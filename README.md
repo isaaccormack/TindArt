@@ -1,14 +1,12 @@
-# <Team name goes here>!
-
+# Majabris!
 
 ## Members
-- Braydon Berthelet
-- Isaac Cormack
-- Jamie St Martin
-- Marina Dunn
+- Braydon Berthelet -> #36436933
+- Isaac Cormack -> 
+- Jamie St Martin -> #3781898
+- Marina Dunn -> #26510100
 
-## Prospective Projects
-### Isaac's Ideas:
+## Prospective Projectsw
 1. TindArt - 
 2. Mock Instagram - create accounts, share images, comment on images, user profiles, etc.
 3. Boardgame Meetup App - 
