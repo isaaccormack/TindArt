@@ -7,7 +7,7 @@
 - Marina Dunn -> #26510100
 
 ## Prospective Projects
-1. TindArt - Sell art with a UI resembling Tinder (Rough notes follow below) (Possibly change name to something that would be more appropriate to put on a resume?)
+1. TindArt (selected) - Sell art with a UI resembling Tinder (Rough notes follow below) (Possibly change name to something that would be more appropriate to put on a resume?)
    - User initially fills out a questionaire of sorts to match with art they are most likely interested in
    - Once user has liked an art piece it is stored onto their liked page where they are then able to message the artist asking further questions, arranging a meetup, negotiating on price (private chat context, ie can have more than one chat with same author)
    - 3 main pages:
@@ -20,3 +20,32 @@
    (Will need to scale down requirements from list of functionality above)
 2. Mock Instagram - create accounts, share images, comment on images, user profiles, etc.
 3. Boardgame Meetup App - user profiles in facebook manner, main homepage where users post about meetup, posts filtered by different criteria, ability to comment on posts, like posts, show interest (ie. is going, is interested, etc. ), posts can contain images
+
+## TindArt
+
+### CRUD/DB Model
+
+User
+
+  * User ID (for internal use & the URL of each user)
+  * Profile Photo (location on server)
+  * Username (for login. probably should be contact email)
+  * Hashed Password
+  * Password Salt
+  * Name (real name/displayed on profile)
+  * User Bio (text description to display)
+  * User location (city - we're not dealing with proper location stuff, just enter your city and you'll see art from the same city)
+  * Phone number (or other contact info, for connecting buyers with sellers - this could be replaced with a messaging system but that's beyond our scope)
+
+Photo
+
+  * Photo ID (used to link to the photo)
+  * User ID (foreign key)
+  * Title
+  * Price
+
+Likes
+
+  * User ID (of the liker)
+  * Photo ID (of the photo they liked)
+  
