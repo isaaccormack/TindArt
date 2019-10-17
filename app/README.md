@@ -11,7 +11,10 @@ npm install
 ```sh
 tsc
 ```
-Note that by default in the [tsconfig.json](./tsconfig.json) file, "watch" is set to true, meaning that changes to the code will automatically be recompiled. To disable this, set "watch" to false.
+or Compile using Watch Mode:
+```sh
+tsc -w
+```
 4. Start the application
 ```sh
 npm start

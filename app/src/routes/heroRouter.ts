@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { json } from 'body-parser';
-const Heroes = require('../../dist/data.json');
+// const Heroes = require('../../dist/data.json');
 const DbClient = require('../DbClient');
 export class HeroRouter {
   public static create(router: Router) {
