@@ -48,7 +48,7 @@ export class IndexRoute extends BaseRoute {
    */
   public index(req: Request, res: Response, next: NextFunction) {
     //set custom title
-    this.title = "Welcome to TindArt";
+    this.title = "Welcome 2 TindArt";
 
     //set message
     let options: Object = {

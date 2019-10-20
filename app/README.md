@@ -21,6 +21,20 @@ npm start
 ```
 5. Navigate to the site on http://localhost:3000/
 
+## Developing
+For ease of development, using services which continuously reflect source code changes is recommended to be used. This can be accomplished by running two proccess continously during development:
+1. Typescript transpiler on watch mode to transpile typescript source code into javascript on every save.
+2. A 'nodemon' to watch the for changes in the javascript source code and automatically refresh the server to use this code.
+
+To run this while developing, first start the transpiler on watch mode:
+```
+tsc -w
+```
+Then, in a new window in your terminal, start the nodemon (an npm script is provided for convenience):
+```
+npm run dev
+```
+
 ## Contributing
 This app uses [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) branching. 
 To contribute:
