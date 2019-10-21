@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/seng350/seng350f19-project-team-3-1.svg?token=MKYirfVTx6By2GhqMnsq&branch=master)](https://travis-ci.com/seng350/seng350f19-project-team-3-1)
 ## Getting Started
 1. Clone the repo
 ```sh
@@ -9,11 +10,11 @@ npm install
 ```
 3. Compile the Typescript
 ```sh
-tsc
+npm run build-ts
 ```
 or Compile using Watch Mode:
 ```sh
-tsc -w
+npm run watch-ts
 ```
 4. Start the application
 ```sh
@@ -28,7 +29,7 @@ For ease of development, using services which continuously reflect source code c
 
 To run this while developing, first start the transpiler on watch mode:
 ```
-tsc -w
+npm run watch-ts
 ```
 Then, in a new window in your terminal, start the nodemon (an npm script is provided for convenience):
 ```
@@ -40,6 +41,6 @@ This app uses [git flow](https://www.atlassian.com/git/tutorials/comparing-workf
 To contribute:
 1. Clone the Project
 2. Create your Feature Branch (git checkout -b feature/AmazingFeature)
-3. Commit your Changes (git commit -m 'Add some AmazingFeature')
+3. Commit your Changes (git commit -m 'Add some AmazingFeature'). If you don't want the CI pipeline to be re-run on your commit (for example, if you've only changed the docs), then add [skip ci] somewhere in the commit message.
 4. Push to the Branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
