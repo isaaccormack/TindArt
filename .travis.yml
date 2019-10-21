@@ -1,4 +1,6 @@
 language: node_js
+node_js:
+  - 10
 
 # Step 1: Run commands before installing dependencies.
 before_install:
