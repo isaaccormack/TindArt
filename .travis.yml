@@ -16,7 +16,7 @@ install:
 before_script:
   - tsc
 
-# Step 4: Run tests.
+# Step 4: Run linter and tests.
 script:
-  - tslint
+  - tslint --project tsconfig.json
   - npm test
