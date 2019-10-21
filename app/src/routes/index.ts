@@ -23,6 +23,13 @@ export class IndexRoute extends BaseRoute {
 
     //add home page route
     router.get("/", (req: Request, res: Response, next: NextFunction) => {
+      if (req.session!.user) {
+        console.log("You are logged in!");
+        console.log(req.session!.user.name);
+        console.log(req.session!.user.email);
+      } else {
+        console.log("Not logged in!");
+      }
       new IndexRoute().index(req, res, next);
     });
   }
@@ -48,11 +55,17 @@ export class IndexRoute extends BaseRoute {
    */
   public index(req: Request, res: Response, next: NextFunction) {
     //set custom title
-    this.title = "Welcome 2 TindArt";
+    this.title = "Welcome to TindArt";
+
+    var authorized = false;
+    if (req.session!.user) {
+      authorized = true;
+    }
 
     //set message
     let options: Object = {
-      "message": "Where art is sold!"
+      "message": "Where art is sold!",
+      "authorized": authorized
     };
 
     //render template

@@ -3,3 +3,12 @@ extends layout
 block content
   h1 #{title}
   p #{message}
+
+  - var showLogin = false;
+  if authorized
+    .welcome You are logged in!
+    a(href="/logout") Log out!
+  else
+    .login
+      h6 You are not logged in:
+      a(href="/register") Create Account!

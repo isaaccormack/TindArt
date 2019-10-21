@@ -1,11 +1,15 @@
+import { Request, Response, NextFunction } from 'express';
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express from "express";
+// import session from "express-session";
+var session = require('express-session');
 import logger from "morgan";
 import path from "path";
 import errorHandler from "errorhandler";
 import { IndexRoute } from "./routes/index";
-import { HeroRouter } from "./routes/heroRouter";
+import { RegisterRouter } from "./routes/registerRouter";
+import { LogoutRoute } from "./routes/logout";
 
 /**
  * The server.
@@ -70,11 +74,40 @@ export class Server {
       extended: true
     }));
 
-    //mount cookie parser middleware
+    // //mount cookie parser middleware
     this.app.use(cookieParser("SECRET_GOES_HERE"));
 
+    // initialize express-session to allow us track the logged-in user across sessions.
+    this.app.use(session({
+      key: 'user_sid',
+      secret: 'SECRET_GOES_HERE',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 360000 // 1 hour
+      }
+    }));
+
+    // This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
+    // This usually happens when you stop your express server after login, your cookie still remains saved in the browser.
+    this.app.use((req: Request, res: Response, next: NextFunction) => {
+      if (req.cookies.user_sid && !req.session!.user) {
+        res.clearCookie('user_sid');
+      }
+      next();
+    });
+
+    // middleware function to check for logged-in users
+    // var sessionChecker = (req: Request, res: Response, next: NextFunction) => {
+    //   if (req.session!.user && req.cookies.user_sid) {
+    //     res.redirect('/');
+    //   } else {
+    //     next();
+    //   }
+    // };
+
     // catch 404 and forward to error handler
-    this.app.use(function (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
+    this.app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
       err.status = 404;
       next(err);
     });
@@ -95,7 +128,8 @@ export class Server {
     router = express.Router();
 
     IndexRoute.create(router);
-    HeroRouter.create(router);
+    RegisterRouter.create(router);
+    LogoutRoute.create(router);
 
     //use router middleware
     this.app.use(router);
