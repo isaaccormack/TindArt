@@ -1,0 +1,18 @@
+language: node_js
+
+# Step 1: Run commands before installing dependencies.
+before_install:
+  - cd app
+
+# Step 2: Install dependencies.
+install:
+  - npm install -g typescript
+  - npm ci
+
+# Step 3: Run commands with installed dependencies.
+before_script:
+  - tsc
+
+# Step 4: Run tests.
+script:
+  - npm test
