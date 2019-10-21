@@ -5,6 +5,10 @@ block content
     .row
       .col-md-6.col-md-offset-3
         h1.display-4.m-b-2 Register
+        - if (messages.error)
+          .message.error
+          for error in messages.error  
+            p #{error}
 
         // register form
         form(method='POST' action='/api/register')

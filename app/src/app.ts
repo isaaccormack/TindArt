@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express from "express";
-// import session from "express-session";
+var flash = require("express-flash");
 var session = require('express-session');
 import logger from "morgan";
 import path from "path";
@@ -87,6 +87,8 @@ export class Server {
         maxAge: 360000 // 1 hour
       }
     }));
+
+    this.app.use(flash(this.app));
 
     // This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
     // This usually happens when you stop your express server after login, your cookie still remains saved in the browser.
