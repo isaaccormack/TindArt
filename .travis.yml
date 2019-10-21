@@ -9,12 +9,11 @@ before_install:
 # Step 2: Install dependencies.
 #   'npm ci' is essentially a stricter 'npm install', designed for CI use.
 install:
-  - npm install -g typescript
   - npm ci
 
-# Step 3: Run commands with dependencies installed .
+# Step 3: Run commands that require dependencies to be installed.
 before_script:
-  - tsc
+  - npm run build-ts 
 
 # Step 4: Run linter and tests.
 script:
