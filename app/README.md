@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/seng350/seng350f19-project-team-3-1.svg?token=MKYirfVTx6By2GhqMnsq&branch=master)](https://travis-ci.com/seng350/seng350f19-project-team-3-1)
 ## Getting Started
 1. Clone the repo
 ```sh
@@ -9,11 +10,11 @@ npm install
 ```
 3. Compile the Typescript
 ```sh
-tsc
+npm run build-ts
 ```
 or Compile using Watch Mode:
 ```sh
-tsc -w
+npm run watch-ts
 ```
 4. Start the application
 ```sh
