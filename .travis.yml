@@ -15,8 +15,8 @@ install:
 # Step 3: Run commands with dependencies installed .
 before_script:
   - tsc
-  - tslint
 
 # Step 4: Run tests.
 script:
+  - tslint
   - npm test
