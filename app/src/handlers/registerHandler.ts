@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { json } from 'body-parser';
 var bcrypt = require('bcrypt');
-const saltRounds = 10;
-import { Validator } from "validator.ts/Validator";
-const DbClient = require('../DbClient');
-import { User } from '../models/User';
-import { ValidationErrorInterface } from 'validator.ts/ValidationErrorInterface';
 import { Hash } from 'crypto';
+import { Validator } from "validator.ts/Validator";
+import { ValidationErrorInterface } from 'validator.ts/ValidationErrorInterface';
 import { Db } from 'mongodb';
+import { User } from '../models/User';
+
+const saltRounds = 10;
+const DbClient = require('../DbClient');
 
 /**
 * Get All Users
