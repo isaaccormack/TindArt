@@ -36,6 +36,10 @@
     "all": true,
     "cache": false,
     "skip-full": false,
+    "branches": 70,
+    "functions": 70,
+    "statements": 70,
+    "lines": 70,
     "check-coverage": true
   },
   "dependencies": {
