@@ -35,8 +35,7 @@
     "exclude-after-remap": false,
     "all": true,
     "cache": false,
-    "skip-full": false,
-    "check-coverage": true
+    "skip-full": false
   },
   "dependencies": {
     "@types/body-parser": "^1.17.1",
