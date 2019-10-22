@@ -15,8 +15,11 @@ install:
 before_script:
   - npm run build-ts 
 
-# Step 4: Run linter, tests, and code coverage.
+# Step 4: Run linter and tests.
 script:
   - tslint --project tsconfig.json
   - npm test
+
+# Step 5: Run code coverage after successful build.
+after_success:
   - npm run coverage
