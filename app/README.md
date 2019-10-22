@@ -35,6 +35,14 @@ Then, in a new window in your terminal, start the nodemon (an npm script is prov
 ```
 npm run dev
 ```
+### Database Initialization
+This app uses a mongoDB for persistant storage. To meet the business requirements of the application, the database must be properly initialized before use.
+1. Install and start mongoDB on your local machine.
+2. Open an interactive session with mongo be entering `mongo` in the shell
+2. Create database "myapp" and use it as current databse: `use myapp`
+3. Create a collection "users" in the "myapp" database: `db.createCollection("users")`
+4. Make the "email" field in the "users" collection unique: `db.users.createIndex( { "email": 1 }, { "unique": true } )`
+  
 
 ## Contributing
 This app uses [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) branching. 
