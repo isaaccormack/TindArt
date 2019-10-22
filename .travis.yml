@@ -17,5 +17,5 @@ before_script:
 
 # Step 4: Run linter and tests.
 script:
-#  - tslint --project tsconfig.json
+  - tslint --project tsconfig.json
   - npm test
