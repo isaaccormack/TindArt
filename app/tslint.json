@@ -1,9 +1,12 @@
 {
-    "defaultSeverity": "error",
+    "defaultSeverity": "warning",
     "extends": [
         "tslint:recommended",
         "tslint-sonarts"
     ],
+    "linterOptions": {
+        "format": "stylish"
+    },
     "jsRules": {},
     "rules": {},
     "rulesDirectory": []
