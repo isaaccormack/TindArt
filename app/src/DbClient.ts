@@ -3,7 +3,7 @@ import { MongoClient, Db } from "mongodb";
 class DbClient {
   public db!: Db;
 
-  async public connect() {
+  public async connect() {
     try {
       const client = await MongoClient.connect("mongodb://localhost:27017");
       this.db = client.db("myapp");
