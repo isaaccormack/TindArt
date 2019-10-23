@@ -8,15 +8,15 @@ export class User {
   @IsLength(2, 32, {
     message: "Name must be between 2 and 32 characters"
   })
-  name: string;
+  public name: string;
 
   @IsEmail()
-  email: string;
+  public email: string;
 
   @IsLength(2, 32, {
     message: "Password must be between 2 and 32 characters"
   })
-  password: string;
+  public password: string;
 
   constructor({ name, email, password }: { name: string, email: string, password: string }) {
     this.name = name;

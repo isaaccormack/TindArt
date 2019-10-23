@@ -1,17 +1,17 @@
-import { Request, Response, NextFunction } from 'express';
-var bcrypt = require('bcrypt');
-import { Hash } from 'crypto';
+import { Request, Response, NextFunction } from "express";
+import { Db } from "mongodb";
+import { Hash } from "crypto";
 import { Validator } from "validator.ts/Validator";
-import { ValidationErrorInterface } from 'validator.ts/ValidationErrorInterface';
-import { Db } from 'mongodb';
-import { User } from '../models/User';
+import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
+import { User } from "../models/User";
+const bcrypt = require("bcrypt");
 
 const saltRounds = 10;
-const DbClient = require('../DbClient');
+const DbClient = require("../DbClient");
 
 /**
-* Get All Users
-*/
+ * Get All Users
+ */
 export function getAllUsers(req: Request, res: Response, next: NextFunction) {
   DbClient.connect()
     .then((db: any) => {
@@ -23,33 +23,33 @@ export function getAllUsers(req: Request, res: Response, next: NextFunction) {
     })
     .catch((err: any) => {
       console.error(err);
-    })
+    });
 }
 
 /**
-* Create New User
-*/
+ * Create New User
+ */
 // need to add uniqueness constraints with email
 export function createUser(req: Request, res: Response, next: NextFunction) {
   // Create User object to validate user input
-  var user: User = new User(req.body);
-  var validator: Validator = new Validator();
-  var errors: ValidationErrorInterface[] = validator.validate(user);
+  const user: User = new User(req.body);
+  const validator: Validator = new Validator();
+  const errors: ValidationErrorInterface[] = validator.validate(user);
 
   // Send back validation errors, if any
   if (errors.length > 0) {
-    errors.forEach((error: ValidationErrorInterface) => { req.flash('error', error.errorMessage) });
-    return res.redirect('/register');
+    errors.forEach((error: ValidationErrorInterface) => { req.flash("error", error.errorMessage); });
+    return res.redirect("/register");
   }
 
   // Async bcrypt.hash takes add user to database function as callback
-  bcrypt.hash(req.body.password, saltRounds, function (err: Error, hash: Hash) {
+  bcrypt.hash(req.body.password, saltRounds, (err: Error, hash: Hash) => {
     if (err) {
-      console.log('Bcrypt Password Hash Error'); // Only log internal errors to server
+      console.log("Bcrypt Password Hash Error"); // Only log internal errors to server
       console.log(err);
 
-      req.flash('error', 'Couldn\'t process user request')
-      return res.redirect('/register');
+      req.flash("error", "Couldn't process user request");
+      return res.redirect("/register");
     }
 
     // Add User to database with hashed password
@@ -63,18 +63,18 @@ export function createUser(req: Request, res: Response, next: NextFunction) {
       })
       .then(() => { // handle database response
         req.session!.user = user; // set session variable
-        return res.redirect('/');
+        return res.redirect("/");
       })
       .catch((err: NodeJS.ErrnoException) => {
-        console.error('Database Insert Error');
+        console.error("Database Insert Error");
         console.error(err);
-        if (err.code && parseInt(err.code) == 11000) {
-          req.flash('error', 'An account with this email already exists, maybe you would like to reset your password?');
+        if (err.code && parseInt(err.code, 10) === 11000) {
+          req.flash("error", "An account with this email already exists, maybe you would like to reset your password?");
         } else {
-          req.flash('error', 'Database Error');
+          req.flash("error", "Database Error");
         }
-        return res.redirect('/register');
-      })
+        return res.redirect("/register");
+      });
   });
 }
 
