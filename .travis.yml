@@ -17,6 +17,6 @@ before_script:
 
 # Step 4: Run linter, tests, and code coverage.
 script:
-  - tslint --config tslint.json --project tsconfig.json
+  - npm run lint
   - npm test
   - npm run coverage
