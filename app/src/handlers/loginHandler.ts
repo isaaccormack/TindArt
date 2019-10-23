@@ -26,12 +26,12 @@ export function loginUser(req: Request, res: Response, next: NextFunction) {
          // Passwords don't match
          req.flash("error", "Email and password combination could not be found");
         }
-        return res.redirect("/");
+        return res.redirect('/login');
       });
     })
     .catch((err: any) => {
       console.error(err);
-      req.flash("error", "Error processing your request");
-      return res.redirect("/");
+      req.flash('error', 'Error processing your request');
+      return res.redirect('/login');
     });
 }

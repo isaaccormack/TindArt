@@ -11,17 +11,6 @@ block content
   else
     .login
       h6 You are not logged in:
-      // Login form
-      - if (messages.error)
-        .message.error
-        for error in messages.error  
-          p #{error}
-      form(method='POST' action='/api/login')
-        div.form-group
-          label(for='email') Email:
-          input#email.form-control(type='email', placeholder='name@email.com' name='email')
-        div.form-group
-          label(for='pw') Password:
-          input#pw.form-control(type='password' name='password')
-        button.btn.btn-primary(type='submit') Sign in
+      a(href="/login") Login Here
+      br
       a(href="/register") Create Account!
