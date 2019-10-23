@@ -10,6 +10,7 @@ import errorHandler from "errorhandler";
 import { IndexRoute } from "./routes/index";
 import { RegisterRouter } from "./routes/registerRouter";
 import { LogoutRoute } from "./routes/logout";
+import { LoginRoute } from './routes/login';
 
 /**
  * The server.
@@ -132,6 +133,7 @@ export class Server {
     IndexRoute.create(router);
     RegisterRouter.create(router);
     LogoutRoute.create(router);
+    LoginRoute.create(router);
 
     //use router middleware
     this.app.use(router);
