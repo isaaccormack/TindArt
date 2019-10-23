@@ -11,7 +11,7 @@ const session = require("express-session");
 
 import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
-import { LoginRoute } from './routes/login';
+import { LoginRoute } from "./routes/login";
 import { RegisterRouter } from "./routes/registerRouter";
 
 /**

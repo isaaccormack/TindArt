@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./route";
-import { loginUser } from '../handlers/loginHandler';
-
+import { loginUser } from "../handlers/loginHandler";
 
 /**
  * / route
@@ -18,10 +17,10 @@ export class LoginRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
-    //log
+    // log
     console.log("[LoginRoute::create] Creating login route.");
 
-    //add home page route
+    // add home page route
     router.post("/api/login", (req: Request, res: Response, next: NextFunction) => {
       loginUser(req, res, next);
     });
