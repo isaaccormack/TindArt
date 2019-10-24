@@ -61,9 +61,17 @@ export function createUser(req: Request, res: Response, next: NextFunction) {
           "password": hash,
         });
       })
-      .then(() => { // handle database response
-        req.session!.user = user; // set session variable
-        return res.redirect("/");
+      .then((result: any) => { // handle database response
+        if (result.ops.length > 0) {
+          let newUser = result.ops[0];
+          newUser.password = ""; // Clear password so it is not floating around
+          req.session!.user = newUser; // set session variable
+          console.log(req.session!.user._id);
+          return res.redirect('/');
+        } else {
+          req.flash('error', 'Error registering');
+          return res.redirect('/register');
+        }
       })
       .catch((err: NodeJS.ErrnoException) => {
         console.error("Database Insert Error");
