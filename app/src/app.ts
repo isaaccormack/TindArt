@@ -14,6 +14,7 @@ import { LoginRoute } from "./routes/login";
 import { RegisterRouter } from "./routes/registerRouter";
 import { err404handler } from "./errorhandlers/404Handler";
 import { getErrorHandler } from "./errorhandlers/errorHandler";
+import { UploadRouter } from "./routes/uploadRouter";
 
 /**
  * The server.
@@ -140,8 +141,9 @@ export class Server {
     RegisterRouter.create(router);
     LogoutRoute.create(router);
     LoginRoute.create(router);
+    UploadRouter.create(router);
 
-    // use router middleware
+    //use router middleware
     this.app.use(router);
   }
 

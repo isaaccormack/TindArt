@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .main.container
+    .row
+      .col-md-6.col-md-offset-3
+        h1.display-4.m-b-2 Upload
+        - if (messages.error)
+          .message.error
+          for error in messages.error  
+            p #{error}
+        - if (messages.result)
+          .message.result
+          for result in messages.result  
+            p #{result}
+
+        // upload form
+        form(method='POST', action='/api/upload' enctype="multipart/form-data")
+          div.form-group
+            label(for='name') File:
+            input#name.form-control(type='file', accept="image/*")
+          input(type='submit', name='uploadimage', value='Upload Image')
+        br
+        p Second Upload test
+        form(method='POST', action='/api/upload' enctype='multipart/form-data')
+          input(type='file', name='imageupload')
+          input(type='submit', name='uploadimage', value='Upload Image 2')
