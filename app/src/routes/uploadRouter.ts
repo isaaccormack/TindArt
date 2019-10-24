@@ -15,11 +15,22 @@ export class UploadRouter extends BaseRoute {
     });
 
     router.post("/api/upload", (req: Request, res: Response, next: NextFunction) => {
-      //if (req.session!.user) {
+      if (req.session!.user) {
         uploadPhoto(req, res, next);
-      //} else {
-      //  return res.redirect('/');
-      //}
+      } else {
+        return res.redirect('/');
+      }
+    }, (req: Request, res: Response, next: NextFunction) => {
+      console.log('Test');
+      console.log(req.files);
+      if ('avatar' in req.files) {
+        console.log(req.files.avatar[0].filename);
+        req.flash('result', 'Successfully uploaded avatar');
+        // Submit request to db to set users profile picture
+      } else if ('gallery' in req.files) {
+        req.flash('result', 'Successfully uploaded to gallery');
+      }
+      res.redirect('/upload');
     });
   }
 
@@ -33,10 +44,10 @@ export class UploadRouter extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public upload(req: Request, res: Response, next: NextFunction) {
-    //if (req.session!.user) {
+    if (req.session!.user) {
       this.render(req, res, "upload");
-    //} else {
-      //return res.redirect('/');
+    } else {
+      return res.redirect('/');
     }
   }
 }

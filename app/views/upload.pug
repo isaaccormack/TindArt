@@ -18,10 +18,11 @@ block content
         form(method='POST', action='/api/upload' enctype="multipart/form-data")
           div.form-group
             label(for='name') File:
-            input#name.form-control(type='file', accept="image/*")
-          input(type='submit', name='uploadimage', value='Upload Image')
+            input#name.form-control(type='file', accept="image/*" name='avatar')
+            input(type='submit', value='Upload Image')
         br
-        p Second Upload test
-        form(method='POST', action='/api/upload' enctype='multipart/form-data')
-          input(type='file', name='imageupload')
-          input(type='submit', name='uploadimage', value='Upload Image 2')
+        form(method='POST', action='/api/upload' enctype="multipart/form-data")
+          div.form-group
+            label(for='name') File:
+            input#name.form-control(type='file', accept="image/*" name='gallery' multiple)
+            input(type='submit', value='Upload Images')
