@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
 const bcrypt = require("bcrypt");
 
-const DbClient = require("../DbClient");
+const DbClient = require("../database/DbClient");
 
 /**
  * Get User

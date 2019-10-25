@@ -7,7 +7,7 @@ import { User } from "../models/User";
 const bcrypt = require("bcrypt");
 
 const saltRounds = 10;
-const DbClient = require("../DbClient");
+const DbClient = require("../database/DbClient");
 
 /**
  * Get All Users
