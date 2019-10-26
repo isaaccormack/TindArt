@@ -14,6 +14,10 @@ export function loginUser(req: Request, res: Response, next: NextFunction) {
       return db.collection("users").find({ email: req.body.email }).toArray();
     })
     .then((result: any) => { // handle database response
+      if (result.length != 1) {
+        req.flash("error", "Email and password combination could not be found");
+        return res.redirect("/login");
+      }
       bcrypt.compare(req.body.password, result[0].password, (err: Error, valid: boolean) => {
         if (err) {
           console.error(err);

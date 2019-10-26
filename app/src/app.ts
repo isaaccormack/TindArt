@@ -14,6 +14,7 @@ import { LoginRoute } from "./routes/login";
 import { RegisterRouter } from "./routes/registerRouter";
 import { err404handler } from "./errorhandlers/404Handler";
 import { getErrorHandler } from "./errorhandlers/errorHandler";
+import { UploadRouter } from "./routes/uploadRouter";
 
 /**
  * The server.
@@ -119,7 +120,7 @@ export class Server {
     // THIS MIDDLEWARE MUST COME LAST (before error handling)! todo: write tests to ensure 404 occurs w/ our handler.
     // catch not found requests, respond with 404
     // this is technically not error handling, because there was no error given, but it's how we handle 404 errors.
-    this.app.use(err404handler);
+    // this.app.use(err404handler);
 
     // error handling
     this.app.use(getErrorHandler());
@@ -140,8 +141,9 @@ export class Server {
     RegisterRouter.create(router);
     LogoutRoute.create(router);
     LoginRoute.create(router);
+    UploadRouter.create(router);
 
-    // use router middleware
+    //use router middleware
     this.app.use(router);
   }
 

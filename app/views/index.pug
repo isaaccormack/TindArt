@@ -7,6 +7,8 @@ block content
   - var showLogin = false;
   if authorized
     .welcome You are logged in!
+    a(href="/upload") Upload Photo?
+    br
     a(href="/logout") Log out!
   else
     .login
