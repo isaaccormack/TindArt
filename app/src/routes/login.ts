@@ -23,7 +23,7 @@ export class LoginRoute extends BaseRoute {
     router.get("/login", (req: Request, res: Response, next: NextFunction) => {
       new LoginRoute().login(req, res, next);
     });
-    //add home page route
+    // add home page route
     router.post("/api/login", (req: Request, res: Response, next: NextFunction) => {
       loginUser(req, res, next);
     });
@@ -49,14 +49,14 @@ export class LoginRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public login(req: Request, res: Response, next: NextFunction) {
-    //set custom title
+    // set custom title
     this.title = "Welcome to TindArt";
 
     if (req.session!.user) {
-      return res.redirect('/');
+      return res.redirect("/");
     }
 
-    //render template
+    // render template
     this.render(req, res, "login");
   }
 }

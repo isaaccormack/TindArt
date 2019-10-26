@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
-const bcrypt = require("bcrypt");
+import bcrypt = require("bcrypt");
 
-const DbClient = require("../DbClient");
+import DbClient = require("../DbClient");
 
 /**
  * Get User
@@ -10,11 +10,11 @@ const DbClient = require("../DbClient");
 export function loginUser(req: Request, res: Response, next: NextFunction) {
   // Get User for database with hashed password
   DbClient.connect()
-    .then((db: Db) => {
-      return db!.collection("users").find({ email: req.body.email }).toArray();
+    .then((db: any) => {
+      return db.collection("users").find({ email: req.body.email }).toArray();
     })
     .then((result: any) => { // handle database response
-      bcrypt.compare(req.body.password, result[0].password, (err: any, valid: boolean) => {
+      bcrypt.compare(req.body.password, result[0].password, (err: Error, valid: boolean) => {
         if (err) {
           console.error(err);
         }
@@ -26,12 +26,12 @@ export function loginUser(req: Request, res: Response, next: NextFunction) {
          // Passwords don't match
          req.flash("error", "Email and password combination could not be found");
         }
-        return res.redirect('/login');
+        return res.redirect("/login");
       });
     })
     .catch((err: any) => {
       console.error(err);
-      req.flash('error', 'Error processing your request');
-      return res.redirect('/login');
+      req.flash("error", "Error processing your request");
+      return res.redirect("/login");
     });
 }

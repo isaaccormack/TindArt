@@ -6,8 +6,8 @@ import errorHandler from "errorhandler";
 import logger from "morgan";
 import path from "path";
 
-const flash = require("express-flash");
-const session = require("express-session");
+import flash = require("express-flash");
+import session = require("express-session");
 
 import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
@@ -82,7 +82,7 @@ export class Server {
 
     // initialize express-session to allow us track the logged-in user across sessions.
     this.app.use(session({
-      key: "user_sid",
+      name: "user_sid",
       secret: "SECRET_GOES_HERE",
       resave: false,
       saveUninitialized: false,
@@ -91,7 +91,7 @@ export class Server {
       }
     }));
 
-    this.app.use(flash(this.app));
+    this.app.use(flash());
 
     /* This middleware will check if user's cookie is still saved in browser and
      * user is not set, then automatically log the user out.
