@@ -120,7 +120,7 @@ export class Server {
     // THIS MIDDLEWARE MUST COME LAST (before error handling)! todo: write tests to ensure 404 occurs w/ our handler.
     // catch not found requests, respond with 404
     // this is technically not error handling, because there was no error given, but it's how we handle 404 errors.
-    this.app.use(err404handler);
+    // this.app.use(err404handler);
 
     // error handling
     this.app.use(getErrorHandler());
