@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import errorHandler from "errorhandler";
 import logger from "morgan";
 import path from "path";
 
@@ -13,6 +12,8 @@ import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { RegisterRouter } from "./routes/registerRouter";
+import { err404handler } from "./errorhandlers/404Handler";
+import { getErrorHandler } from "./errorhandlers/errorHandler";
 
 /**
  * The server.
@@ -114,14 +115,14 @@ export class Server {
     //   }
     // };
 
-    // catch 404 and forward to error handler
-    this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-      err.status = 404;
-      next(err);
-    });
+
+    // THIS MIDDLEWARE MUST COME LAST (before error handling)! todo: write tests to ensure 404 occurs w/ our handler.
+    // catch not found requests, respond with 404
+    // this is technically not error handling, because there was no error given, but it's how we handle 404 errors.
+    this.app.use(err404handler);
 
     // error handling
-    this.app.use(errorHandler());
+    this.app.use(getErrorHandler());
   }
 
   /**
