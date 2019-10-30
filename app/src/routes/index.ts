@@ -1,7 +1,5 @@
-
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./route";
-
 
 /**
  * / route
@@ -18,11 +16,18 @@ export class IndexRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
-    //log
+    // log
     console.log("[IndexRoute::create] Creating index route.");
 
-    //add home page route
+    // add home page route
     router.get("/", (req: Request, res: Response, next: NextFunction) => {
+      if (req.session!.user) {
+        console.log("You are logged in!");
+        console.log(req.session!.user.name);
+        console.log(req.session!.user.email);
+      } else {
+        console.log("Not logged in!");
+      }
       new IndexRoute().index(req, res, next);
     });
   }
@@ -47,15 +52,21 @@ export class IndexRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public index(req: Request, res: Response, next: NextFunction) {
-    //set custom title
+    // set custom title
     this.title = "Welcome to TindArt";
 
-    //set message
-    let options: Object = {
-      "message": "Where art is sold!"
+    let authorized = false;
+    if (req.session!.user) {
+      authorized = true;
+    }
+
+    // set message
+    const options: object = {
+      "message": "Where art is sold!",
+      "authorized": authorized
     };
 
-    //render template
+    // render template
     this.render(req, res, "index", options);
   }
 }

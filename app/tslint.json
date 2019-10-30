@@ -1,0 +1,31 @@
+{
+    "defaultSeverity": "warning",
+    "extends": [
+        "tslint:recommended",
+        "tslint-sonarts"
+    ],
+    "linterOptions": {
+        "format": "stylish"
+    },
+    "jsRules": {},
+    "rules": {
+        "no-console": false,
+        "object-literal-sort-keys": false,
+        "object-literal-key-quotes": [true, "consistent"],
+        "ordered-imports": [false, {"named-imports-order": "any"}],
+        "trailing-comma": [true, {"multiline": "ignore", "singleline": "never"}],
+        "member-ordering": [
+            true,
+            {
+                "order": [
+                    "static-field",
+                    "instance-field",
+                    "static-method",
+                    "constructor",
+                    "instance-method"
+                ]
+            }
+        ]
+    },
+    "rulesDirectory": []
+}
