@@ -2,20 +2,16 @@ language: node_js
 node_js:
   - 10
 
-# Step 1: Run commands before installing dependencies.
-before_install:
-  - cd app
-
-# Step 2: Install dependencies.
+# Step 1: Install dependencies.
 #   'npm ci' is essentially a stricter 'npm install', designed for CI use.
 install:
   - npm ci
 
-# Step 3: Run commands that require dependencies to be installed.
+# Step 2: Run commands that require dependencies to be installed.
 before_script:
   - npm run build-ts 
 
-# Step 4: Run linter, tests, and code coverage.
+# Step 3: Run linter, tests, and code coverage.
 script:
   - npm run lint
   - npm test

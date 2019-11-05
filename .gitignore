@@ -1,1 +1,3 @@
 app/uploads/
+/dist
+/node_modules
