@@ -49,14 +49,10 @@ export class LoginRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public login(req: Request, res: Response, next: NextFunction) {
-    // set custom title
-    this.title = "Welcome to TindArt";
-
     if (req.session!.user) {
-      return res.redirect("/");
+      res.redirect("/");
+    } else {
+      this.render(req, res, "login");
     }
-
-    // render template
-    this.render(req, res, "login");
   }
 }

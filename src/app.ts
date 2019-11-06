@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import { Request, Response, NextFunction } from "express";
+import express from "express";
 import logger from "morgan";
+var mustacheExpress = require('mustache-express');
 import path from "path";
 
 import flash = require("express-flash");
@@ -12,8 +13,7 @@ import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { RegisterRouter } from "./routes/registerRouter";
-import { err404handler } from "./errorhandlers/404Handler";
-import { getErrorHandler } from "./errorhandlers/errorHandler";
+import { NotFoundRoute } from "./routes/notFound";
 import { UploadRouter } from "./routes/uploadRouter";
 
 /**
@@ -64,9 +64,10 @@ export class Server {
     // add static paths
     this.app.use(express.static(path.join(__dirname, "../public")));
 
-    // configure pug
-    this.app.set("views", path.join(__dirname, "../views"));
-    this.app.set("view engine", "pug");
+    // configure mustache
+    this.app.engine('mustache', mustacheExpress());
+    this.app.set('view engine', 'mustache');
+    this.app.set('views', __dirname + '/../src/views');
 
     // mount logger
     this.app.use(logger("dev"));
@@ -106,24 +107,6 @@ export class Server {
       }
       next();
     });
-
-    // middleware function to check for logged-in users
-    // var sessionChecker = (req: Request, res: Response, next: NextFunction) => {
-    //   if (req.session!.user && req.cookies.user_sid) {
-    //     res.redirect('/');
-    //   } else {
-    //     next();
-    //   }
-    // };
-
-
-    // THIS MIDDLEWARE MUST COME LAST (before error handling)! todo: write tests to ensure 404 occurs w/ our handler.
-    // catch not found requests, respond with 404
-    // this is technically not error handling, because there was no error given, but it's how we handle 404 errors.
-    // this.app.use(err404handler);
-
-    // error handling
-    this.app.use(getErrorHandler());
   }
 
   /**
@@ -142,6 +125,7 @@ export class Server {
     LogoutRoute.create(router);
     LoginRoute.create(router);
     UploadRouter.create(router);
+    NotFoundRoute.create(router); // 404 Route must be last
 
     //use router middleware
     this.app.use(router);

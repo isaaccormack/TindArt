@@ -52,21 +52,13 @@ export class IndexRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public index(req: Request, res: Response, next: NextFunction) {
-    // set custom title
-    this.title = "Welcome to TindArt";
-
-    let authorized = false;
-    if (req.session!.user) {
-      authorized = true;
+    if (req.session!.user) { // If user logged in
+      let options: object = {
+        "name": req.session!.user.name
+      }
+      this.render(req, res, 'home', options);
+    } else {
+      this.render(req, res, 'index');
     }
-
-    // set message
-    const options: object = {
-      "message": "Where art is sold!",
-      "authorized": authorized
-    };
-
-    // render template
-    this.render(req, res, "index", options);
   }
 }

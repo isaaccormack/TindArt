@@ -49,15 +49,15 @@ export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
 
 function getNextPhotoID(req: Request) {
   return DbClient.connect()
-  .then((db: Db) => {
-    return db!.collection("photos").insertOne({
-      "user": req.session!.user._id
+    .then((db: Db) => {
+      return db!.collection("photos").insertOne({
+        "user": req.session!.user._id
+      });
+    })
+    .then((result: any) => { // handle database response
+      if (result) {
+        console.log('Upload: ' + result.insertedId);
+        return result.insertedId.toString();
+      }
     });
-  })
-  .then((result: any) => { // handle database response
-    if (result) {
-      console.log('Upload: ' + result.insertedId);
-      return result.insertedId.toString();
-    }
-  });
 }
