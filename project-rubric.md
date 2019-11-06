@@ -32,9 +32,12 @@ Marks deducted:
 - I think a few user stories - particularly location ones - could have been expressed so this feature requirement was more obvious. It would be hard to see how to take this user story and start work on the implementation. 
 - more comments in the issues themselves
 
-# Milestone 2    / 20
+
+
+# Milestone 2   16 / 20
 
 ## Marking Guide
+
 - technical writing is clear and concise (key decisions are documented; organization is easy to follow; basic English spelling and writing conventions adhered to)
 - design follows basic principles like cohesion/coupling, single responsibility, open/closed
 - design addresses QAR from M1
@@ -45,8 +48,15 @@ Marks deducted:
 - ADRs don't capture trivial design decisions
 
 ## Notes M2
+
 (explaining why marks were deducted)
 -----
+
+- Did not follow the convention of a class diagram. (-1)
+- The Sequence diagram only outlines Webserver but is not broken down into modules or small chunks which are responsible for the implementation 
+  of the user stories (-2)
+- again neither the Sequence nor the class diagram has any rationale behind it and the individual responsibilities and design choices are not well 
+  described (-1)
 
 
 # Milestone 3    / 20
