@@ -6,20 +6,18 @@ export class UploadRouter extends BaseRoute {
   public static create(router: Router) {
     console.log("[UploadRoute::create] Creating UploadRoutes route.");
 
+    router.get("/api/photos", (req: Request, res: Response, next: NextFunction) => {
+      getAllPhotos(req, res, next); // should check users level of authentication here
+    });
+
     router.get("/upload", (req: Request, res: Response, next: NextFunction) => {
       new UploadRouter().upload(req, res, next);
     });
 
-    router.get("/api/photos", (req: Request, res: Response, next: NextFunction) => {
-      getAllPhotos(req, res, next);
-    });
-
     router.post("/api/upload", (req: Request, res: Response, next: NextFunction) => {
-      if (req.session!.user) {
-        uploadPhoto(req, res, next);
-      } else {
-        return res.redirect('/');
-      }
+      if (!req.session!.user) return res.status(401).redirect("/");
+
+      uploadPhoto(req, res, next);
     }, (req: Request, res: Response, next: NextFunction) => {
       console.log('Test');
       console.log(req.files);
@@ -44,10 +42,8 @@ export class UploadRouter extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public upload(req: Request, res: Response, next: NextFunction) {
-    if (req.session!.user) {
-      this.render(req, res, "upload");
-    } else {
-      return res.redirect('/');
-    }
+    if (!req.session!.user) return res.status(401).redirect("/");
+
+    this.render(req, res, "upload");
   }
 }

@@ -21,10 +21,9 @@ export class LogoutRoute extends BaseRoute {
 
     // add home page route
     router.get("/api/logout", (req: Request, res: Response, next: NextFunction) => {
-      if (req.session!.user) {
-        res.clearCookie("user_sid");
-        res.redirect("/");
-      }
+      if (req.session!.user) res.clearCookie("user_sid");
+
+      res.redirect("/");
     });
   }
 }

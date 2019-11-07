@@ -7,15 +7,18 @@ export class RegisterRouter extends BaseRoute {
   public static create(router: Router) {
     console.log("[RegisterRoute::create] Creating RegisterRoutes route.");
 
-    router.get("/register", (req: Request, res: Response, next: NextFunction) => {
-      new RegisterRouter().register(req, res, next);
-    });
-
+    // Endpoint for development and testing
     router.get("/api/register/users", (req: Request, res: Response, next: NextFunction) => {
       getAllUsers(req, res, next);
     });
 
+    router.get("/register", (req: Request, res: Response, next: NextFunction) => {
+      new RegisterRouter().register(req, res, next);
+    });
+
     router.post("/api/register", (req: Request, res: Response, next: NextFunction) => {
+      if (req.session!.user) return res.redirect("/");
+
       createUser(req, res, next);
     });
   }
@@ -30,6 +33,8 @@ export class RegisterRouter extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public register(req: Request, res: Response, next: NextFunction) {
+    if (req.session!.user) return res.redirect("/");
+
     this.render(req, res, "register");
   }
 }
