@@ -59,6 +59,7 @@ This app uses a mongoDB for persistant storage. To meet the business requirement
 2. Create database "myapp" and use it as current databse: `use myapp`
 3. Create a collection "users" in the "myapp" database: `db.createCollection("users")`
 4. Make the "email" field in the "users" collection unique: `db.users.createIndex( { "email": 1 }, { "unique": true } )`
+5. Make the "username" field in the "users" collection unique: `db.users.createIndex( { "username": 1 }, { "unique": true } )`
 
 ## Contributing
 This app uses [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) branching. 

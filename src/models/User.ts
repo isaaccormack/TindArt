@@ -1,4 +1,4 @@
-import { IsLength, IsEmail, IsAlpha } from "validator.ts/decorator/Validation";
+import { IsLength, IsEmail, IsAlpha, IsAlphanumeric, Matches } from "validator.ts/decorator/Validation";
 
 export class User {
 
@@ -10,6 +10,10 @@ export class User {
   })
   public name: string = '';
 
+  /* Generic username regexp from https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username */
+  @Matches(RegExp("^(?=.{2,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"))
+  public username: string = '';
+
   @IsEmail()
   public email: string = '';
 
@@ -19,6 +23,7 @@ export class User {
   public password: string = '';
 
   public getName() { return this.name; }
+  public getUsername() { return this.username; }
   public getEmail() { return this.email; }
 
 }

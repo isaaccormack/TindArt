@@ -19,6 +19,9 @@ function registerValidationErrorRes(req: Request, res: Response, errors: Validat
       case 'name':
         req.flash("nameError", error.errorMessage);
         break;
+      case 'username':
+        req.flash("usernameError", "Usename is invalid - only alphanumeric . and _ characters allowed");
+        break;
       case 'email':
         req.flash("emailError", "Email is invalid"); // Not able to add err msg in IsEmail() in user model
         break;
@@ -62,6 +65,7 @@ export function createUser(req: Request, res: Response, next: NextFunction) {
   // Create User object to validate user input
   const user: User = new User();
   user.name = req.body.name;
+  user.username = req.body.username;
   user.email = req.body.email;
   user.password = req.body.password;
   const validator: Validator = new Validator();
@@ -79,6 +83,7 @@ export function createUser(req: Request, res: Response, next: NextFunction) {
       .then((db: any) => {
         return db.collection("users").insertOne({
           "name": user.getName(),
+          "username": user.getUsername(),
           "email": user.getEmail(),
           "password": hash,
         });
