@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
+
 import { BaseRoute } from "./route";
-import { loginUser } from "../handlers/loginHandler";
+import { loginUser } from "../handlers/login";
 
 /**
  * / route
