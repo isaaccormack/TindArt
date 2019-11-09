@@ -1,4 +1,4 @@
-import { IsLength, IsEmail, IsAlpha, Matches, IsNumeric } from "validator.ts/decorator/Validation";
+import { IsLength, IsEmail, IsAlpha, Matches, IsNumeric, IsIn } from "validator.ts/decorator/Validation";
 
 export class User {
 
@@ -28,7 +28,11 @@ export class User {
   @IsNumeric({
     message: "Province code must be numeric"
   })
-  private provinceCode: number = -1;
+  /* Province codes are defined in the following http://geogratis.gc.ca/services/geoname/en/codes/province */
+  @IsIn(["10", "11", "12", "13", "24", "35", "46", "47", "48", "59", "60", "61", "62", "72", "73"], {
+    message: "Province code does not map to a province"
+  })
+  private provinceCode: string = '';
 
   @IsLength(2, 32, {
     message: "Password must be between 2 and 32 characters"
@@ -51,7 +55,7 @@ export class User {
   public getUsername(): string { return this.username; }
   public getEmail(): string { return this.email; }
   public getCity(): string { return this.city; }
-  public getProvinceCode(): number { return this.provinceCode; }
+  public getProvinceCode(): string { return this.provinceCode; }
   public setID(id: string) { this.id = id; }
   public clearPassword() { this.password = ''; }
 }

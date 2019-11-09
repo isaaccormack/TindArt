@@ -27,7 +27,7 @@ function registerValidationErrorRes(req: Request, res: Response, errors: Validat
       case 'city':
         req.flash("locationError", error.errorMessage);
         break;
-      case 'province':
+      case 'provinceCode':
         req.flash("locationError", error.errorMessage);
         break;
       case 'password':
@@ -38,7 +38,7 @@ function registerValidationErrorRes(req: Request, res: Response, errors: Validat
   return res.redirect("/register");
 }
 
-async function validateLocation(city: string, provinceCode: number): Promise<Boolean> {
+async function validateLocation(city: string, provinceCode: string): Promise<Boolean> {
   const url: string =
     "http://geogratis.gc.ca/services/geoname/en/geonames.json?q=" + city + "&province=" + provinceCode + "&concise=CITY";
   return new Promise((resolve, reject) => {
@@ -110,6 +110,7 @@ async function addUserToDB(user: User, hash: string): Promise<validationError> {
   });
 }
 
+/* Known defect - all req.body params must be present or server will crash */
 export async function createUser(req: Request, res: Response, next: NextFunction) {
   // Create User object to validate user input
   const user: User = new User();
