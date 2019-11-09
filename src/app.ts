@@ -1,19 +1,18 @@
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import { Request, Response, NextFunction } from "express";
 import express from "express";
-import logger from "morgan";
-var mustacheExpress = require('mustache-express');
-import path from "path";
-
+import { Request, Response, NextFunction } from "express";
 import flash = require("express-flash");
+import logger from "morgan";
+import mustache from 'mustache-express';
+import path from "path";
 import session = require("express-session");
 
 import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
-import { RegisterRouter } from "./routes/registerRouter";
 import { NotFoundRoute } from "./routes/notFound";
+import { RegisterRouter } from "./routes/registerRouter";
 import { UploadRouter } from "./routes/uploadRouter";
 
 /**
@@ -65,7 +64,7 @@ export class Server {
     this.app.use(express.static(path.join(__dirname, "../public")));
 
     // configure mustache
-    this.app.engine('mustache', mustacheExpress());
+    this.app.engine('mustache', mustache());
     this.app.set('view engine', 'mustache');
     this.app.set('views', __dirname + '/../src/views');
 

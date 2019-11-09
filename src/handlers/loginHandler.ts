@@ -1,69 +1,81 @@
-import { Request, Response, NextFunction } from "express";
-import { Db } from "mongodb";
-import { Validator } from "validator.ts/Validator";
-import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
-import { User } from "../models/User";
 import bcrypt = require("bcrypt");
+import { Request, Response, NextFunction } from "express";
+import { Validator } from "validator.ts/Validator";
 
 import DbClient = require("../DbClient");
-
-/* Util Function for Handling Validation Errors */
-function loginValidationErrorRes(req: Request, res: Response, errors: ValidationErrorInterface[]) {
-  // Extract errors into their own object for ease of client side rendering
-  errors.forEach((error: ValidationErrorInterface) => {
-    if (error.property == 'email') {
-      req.flash("emailError", "Email is invalid"); // Not able to add err msg in IsEmail() in user model
-    }
-  });
-  return res.redirect("/login");
-}
-
-/* Util Function for Handling Generic Server Errors */
-function loginServerErrorRes(req: Request, res: Response, logMsg: string, err: any) {
-  console.error(logMsg);
-  console.error(err);
-  req.flash("serverError", "We couldn't log you in right now");
-  return res.status(500).render('error');
-}
+import { User } from "../models/User";
 
 /**
  * Log User In
  */
-export function loginUser(req: Request, res: Response, next: NextFunction) {
-  // Create User object to validate user input
-  const user: User = new User();
-  user.email = req.body.email;
-  const validator: Validator = new Validator();
-  const errors: ValidationErrorInterface[] = validator.validate(user, { skipMissingProperties: true });
 
-  // Send back any validation errors
-  if (errors.length > 0) return loginValidationErrorRes(req, res, errors);
-
-  // Query database for an account with matching email
-  DbClient.connect()
-    .then((db: any) => {
-      return db.collection("users").find({ email: user.email }).toArray();
-    })
-    .then((result: any) => {
-      if (result.length != 1) {
-        req.flash("loginError", "The email you entered does not belong to any account");
-        return res.redirect("/login");
-      }
-      bcrypt.compare(req.body.password, result[0].password, (err: Error, valid: boolean) => {
-        if (err) return loginServerErrorRes(req, res, "Bcrypt error", err);
-
-        if (valid) { // Passwords match
-          const userData = result[0];
-          userData.password = ""; // Clear password so it is not floating around
-          req.session!.user = userData; // Set session variable
-          return res.redirect("/");
+async function findUserByEmail(email: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    DbClient.connect()
+      .then((db: any) => {
+        return db.collection("users").find({ email }).toArray();
+      })
+      .then((result: any) => {
+        if (result.length != 1) {
+          resolve(); // Couldn't find users email
         }
-        // Passwords don't match
-        req.flash("loginError", "The password you entered is incorrect");
-        return res.redirect("/login");
+        resolve(result[0]);
+      })
+      .catch((err: any) => {
+        err.message = "Database find error";
+        reject(err);
       });
-    })
-    .catch((err: any) => {
-      return loginServerErrorRes(req, res, "Database find error", err);
-    });
+  });
+}
+
+async function compareHashedPasswords(plaintextPassword: string, hashedPassword: string): Promise<Boolean> {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(plaintextPassword, hashedPassword)
+      .then((valid: Boolean) => {
+        resolve(valid);
+      })
+      .catch((err: any) => {
+        err.message = "Bcrypt compare error";
+        reject(err);
+      })
+  });
+}
+
+export async function loginUser(req: Request, res: Response, next: NextFunction) {
+  // Validate user email and password manually
+  const validator: Validator = new Validator();
+  const validEmail: Boolean = validator.isEmail(req.body.email, {});
+  const validPassword: Boolean = validator.isLength(req.body.password, 0, 32);
+
+  if (!validEmail) {
+    req.flash("emailError", "Email is invalid");
+    return res.redirect("/login");
+  } else if (!validPassword) {
+    req.flash("passwordError", "Password is too long");
+    return res.redirect("/login");
+  }
+
+  try {
+    const result: any = await findUserByEmail(req.body.email);
+    if (!result) {
+      req.flash("loginError", "The email you entered does not belong to any account");
+      return res.redirect("/login");
+    }
+    const valid: Boolean = await compareHashedPasswords(req.body.password, result.password);
+    if (!valid) {
+      req.flash("loginError", "The password you entered is incorrect");
+      return res.redirect("/login");
+    }
+    // Create new user and set the sessions variable with it
+    const user: User = new User();
+    user.create(result);
+    user.clearPassword(); // Clear hashed password
+    user.setID(result._id);
+    req.session!.user = user; // Set session variable
+  } catch (err) {
+    console.error(err);
+    req.flash("serverError", "We couldn't log you in right now");
+    return res.status(500).render('error');
+  }
+  return res.redirect("/");
 }
