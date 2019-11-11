@@ -144,21 +144,3 @@ export async function createUser(req: Request, res: Response, next: NextFunction
   }
   return res.redirect("/");
 }
-
-/**
- * Get All Users (For Development)
- */
-export function getAllUsers(req: Request, res: Response, next: NextFunction) {
-  DbClient.connect()
-    .then((db: any) => {
-      return db.collection("users").find().toArray();
-    })
-    .then((users: any) => {
-      console.log(users);
-      res.send(users);
-    })
-    .catch((err: any) => {
-      console.error(err);
-    });
-}
-
