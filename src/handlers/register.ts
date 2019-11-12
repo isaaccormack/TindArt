@@ -37,6 +37,7 @@ function registerValidationErrorRes(req: Request, res: Response, errors: Validat
         break;
     }
   });
+
   return res.redirect("/register");
 }
 
@@ -106,14 +107,17 @@ export async function createUser(req: Request, res: Response, next: NextFunction
       req.flash(err.type, err.message);
       return res.redirect("/register");
     }
+
     // Create new user DTO and set the sessions variable with it
     const userDTO: UserDTO = new UserDTO();
     userDTO.create(result!); // Assert that result is not undefined
-    req.session!.user = userDTO; // Set session variable
+    req.session!.user = userDTO;
+
   } catch (err) {
     console.error(err);
     req.flash("serverError", "We couldn't make you an account right now");
     return res.status(500).render('error');
   }
+
   return res.redirect("/");
 }

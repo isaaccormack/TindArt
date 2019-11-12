@@ -26,8 +26,6 @@ async function compareHashedPasswords(plaintextPassword: string, hashedPassword:
  * Log User In
  */
 export async function loginUser(req: Request, res: Response, next: NextFunction) {
-  // maybe change this to create a user then validate without all fields to eliminate redundancy
-  // Validate user email and password manually
   const validator: Validator = new Validator();
   const validEmail: Boolean = validator.isEmail(req.body.email, {});
   const validPassword: Boolean = validator.isLength(req.body.password, 0, 32);
@@ -51,14 +49,17 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
       req.flash("loginError", "The password you entered is incorrect");
       return res.redirect("/login");
     }
-    // Create new user DTO and set the sessions variable with it
+
+    // Create new user DTO and set the session variable with it
     const userDTO: UserDTO = new UserDTO();
     userDTO.create(result);
     req.session!.user = userDTO; // Set session variable
+
   } catch (err) {
     console.error(err);
     req.flash("serverError", "We couldn't log you in right now");
     return res.status(500).render('error');
   }
+
   return res.redirect("/");
 }

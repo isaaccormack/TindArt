@@ -26,11 +26,13 @@ export class UserDTO {
 
   public _id: string = '';
 
-  // phone number - only displayed on clients website
-  // personal website
-  // social media links - facebook, twitter
+  /* 
+   * Could add these later:
+   * Phone number
+   * Personal Website
+   * Social media links - facebook, twitter, etc.
+  */
 
-  // UserDTO is created from database response -- unsure of type
   public create(res: UserDataJSON) {
     this.bio = res.bio;
     this.name = res.name;
@@ -40,6 +42,4 @@ export class UserDTO {
     this.province = res.province;
     this._id = res._id;
   }
-
-  // Can create many initialization methods for different DTO uses
 }
