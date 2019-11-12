@@ -1,8 +1,13 @@
 import { Router, Request, Response, NextFunction } from "express";
 
-import { getAllUsers, createUser } from "../handlers/registerHandler";
 import { BaseRoute } from "./route";
+import { getAllUsers, createUser } from "../handlers/register";
 
+/**
+ * / route
+ *
+ * @class RegisterRouter
+ */
 export class RegisterRouter extends BaseRoute {
   public static create(router: Router) {
     console.log("[RegisterRoute::create] Creating RegisterRoutes route.");

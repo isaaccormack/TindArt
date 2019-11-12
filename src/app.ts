@@ -12,8 +12,8 @@ import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
-import { RegisterRouter } from "./routes/registerRouter";
-import { UploadRouter } from "./routes/uploadRouter";
+import { RegisterRouter } from "./routes/register";
+import { UploadRouter } from "./routes/upload";
 
 /**
  * The server.

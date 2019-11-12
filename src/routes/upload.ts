@@ -1,6 +1,7 @@
-import { BaseRoute } from "./route";
 import { Router, Request, Response, NextFunction } from 'express';
-import { getAllPhotos, uploadPhoto } from '../handlers/uploadHandler';
+
+import { BaseRoute } from "./route";
+import { getAllPhotos, uploadPhoto } from '../handlers/upload';
 
 export class UploadRouter extends BaseRoute {
   public static create(router: Router) {

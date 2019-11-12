@@ -1,4 +1,3 @@
-import { Request } from "express";
 import { IsLength, IsEmail, IsAlpha, Matches, IsNumeric } from "validator.ts/decorator/Validation";
 
 export class User {
