@@ -20,6 +20,11 @@
               {{messages.nameError}}
           </div>
           <div class="c-form__row">
+              <label for="name" class="c-label">Username</label>
+              <input type="text" name="username" id="username" class="c-input-field" value="" autocorrect="off" required />
+              {{messages.usernameError}}
+          </div>
+          <div class="c-form__row">
               <label for="email" class="c-label">Email</label>
               <input type="email" name="email" id="email" autocapitalize="none" autocorrect="off" class="c-input-field" required />
               {{messages.emailError}}
