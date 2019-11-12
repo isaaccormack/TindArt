@@ -30,7 +30,7 @@ export function getAllPhotos(req: Request, res: Response, next: NextFunction) {
       res.send(photos);
     })
     .catch((err: any) => {
-      console.error(err);
+      console.error("Database conn failed: " + err);
     })
 }
 
@@ -40,7 +40,7 @@ export function getAllPhotos(req: Request, res: Response, next: NextFunction) {
 export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
   uploader(req, res, (err: any) => {
     if (err) {
-      console.error(err);
+      console.error("Upload failed: " + err);
       req.flash('error', 'Photo upload failed!');
     }
     next();
@@ -49,15 +49,15 @@ export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
 
 function getNextPhotoID(req: Request) {
   return DbClient.connect()
-  .then((db: Db) => {
-    return db!.collection("photos").insertOne({
-      "user": req.session!.user._id
+    .then((db: Db) => {
+      return db!.collection("photos").insertOne({
+        "user": req.session!.user._id
+      });
+    })
+    .then((result: any) => { // handle database response
+      if (result) {
+        console.log('Upload: ' + result.insertedId);
+        return result.insertedId.toString();
+      }
     });
-  })
-  .then((result: any) => { // handle database response
-    if (result) {
-      console.log('Upload: ' + result.insertedId);
-      return result.insertedId.toString();
-    }
-  });
 }

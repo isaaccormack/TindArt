@@ -19,12 +19,14 @@ export class LoginRoute extends BaseRoute {
   public static create(router: Router) {
     // log
     console.log("[LoginRoute::create] Creating login route.");
-    // login page
+
     router.get("/login", (req: Request, res: Response, next: NextFunction) => {
       new LoginRoute().login(req, res, next);
     });
-    // add home page route
+
     router.post("/api/login", (req: Request, res: Response, next: NextFunction) => {
+      if (req.session!.user) return res.redirect("/");
+
       loginUser(req, res, next);
     });
   }
@@ -49,14 +51,8 @@ export class LoginRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public login(req: Request, res: Response, next: NextFunction) {
-    // set custom title
-    this.title = "Welcome to TindArt";
+    if (req.session!.user) return res.redirect("/");
 
-    if (req.session!.user) {
-      return res.redirect("/");
-    }
-
-    // render template
     this.render(req, res, "login");
   }
 }

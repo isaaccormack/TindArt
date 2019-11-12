@@ -4,24 +4,24 @@ import { BaseRoute } from "./route";
 /**
  * / route
  *
- * @class IndexRoute
+ * @class NotFoundRoute
  */
-export class IndexRoute extends BaseRoute {
+export class NotFoundRoute extends BaseRoute {
 
   /**
    * Create the routes.
    *
-   * @class IndexRoute
+   * @class NotFoundRoute
    * @method create
    * @static
    */
   public static create(router: Router) {
     // log
-    console.log("[IndexRoute::create] Creating index route.");
+    console.log("[NotFoundRoute::create] Creating not found route.");
 
-    // add home page route
-    router.get("/", (req: Request, res: Response, next: NextFunction) => {
-      new IndexRoute().index(req, res, next);
+    // Catch all requests for endpoints which are not found
+    router.get("/*", (req: Request, res: Response, next: NextFunction) => {
+      new NotFoundRoute().display(req, res, next);
     });
   }
 
@@ -44,11 +44,7 @@ export class IndexRoute extends BaseRoute {
    * @param res {Response} The express Response object.
    * @next {NextFunction} Execute the next method.
    */
-  public index(req: Request, res: Response, next: NextFunction) {
-    if (req.session!.user) { // If user logged in
-      this.render(req, res, 'home', { "name": req.session!.user.name });
-    } else {
-      this.render(req, res, 'index');
-    }
+  public display(req: Request, res: Response, next: NextFunction) {
+    this.render(req, res, "404");
   }
 }

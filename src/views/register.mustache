@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Register</title>
+</head>
+
+<body>
+  <!-- Boilerplate Form -->
+  <form class="boilerform" id="form" action='/api/register' method="post" onsubmit="return check(event)">
+      <fieldset class="c-form">
+          <legend class="c-form__heading">Register form</legend>
+          <div class="c-form__row">
+              <label for="name" class="c-label">Name</label>
+              <input type="text" name="name" id="name" class="c-input-field" value="" autocorrect="off" required />
+              {{messages.nameError}}
+          </div>
+          <div class="c-form__row">
+              <label for="email" class="c-label">Email</label>
+              <input type="email" name="email" id="email" autocapitalize="none" autocorrect="off" class="c-input-field" required />
+              {{messages.emailError}}
+          </div>
+          <div class="c-form__row">
+              <label for="password" class="c-label">Password</label>
+              <input type="password" name="password" id="password" autocapitalize="none" autocorrect="off" class="c-input-field" required />
+              {{messages.passwordError}}
+          </div>
+          <div class="c-form__row" id="confirm">
+              <label for="confirm-password" class="c-label">Confirm Password</label>
+              <input type="password" name="confirm-password" id="confirm-password" autocapitalize="none" autocorrect="off" class="c-input-field" required />
+          </div>
+          <div class="c-form__row">
+              <button class="c-button" type="submit">Submit</button>   
+              {{messages.registerError}} 
+          </div>
+      </fieldset>
+  </form>
+
+  <script>
+  // check runs before form is submitted to server to provide client side validation
+  // this can be extended to validate all form fields client side to provide better UI for client (ie. page
+  // wont refresh before error message to client doesn't lose all form info)
+  var check = function(e) {
+    if (document.getElementById('password').value != document.getElementById('confirm-password').value) {
+        e.preventDefault(); // don't submit form
+        document.getElementById("confirm").appendChild(document.createTextNode("passwords dont match"));
+    }
+  }
+  </script>
+
+  <a href="/">Go Home?</a>
+</body>
+
+</html>
