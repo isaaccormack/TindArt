@@ -12,7 +12,8 @@ import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
-import { RegisterRouter } from "./routes/register";
+import { RegisterRoute } from "./routes/register";
+import { UserRoute } from "./routes/users";
 import { UploadRouter } from "./routes/upload";
 
 /**
@@ -120,10 +121,11 @@ export class Server {
     router = express.Router();
 
     IndexRoute.create(router);
-    RegisterRouter.create(router);
-    LogoutRoute.create(router);
+    RegisterRoute.create(router);
     LoginRoute.create(router);
+    LogoutRoute.create(router);
     UploadRouter.create(router);
+    UserRoute.create(router); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
     //use router middleware

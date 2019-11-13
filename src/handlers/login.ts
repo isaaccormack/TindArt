@@ -1,33 +1,14 @@
-import bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 
-import DbClient = require("../DbClient");
-import { User } from "../models/User";
+import { UserDataJSON, UserDTO } from "../DTOs/UserDTO";
+import { findUserByEmail } from "../services/user";
+
 
 /**
- * Log User In
+ * Compare Hashed Passwords Util
  */
-
-async function findUserByEmail(email: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    DbClient.connect()
-      .then((db: any) => {
-        return db.collection("users").find({ email }).toArray();
-      })
-      .then((result: any) => {
-        if (result.length != 1) {
-          resolve(); // Couldn't find users email
-        }
-        resolve(result[0]);
-      })
-      .catch((err: any) => {
-        err.message = "Database find error";
-        reject(err);
-      });
-  });
-}
-
 async function compareHashedPasswords(plaintextPassword: string, hashedPassword: string): Promise<Boolean> {
   return new Promise((resolve, reject) => {
     bcrypt.compare(plaintextPassword, hashedPassword)
@@ -41,8 +22,10 @@ async function compareHashedPasswords(plaintextPassword: string, hashedPassword:
   });
 }
 
+/**
+ * Log User In
+ */
 export async function loginUser(req: Request, res: Response, next: NextFunction) {
-  // Validate user email and password manually
   const validator: Validator = new Validator();
   const validEmail: Boolean = validator.isEmail(req.body.email, {});
   const validPassword: Boolean = validator.isLength(req.body.password, 0, 32);
@@ -56,7 +39,7 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
   }
 
   try {
-    const result: any = await findUserByEmail(req.body.email);
+    const result: UserDataJSON = await findUserByEmail(req.body.email);
     if (!result) {
       req.flash("loginError", "The email you entered does not belong to any account");
       return res.redirect("/login");
@@ -66,16 +49,17 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
       req.flash("loginError", "The password you entered is incorrect");
       return res.redirect("/login");
     }
-    // Create new user and set the sessions variable with it
-    const user: User = new User();
-    user.create(result);
-    user.clearPassword(); // Clear hashed password
-    user.setID(result._id);
-    req.session!.user = user; // Set session variable
+
+    // Create new user DTO and set the session variable with it
+    const userDTO: UserDTO = new UserDTO();
+    userDTO.create(result);
+    req.session!.user = userDTO; // Set session variable
+
   } catch (err) {
     console.error(err);
     req.flash("serverError", "We couldn't log you in right now");
     return res.status(500).render('error');
   }
+
   return res.redirect("/");
 }

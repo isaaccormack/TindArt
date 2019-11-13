@@ -29,7 +29,7 @@ export class NotFoundRoute extends BaseRoute {
   /**
    * Constructor
    *
-   * @class IndexRoute
+   * @class NotFoundRoute
    * @constructor
    */
   constructor() {
@@ -37,10 +37,10 @@ export class NotFoundRoute extends BaseRoute {
   }
 
   /**
-   * The home page route.
+   * The 404 route.
    *
-   * @class IndexRoute
-   * @method index
+   * @class NotFoundRoute
+   * @method display
    * @param req {Request} The express Request object.
    * @param res {Response} The express Response object.
    * @next {NextFunction} Execute the next method.

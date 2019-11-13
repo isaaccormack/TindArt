@@ -2,83 +2,90 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Register</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register</title>
 </head>
 
 <body>
-  <!-- Boilerplate Form -->
-  <form class="boilerform" id="form" action='/api/register' method="post" onsubmit="return check(event)">
-      <fieldset class="c-form">
-          <legend class="c-form__heading">Register form</legend>
-          <div class="c-form__row">
-              <label for="name" class="c-label">Name</label>
-              <input type="text" name="name" id="name" class="c-input-field" value="" autocorrect="off" maxlength="32" required />
-              {{messages.nameError}}
-          </div>
-          <div class="c-form__row">
-              <label for="name" class="c-label">Username</label>
-              <input type="text" name="username" id="username" class="c-input-field" value="" autocorrect="off" maxlength="32" required />
-              {{messages.usernameError}}
-          </div>
-          <div class="c-form__row">
-              <label for="email" class="c-label">Email</label>
-              <input type="email" name="email" id="email" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
-              {{messages.emailError}}
-          </div>
-          <div class="c-form__row">
-              <label for="name" class="c-label">City</label>
-              <input type="text" name="city" id="city" class="c-input-field" value="" autocorrect="off" maxlength="32" required />
-              <!-- Map provinces in drop down to their codes according to http://geogratis.gc.ca/services/geoname/en/codes/province -->
-              <select name="provinceCode">
-                <option value=48>AB</option>
-                <option value=59>BC</option>
-                <option value=46>MB</option>
-                <option value=13>NB</option>
-                <option value=10>NL</option>
-                <option value=12>NS</option>
-                <option value=61>NT</option>
-                <option value=62>NU</option>
-                <option value=35>ON</option>
-                <option value=11>PE</option>
-                <option value=24>QC</option>
-                <option value=47>SK</option>
-                <option value=60>YT</option>
-              </select>
-              {{messages.locationError}}
-          </div>
-          <div class="c-form__row">
-              <label for="password" class="c-label">Password</label>
-              <input type="password" name="password" id="password" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
-              {{messages.passwordError}}
-          </div>
-          <div class="c-form__row" id="confirm">
-              <label for="confirm-password" class="c-label">Confirm Password</label>
-              <input type="password" name="confirm-password" id="confirm-password" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
-          </div>
-          <div class="c-form__row">
-              <button class="c-button" type="submit">Submit</button>   
-              {{messages.registerError}} 
-          </div>
-      </fieldset>
-  </form>
+    <!-- Boilerplate Form -->
+    <form class="boilerform" id="form" action='/api/register' method="post" onsubmit="return check(event)">
+        <fieldset class="c-form">
+            <legend class="c-form__heading">Register form</legend>
+            <div class="c-form__row">
+                <label for="name" class="c-label">Name</label>
+                <input type="text" name="name" id="name" class="c-input-field" value="" autocorrect="off" maxlength="32"
+                    required />
+                {{messages.nameError}}
+            </div>
+            <div class="c-form__row">
+                <label for="name" class="c-label">Username</label>
+                <input type="text" name="username" id="username" class="c-input-field" value="" autocorrect="off"
+                    maxlength="32" required />
+                {{messages.usernameError}}
+            </div>
+            <div class="c-form__row">
+                <label for="email" class="c-label">Email</label>
+                <input type="email" name="email" id="email" autocapitalize="none" autocorrect="off"
+                    class="c-input-field" maxlength="32" required />
+                {{messages.emailError}}
+            </div>
+            <div class="c-form__row">
+                <label for="name" class="c-label">City</label>
+                <input type="text" name="city" id="city" class="c-input-field" value="" autocorrect="off" maxlength="32"
+                    required />
+                <!-- Map provinces in drop down to their codes according to http://geogratis.gc.ca/services/geoname/en/codes/province -->
+                <select name="provinceCode">
+                    <option value="48">AB</option>
+                    <option value="59">BC</option>
+                    <option value="46">MB</option>
+                    <option value="13">NB</option>
+                    <option value="10">NL</option>
+                    <option value="12">NS</option>
+                    <option value="61">NT</option>
+                    <option value="62">NU</option>
+                    <option value="35">ON</option>
+                    <option value="11">PE</option>
+                    <option value="24">QC</option>
+                    <option value="47">SK</option>
+                    <option value="60">YT</option>
+                </select>
+                {{messages.locationError}}
+            </div>
+            <div class="c-form__row">
+                <label for="password" class="c-label">Password</label>
+                <input type="password" name="password" id="password" autocapitalize="none" autocorrect="off"
+                    class="c-input-field" maxlength="32" required />
+                {{messages.passwordError}}
+            </div>
+            <div class="c-form__row" id="confirm">
+                <label for="confirm-password" class="c-label">Confirm Password</label>
+                <input type="password" name="confirm-password" id="confirm-password" autocapitalize="none"
+                    autocorrect="off" class="c-input-field" maxlength="32" required />
+            </div>
+            <div class="c-form__row">
+                <button class="c-button" type="submit">Submit</button>
+                {{messages.registerError}}
+            </div>
+        </fieldset>
+    </form>
 
-  <script>
-  // check runs before form is submitted to server to provide client side validation
-  // this can be extended to validate all form fields client side to provide better UI for client (ie. page
-  // wont refresh before error message to client doesn't lose all form info)
-  var check = function(e) {
-    if (document.getElementById('password').value != document.getElementById('confirm-password').value) {
-        e.preventDefault(); // don't submit form
-        document.getElementById("confirm").appendChild(document.createTextNode("passwords dont match"));
-    }
-  }
-  </script>
+    <script>
+        // 'check' runs before form is submitted to server to provide client side validation
+        // This can be extended to validate all form fields client side to provide better UI for client (ie. page
+        // wont refresh before error message to client doesn't lose all form info)
+        function check(e) {
+            if (document.getElementById('password').value != document.getElementById('confirm-password').value) {
+                e.preventDefault(); // don't submit form
+                document.getElementById("confirm").appendChild(document.createTextNode("Passwords don't match"));
+            }
+        }
+    </script>
 
-  <a href="/">Go Home?</a>
+    <p>Already have an account? <a href="/login">Log in</a></p>
+    <a href="/">Go Home?</a>
 </body>
 
 </html>

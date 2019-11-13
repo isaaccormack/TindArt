@@ -1,16 +1,18 @@
 import axios from 'axios';
-import bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
 
-import DbClient = require("../DbClient");
+import { DbResult, insertNewUser } from "../services/user";
 import { User } from "../models/User";
+import { UserDTO } from "../DTOs/UserDTO";
+
+// NEED TO TEST THIS WIth postman to make sure doesnt crash still
 
 /**
- * Create New User
- */
-
+* Render Register Validation Errors Util
+*/
 function registerValidationErrorRes(req: Request, res: Response, errors: ValidationErrorInterface[]) {
   // Extract errors into their own object for ease of client side rendering
   errors.forEach((error: ValidationErrorInterface) => {
@@ -27,7 +29,7 @@ function registerValidationErrorRes(req: Request, res: Response, errors: Validat
       case 'city':
         req.flash("locationError", error.errorMessage);
         break;
-      case 'province':
+      case 'provinceCode':
         req.flash("locationError", error.errorMessage);
         break;
       case 'password':
@@ -35,10 +37,14 @@ function registerValidationErrorRes(req: Request, res: Response, errors: Validat
         break;
     }
   });
+
   return res.redirect("/register");
 }
 
-async function validateLocation(city: string, provinceCode: number): Promise<Boolean> {
+/**
+ * Validate Location Util
+ */
+async function validateLocation(city: string, provinceCode: string): Promise<Boolean> {
   const url: string =
     "http://geogratis.gc.ca/services/geoname/en/geonames.json?q=" + city + "&province=" + provinceCode + "&concise=CITY";
   return new Promise((resolve, reject) => {
@@ -58,6 +64,9 @@ async function validateLocation(city: string, provinceCode: number): Promise<Boo
   });
 }
 
+/**
+ * Async Function Wrapper Around Bcrypt Hash
+ */
 async function getHashedPassword(password: string): Promise<string> {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, 10) // Use 10 salt rounds
@@ -69,47 +78,10 @@ async function getHashedPassword(password: string): Promise<string> {
   });
 }
 
-// The returned object type from the addUserToDB function
-interface validationError {
-  type: string;
-  message: string;
-}
-
-async function addUserToDB(user: User, hash: string): Promise<validationError> {
-  return new Promise((resolve, reject) => {
-    DbClient.connect()
-      .then((db: any) => {
-        return db.collection("users").insertOne({
-          "name": user.getName(),
-          "username": user.getUsername(),
-          "email": user.getEmail(),
-          "city": user.getCity(),
-          "provinceCode": user.getProvinceCode(),
-          "password": hash,
-        });
-      })
-      .then((result: any) => {
-        if (result.ops.length != 1) { // User couldn't be created
-          reject(Error("Database insert error"));
-        }
-        user.setID(result.ops[0]._id);
-        resolve(); // Resolve with empty which is falsey
-      })
-      .catch((err: any) => {
-        if (err.code && parseInt(err.code, 10) === 11000) { // Username is not unique
-          if (err.keyPattern.username) {
-            resolve({ type: "usernameError", message: "An account with this username already exists" })
-          } else if (err.keyPattern.email) {
-            resolve({ type: "emailError", message: "An account with this email already exists" })
-          }
-        } else {
-          err.message = "Database error";
-          reject(err);
-        }
-      });
-  });
-}
-
+/**
+ * Create New User
+ */
+/* Known defect - all req.body params must be present or server will crash */
 export async function createUser(req: Request, res: Response, next: NextFunction) {
   // Create User object to validate user input
   const user: User = new User();
@@ -130,34 +102,22 @@ export async function createUser(req: Request, res: Response, next: NextFunction
 
     const hash: string = await getHashedPassword(req.body.password);
 
-    const err: validationError = await addUserToDB(user, hash);
+    const { err, result }: DbResult = await insertNewUser(user, hash);
     if (err) {
       req.flash(err.type, err.message);
       return res.redirect("/register");
     }
-    req.session!.user = user; // Set session variable
+
+    // Create new user DTO and set the sessions variable with it
+    const userDTO: UserDTO = new UserDTO();
+    userDTO.create(result!); // Assert that result is not undefined
+    req.session!.user = userDTO;
+
   } catch (err) {
     console.error(err);
     req.flash("serverError", "We couldn't make you an account right now");
     return res.status(500).render('error');
   }
+
   return res.redirect("/");
 }
-
-/**
- * Get All Users (For Development)
- */
-export function getAllUsers(req: Request, res: Response, next: NextFunction) {
-  DbClient.connect()
-    .then((db: any) => {
-      return db.collection("users").find().toArray();
-    })
-    .then((users: any) => {
-      console.log(users);
-      res.send(users);
-    })
-    .catch((err: any) => {
-      console.error(err);
-    });
-}
-

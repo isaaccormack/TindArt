@@ -35,7 +35,7 @@ export class LoginRoute extends BaseRoute {
   /**
    * Constructor
    *
-   * @class IndexRoute
+   * @class LoginRoute
    * @constructor
    */
   constructor() {
@@ -43,10 +43,10 @@ export class LoginRoute extends BaseRoute {
   }
 
   /**
-   * The home page route.
+   * The login route.
    *
-   * @class IndexRoute
-   * @method index
+   * @class LoginRoute
+   * @method login
    * @param req {Request} The express Request object.
    * @param res {Response} The express Response object.
    * @next {NextFunction} Execute the next method.
