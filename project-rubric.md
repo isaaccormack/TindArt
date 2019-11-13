@@ -58,13 +58,13 @@ Marks deducted:
 - again neither the Sequence nor the class diagram has any rationale behind it and the individual responsibilities and design choices are not well 
   described (-1)
 
+# Milestone 3 15.5 / 20
 
-# Milestone 3    / 20
+## Marking Guide
 
-## Marking Guide	
-- code compiles 
+- code compiles
 - code conventions/CI from above (commented, code style, design principles)
-- working demo 
+- working demo
 - clear explanation of what user stories were satisfied in this iteration
 - design as implemented follows design doc, or change rationale is present in README
 - async is async when necessary
@@ -72,7 +72,20 @@ Marks deducted:
 - test suite present/part of CI
 - test coverage reasonable and meaningful
 
+
+Marks deducted:
+
+- Test suite is not present. (-2)
+- Linter complains. (-0.5)
+- Asynchronous programming was not followed everywhere. (-1)
+- Coding convention and good coding design was not followed properly. (-1)
+
 ## Notes M3
+
 (explaining why marks were deducted)
 -----
 
+- Test coverage is not present for the stories.
+- Linter complains for some trivial problems. (ex. "")
+- Asynchronous programming was only done to connect to database. The read/write operation could also be implemented Asynchronously.
+- The methods are large. The database connection could be moved somewhere else to avoid having large methods.
