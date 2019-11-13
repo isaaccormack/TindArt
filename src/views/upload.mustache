@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Register</title>
+</head>
+
+<body>
+  <div class="registration-error">
+    <ul>{{#messages}}<li>{{error}}</li>{{/messages}}</ul>
+  </div>
+
+  <!-- Boilerplate Form -->
+  <form class="boilerform" id="form" action='/api/upload' method="post" enctype="multipart/form-data">
+      <fieldset class="c-form">
+          <legend class="c-form__heading">Avatar Upload</legend>
+          <div class="c-form__row">
+              <label for="name" class="c-label">File</label>
+              <input type='file', accept="image/*" name='avatar' class="c-input-field" value="" autocorrect="off"/>
+              <input type='submit', value='Upload avatar'/>
+          </div>
+      </fieldset>
+  </form>
+  <form class="boilerform2" id="form2" action='/api/upload' method="post" enctype="multipart/form-data">
+      <fieldset class="c-form">
+          <legend class="c-form__heading">Gallery Upload</legend>
+          <div class="c-form__row">
+              <label for="name" class="c-label">File:</label>
+              <input type='file', accept="image/*" name='gallery' multiple class="c-input-field" value="" autocorrect="off"/>
+              <input type='submit', value='Upload to gallery'/>
+          </div>
+      </fieldset>
+  </form>
+
+  <a href="/">Go Home?</a>
+</body>
+
+</html>

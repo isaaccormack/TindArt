@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>TindArt</title>
+</head>
+
+<body>
+  <p>Welcome to your user page {{name}}</p>
+  <p>{{city}}, {{province}}</p>
+  <!-- Edit bio button / form dynamically created in below div -->
+  <div id="bio">
+  </div>
+  <h6>{{bio}}</h6>
+
+  <h3><a href="/api/logout">Log Out?</a></h3>
+  <h3><a href="/upload">Upload Photo?</a></h3>
+  <h4>{{messages.serverError}}</h4>
+</body>
+
+<script>
+  document.onload = buildEditBioBtn();
+
+  function buildEditBioBtn() {
+    document.getElementById('bio').innerHTML +=
+      '<div id="edit-bio">' +
+      '<button type="button" onclick="handleEditBioBtnClick(event);">Edit Bio</button>' +
+      '{{messages.bioError}}' +
+      '</div>';
+  }
+
+  function buildEditBioForm() {
+    document.getElementById('bio').innerHTML +=
+      '<form id="update-bio-form" action="/api/user/updateBio" method="post">' +
+      '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
+      '<div class="c-form__row">' +
+      '<label for="bio-input" class="c-label">Bio</label>' +
+      '<input type="text" name="bio" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="32" required />' +
+      '</div>' +
+      '<div class="c-form__row">' +
+      '<button class="c-button" onclick="handleCancelEditBioBtnClick(event);" type="submit">Cancel</button>' +
+      '</div>' +
+      '<div class="c-form__row">' +
+      '<button class="c-button" type="submit">Save</button>' +
+      '</div>' +
+      '</form>'
+  }
+
+  function handleEditBioBtnClick(e) {
+    e.preventDefault();
+
+    document.getElementById('edit-bio').remove(); // Delete edit bio button on DOM
+    buildEditBioForm();
+  }
+
+  function handleCancelEditBioBtnClick(e) {
+    e.preventDefault();
+
+    document.getElementById('update-bio-form').remove(); // Delete edit bio form on DOM
+    buildEditBioBtn();
+  }
+</script>
+
+</html>

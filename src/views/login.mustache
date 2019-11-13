@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Register</title>
+</head>
+
+<body>
+  <!-- Boilerplate Form -->
+  <form class="boilerform" id="form" action='/api/login' method="post">
+      <fieldset class="c-form">
+          <legend class="c-form__heading">Login form</legend>
+          <div class="c-form__row">
+              <label for="email" class="c-label">Email</label>
+              <input type="email" name="email" id="email" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
+              {{messages.emailError}}
+          </div>
+          <div class="c-form__row">
+              <label for="password" class="c-label">Password</label>
+              <input type="password" name="password" id="password" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
+              {{messages.passwordError}}
+
+          </div>
+          <div class="c-form__row">
+              <button class="c-button" type="submit">Submit</button>    
+              {{messages.loginError}}
+          </div>
+      </fieldset>
+  </form>
+
+  <p>Don't have an account? <a href="/register">Register</a></p>
+  <a href="/">Go Home?</a>
+</body>
+
+</html>
