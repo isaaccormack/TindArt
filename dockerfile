@@ -1,6 +1,8 @@
-# dockerfile made mostly from here: 
-# https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
-FROM node:12
+# Dockerfile from node-alpine for smaller-sized images
+FROM node:12-alpine
+
+# Add python and make for building bcrypt
+RUN apk add build-base python3
 
 # Create app directory and set pwd to it
 WORKDIR /usr/src/app
@@ -15,7 +17,7 @@ RUN npm install
 COPY . .
 
 # Compile typescript to javascript
-RUN npm build-ts
+RUN npm run build-ts
 
 # Expose port 3000 to outside world
 EXPOSE 3000

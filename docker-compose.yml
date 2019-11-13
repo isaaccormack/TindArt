@@ -19,6 +19,6 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
 
   node-webserver:
-    build: .
+    image: seng350team301/webserver
     ports:
       - 3000:3000
