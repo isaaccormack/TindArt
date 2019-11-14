@@ -2,6 +2,7 @@ import DbClient from "../DbClient";
 import { ObjectId } from 'mongodb';
 import { User } from "../models/User";
 import { UserDataJSON } from "../DTOs/UserDTO";
+import { getDb } from "../database/dal";
 
 
 export interface DbResult { // Type returned by insertNewUser
@@ -98,6 +99,20 @@ export async function findUserByUsername(username: string): Promise<UserDataJSON
   });
 }
 
+export function findUserByUsernameNew(username: string) {
+  const db = getDb();
+  try {
+    const results = db.collection("users").find({ username }).toArray();
+    if (results.length !== 1) {
+      return; // Couldn't find username
+    } else {
+      return results[0]; // Found username
+    }
+  } catch (err) {
+    err.message = "Database find error";
+    throw err;
+  }
+}
 
 /**
  * Update User Bio by ID
