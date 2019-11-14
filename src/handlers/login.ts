@@ -39,7 +39,7 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
   }
 
   try {
-    const result: UserDataJSON = await findUserByEmail(req.body.email);
+    const result: UserDataJSON | null = await findUserByEmail(req.body.email);
     if (!result) {
       req.flash("loginError", "The email you entered does not belong to any account");
       return res.redirect("/login");

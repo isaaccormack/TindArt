@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { Db } from 'mongodb';
+import multer from 'multer';
 
-const DbClient = require('../DbClient');
-const multer = require('multer');
+import { getDb } from '../database/dbclient';
 
 const storage = multer.diskStorage({
   destination: function (req: any, file: any, cb: any) {
@@ -20,18 +20,16 @@ const uploader = multer({ storage: storage }).fields([{ name: 'avatar', maxCount
 /**
 * Get All Photos
 */
-export function getAllPhotos(req: Request, res: Response, next: NextFunction) {
-  DbClient.connect()
-    .then((db: any) => {
-      return db!.collection("photos").find().toArray();
-    })
-    .then((photos: any) => {
-      console.log(photos);
-      res.send(photos);
-    })
-    .catch((err: any) => {
-      console.error("Database conn failed: " + err);
-    })
+export async function getAllPhotos(req: Request, res: Response, next: NextFunction) {
+  const db: Db = getDb();
+  try {
+    const photos = await db.collection("photos").find().toArray();
+    console.log(photos);
+    res.send(photos);
+  } catch (err) {
+    console.error("Failed to get all photos: " + err);
+    throw err;
+  }
 }
 
 /**
@@ -47,17 +45,13 @@ export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
   });
 }
 
-function getNextPhotoID(req: Request) {
-  return DbClient.connect()
-    .then((db: Db) => {
-      return db!.collection("photos").insertOne({
-        "user": req.session!.user._id
-      });
-    })
-    .then((result: any) => { // handle database response
-      if (result) {
-        console.log('Upload: ' + result.insertedId);
-        return result.insertedId.toString();
-      }
-    });
+async function getNextPhotoID(req: Request) {
+  const db: Db = getDb();
+  const result: any = await db.collection("photos").insertOne({
+    "user": req.session!.user._id
+  });
+  if (result) {
+    console.log("Upload: " + result.insertedId);
+    return result.insertedId.toString();
+  }
 }
