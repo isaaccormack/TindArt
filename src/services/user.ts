@@ -55,47 +55,26 @@ export async function insertNewUser(user: User, hash: string): Promise<DbResult>
 
 
 /**
- * Find User by Email
+ * Find a User in the database by searching for its email
+ * @param email User to search for
+ * @return a Promise with either a UserDataJSON object containing the user's
+ * data or null if the user does not exist
  */
-export async function findUserByEmail(email: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    DbClient.connect()
-      .then((db: any) => {
-        return db.collection("users").find({ email }).toArray();
-      })
-      .then((result: any) => {
-        if (result.length != 1) {
-          resolve(); // Couldn't find users email
-        }
-        resolve(result[0]);
-      })
-      .catch((err: any) => {
-        err.message = "Database find error";
-        reject(err);
-      });
-  });
+export async function findUserByEmail(email: string): Promise<UserDataJSON | null> {
+  const db: Db = getDb();
+  try {
+    const results = await db.collection("users").find({ email }).toArray();
+    if (results.length !== 1) {
+      return null; // Couldn't find email
+    } else {
+      return results[0]; // Found email
+    }
+  } catch (err) {
+    err.message = "Database find error";
+    throw err;
+  }
 }
 
-
-/**
- * Find User by Username
- */
-export async function findUserByUsernameOld(username: string): Promise<UserDataJSON> {
-  return new Promise((resolve, reject) => {
-    const db: Db = getDb();
-    db.collection("users").find({ username }).toArray()
-      .then((result: any) => {
-        if (result.length != 1) {
-          resolve(); // Couldn't find username
-        }
-        resolve(result[0]);
-      })
-      .catch((err: any) => {
-        err.message = "Database find error";
-        reject(err);
-      });
-  });
-}
 
 /**
  * Find a User in the database by searching for its username
