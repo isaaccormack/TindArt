@@ -1,5 +1,5 @@
 import DbClient from "../DbClient";
-import { ObjectId } from 'mongodb';
+import { ObjectId, Db } from "mongodb";
 import { User } from "../models/User";
 import { UserDataJSON } from "../DTOs/UserDTO";
 import { getDb } from "../database/dal";
@@ -82,10 +82,8 @@ export async function findUserByEmail(email: string): Promise<any> {
  */
 export async function findUserByUsername(username: string): Promise<UserDataJSON> {
   return new Promise((resolve, reject) => {
-    DbClient.connect()
-      .then((db: any) => {
-        return db.collection("users").find({ username }).toArray();
-      })
+    const db: Db = getDb();
+    db.collection("users").find({ username }).toArray()
       .then((result: any) => {
         if (result.length != 1) {
           resolve(); // Couldn't find username
@@ -99,12 +97,18 @@ export async function findUserByUsername(username: string): Promise<UserDataJSON
   });
 }
 
-export function findUserByUsernameNew(username: string) {
-  const db = getDb();
+/**
+ * Find a User in the database by searching for its username
+ * @param username User to search for
+ * @return a Promise with either a UserDataJSON object containing the user's
+ * data or undefined if the user does not exist
+ */
+export async function findUserByUsernameNew(username: string): Promise<UserDataJSON | undefined> {
+  const db: Db = getDb();
   try {
-    const results = db.collection("users").find({ username }).toArray();
+    const results = await db.collection("users").find({ username }).toArray();
     if (results.length !== 1) {
-      return; // Couldn't find username
+      return undefined; // Couldn't find username
     } else {
       return results[0]; // Found username
     }
