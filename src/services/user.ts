@@ -1,3 +1,4 @@
+import { DbResult } from "./user";
 import DbClient from "../DbClient";
 import { ObjectId, Db } from "mongodb";
 import { User } from "../models/User";
@@ -15,49 +16,48 @@ export interface DbResult { // Type returned by insertNewUser
 }
 
 /**
- * Insert New User
+ * Insert new User into database
+ * @param user the User object to add to the users database
+ * @param hash the password for the user
+ * @return a Promise for a DbResult object, which contains either the UserDataJSON object
+ * of the new user, or an error message. An error message is returned if the username or
+ * email of the new user is not unique, i.e. already exists in the database.
  */
 export async function insertNewUser(user: User, hash: string): Promise<DbResult> {
-  return new Promise((resolve, reject) => {
-    DbClient.connect()
-      .then((db: any) => {
-        return db.collection("users").insertOne({
-          "name": user.getName(),
-          "username": user.getUsername(),
-          "email": user.getEmail(),
-          "city": user.getCity(),
-          "province": user.getProvince(),
-          "password": hash,
-        });
-      })
-      .then((result: any) => {
-        // Add typing in here for result.ops
-        if (result.ops.length != 1) { // User couldn't be created
-          reject(Error("Database insert error"));
-        }
-        const userData: UserDataJSON = result.ops[0]; // Type the DB response
-        resolve({ err: undefined, result: userData }); // err is falsey
-      })
-      .catch((err: any) => {
-        if (err.code && parseInt(err.code, 10) === 11000) { // Username is not unique
-          if (err.keyPattern.username) {
-            resolve({ err: { type: "usernameError", message: "An account with this username already exists" }, result: undefined })
-          } else if (err.keyPattern.email) {
-            resolve({ err: { type: "emailError", message: "An account with this email already exists" }, result: undefined })
-          }
-        } else {
-          err.message = "Database error";
-          reject(err);
-        }
-      });
-  });
+  const db: Db = getDb();
+  try {
+    const result = await db.collection("users").insertOne({
+      "name": user.getName(),
+      "username": user.getUsername(),
+      "email": user.getEmail(),
+      "city": user.getCity(),
+      "province": user.getProvince(),
+      "password": hash,
+    });
+    // User couldn't be created, but insertOne() did not throw
+    if (result.ops.length !== 1) {
+      throw new Error("Database insert error");
+    }
+    return { err: undefined, result: result.ops[0] as UserDataJSON }; // err is falsey; typecast db return value
+  } catch (err) {
+    if (err.code && parseInt(err.code, 10) === 11000) { // Something is not unique that needs to be
+      if (err.keyPattern.username) { // username is not unique
+        return { err: { type: "usernameError", message: "An account with this username already exists" }, result: undefined }
+      } else { // implicitly err.keyPattern.email i.e. email is not unique
+        return { err: { type: "emailError", message: "An account with this email already exists" }, result: undefined }
+      }
+    } else {
+      err.message = "Database error";
+      throw err;
+    }
+  }
 }
 
 
 /**
  * Find a User in the database by searching for its email
  * @param email User to search for
- * @return a Promise with either a UserDataJSON object containing the user's
+ * @return a Promise for either a UserDataJSON object containing the user's
  * data or null if the user does not exist
  */
 export async function findUserByEmail(email: string): Promise<UserDataJSON | null> {
@@ -79,7 +79,7 @@ export async function findUserByEmail(email: string): Promise<UserDataJSON | nul
 /**
  * Find a User in the database by searching for its username
  * @param username User to search for
- * @return a Promise with either a UserDataJSON object containing the user's
+ * @return a Promise for either a UserDataJSON object containing the user's
  * data or null if the user does not exist
  */
 export async function findUserByUsername(username: string): Promise<UserDataJSON | null> {
