@@ -97,24 +97,24 @@ export async function findUserByUsername(username: string): Promise<UserDataJSON
   }
 }
 
+
 /**
- * Update User Bio by ID
+ * Update a User's Bio by searching for its ID
+ * @param _id User ID to search for
+ * @param bio Updated Bio contents
+ * @return a Promise with a boolean success/failure value
  */
-export async function updateUserBioByID(_id: string, bio: string): Promise<Boolean> {
-  return new Promise((resolve, reject) => {
-    DbClient.connect()
-      .then((db: any) => {
-        return db.collection("users").updateOne({ _id: new ObjectId(_id) }, { $set: { bio } });
-      })
-      .then((result: any) => {
-        if (result.matchedCount != 1) {
-          resolve(false); // Couldn't find id
-        }
-        resolve(true);
-      })
-      .catch((err: any) => {
-        err.message = "Database update error";
-        reject(err);
-      });
-  });
+export async function updateUserBioByID(_id: string, bio: string): Promise<boolean> {
+  const db: Db = getDb();
+  try {
+    const result = await db.collection("users").updateOne({ _id: new ObjectId(_id) }, { $set: { bio } });
+    if (result.matchedCount != 1) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (err) {
+    err.message = "Database update error";
+    throw err;
+  }
 }

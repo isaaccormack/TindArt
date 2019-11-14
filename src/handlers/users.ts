@@ -43,7 +43,7 @@ export async function updateUserBio(req: Request, res: Response, next: NextFunct
   }
 
   try {
-    const success: Boolean = await updateUserBioByID(req.session!.user._id, bio);
+    const success: boolean = await updateUserBioByID(req.session!.user._id, bio);
     if (!success) throw new Error('Couldn\'t find user account'); // No user with given username exists
 
     req.session!.user.bio = bio; // Set bio in session
