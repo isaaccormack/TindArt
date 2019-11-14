@@ -5,14 +5,13 @@ import { User } from "../models/User";
 import { UserDataJSON } from "../DTOs/UserDTO";
 import { getDb } from "../database/dal";
 
-
 export interface DbResult { // Type returned by insertNewUser
   // Types can be undefined so result can be falsey if error present and vice versa
-  err: {
+  err?: {
     type: string;
     message: string;
-  } | undefined;
-  result: UserDataJSON | undefined;
+  };
+  result?: UserDataJSON;
 }
 
 /**
@@ -38,13 +37,13 @@ export async function insertNewUser(user: User, hash: string): Promise<DbResult>
     if (result.ops.length !== 1) {
       throw new Error("Database insert error");
     }
-    return { err: undefined, result: result.ops[0] as UserDataJSON }; // err is falsey; typecast db return value
+    return { result: result.ops[0] as UserDataJSON }; // err is falsey; typecast db return value
   } catch (err) {
     if (err.code && parseInt(err.code, 10) === 11000) { // Something is not unique that needs to be
       if (err.keyPattern.username) { // username is not unique
-        return { err: { type: "usernameError", message: "An account with this username already exists" }, result: undefined }
+        return { err: { type: "usernameError", message: "An account with this username already exists" } };
       } else { // implicitly err.keyPattern.email i.e. email is not unique
-        return { err: { type: "emailError", message: "An account with this email already exists" }, result: undefined }
+        return { err: { type: "emailError", message: "An account with this email already exists" } };
       }
     } else {
       err.message = "Database error";
@@ -52,7 +51,6 @@ export async function insertNewUser(user: User, hash: string): Promise<DbResult>
     }
   }
 }
-
 
 /**
  * Find a User in the database by searching for its email
@@ -75,7 +73,6 @@ export async function findUserByEmail(email: string): Promise<UserDataJSON | nul
   }
 }
 
-
 /**
  * Find a User in the database by searching for its username
  * @param username User to search for
@@ -97,7 +94,6 @@ export async function findUserByUsername(username: string): Promise<UserDataJSON
   }
 }
 
-
 /**
  * Update a User's Bio by searching for its ID
  * @param _id User ID to search for
@@ -108,7 +104,7 @@ export async function updateUserBioByID(_id: string, bio: string): Promise<boole
   const db: Db = getDb();
   try {
     const result = await db.collection("users").updateOne({ _id: new ObjectId(_id) }, { $set: { bio } });
-    if (result.matchedCount != 1) {
+    if (result.matchedCount !== 1) {
       return false;
     } else {
       return true;
