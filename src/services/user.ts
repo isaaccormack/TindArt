@@ -80,7 +80,7 @@ export async function findUserByEmail(email: string): Promise<any> {
 /**
  * Find User by Username
  */
-export async function findUserByUsername(username: string): Promise<UserDataJSON> {
+export async function findUserByUsernameOld(username: string): Promise<UserDataJSON> {
   return new Promise((resolve, reject) => {
     const db: Db = getDb();
     db.collection("users").find({ username }).toArray()
@@ -101,14 +101,14 @@ export async function findUserByUsername(username: string): Promise<UserDataJSON
  * Find a User in the database by searching for its username
  * @param username User to search for
  * @return a Promise with either a UserDataJSON object containing the user's
- * data or undefined if the user does not exist
+ * data or null if the user does not exist
  */
-export async function findUserByUsernameNew(username: string): Promise<UserDataJSON | undefined> {
+export async function findUserByUsername(username: string): Promise<UserDataJSON | null> {
   const db: Db = getDb();
   try {
     const results = await db.collection("users").find({ username }).toArray();
     if (results.length !== 1) {
-      return undefined; // Couldn't find username
+      return null; // Couldn't find username
     } else {
       return results[0]; // Found username
     }

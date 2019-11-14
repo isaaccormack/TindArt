@@ -17,7 +17,7 @@ export async function getUserByUsername(req: Request, res: Response, next: NextF
 
   if (!validUsername) throw new Error('Couldn\'t find user account');
 
-  const result: UserDataJSON = await findUserByUsername(req.params.username); // This throws
+  const result: UserDataJSON | null = await findUserByUsername(req.params.username); // This throws
   if (!result) throw new Error('Couldn\'t find user account'); // No user with given username exists
 
   return result;
