@@ -5,7 +5,7 @@
  */
 
 var appModule = require('../dist/app');
-var dbModule = require('../dist/database/dal');
+var dbModule = require('../dist/database/dbclient');
 var debug = require('debug')('myapp:server');
 var http = require('http');
 var app = appModule.Server.bootstrap().app;
