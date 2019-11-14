@@ -125,6 +125,7 @@ export class Server {
     LoginRoute.create(router);
     LogoutRoute.create(router);
     UploadRouter.create(router);
+    LikesRoute.create(router);
     UserRoute.create(router); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
