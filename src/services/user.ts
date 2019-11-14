@@ -1,9 +1,8 @@
 import { DbResult } from "./user";
-import DbClient from "../DbClient";
 import { ObjectId, Db } from "mongodb";
 import { User } from "../models/User";
 import { UserDataJSON } from "../DTOs/UserDTO";
-import { getDb } from "../database/dal";
+import { getDb } from "../database/dbclient";
 
 export interface DbResult { // Type returned by insertNewUser
   // Types can be undefined so result can be falsey if error present and vice versa
