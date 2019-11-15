@@ -26,12 +26,15 @@ export class UserDTO {
 
   public _id: string = "";
 
-  /* 
+  /**
    * Could add these later:
    * Phone number
    * Personal Website
    * Social media links - facebook, twitter, etc.
-  */
+   */
+  constructor(res: UserDataJSON) {
+    this.create(res);
+  }
 
   public create(res: UserDataJSON) {
     this.bio = res.bio;
