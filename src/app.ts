@@ -13,6 +13,7 @@ import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
 import { RegisterRoute } from "./routes/register";
+import { LikesRoute } from "./routes/likes";
 import { UserRoute } from "./routes/users";
 import { UploadRouter } from "./routes/upload";
 
