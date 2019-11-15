@@ -45,7 +45,7 @@ export class LikesRoute extends BaseRoute {
     // Try to get likes page from user's request
     try {
       //TODO: get some liked photos
-      const result: PhotoDataJSON = await getLikesByUsername(req, res, next)
+      const result: PhotoDataJSON = await getLikesByUserID(req, res, next)
 
       const photoDTO: PhotoDTO = new PhotoDTO(result);
 
