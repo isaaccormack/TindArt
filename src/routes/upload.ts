@@ -1,14 +1,20 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { getAllPhotos, uploadPhoto } from '../handlers/upload';
+import { uploadPhoto, uploadToGCP } from "../handlers/upload";
+import { clearPhotos, getAllPhotos } from "../services/photo";
 
 export class UploadRouter extends BaseRoute {
   public static create(router: Router) {
     console.log("[UploadRoute::create] Creating UploadRoutes route.");
 
-    router.get("/api/photos", (req: Request, res: Response, next: NextFunction) => {
-      getAllPhotos(req, res, next); // should check users level of authentication here
+    router.get("/api/photos", async (req: Request, res: Response, next: NextFunction) => {
+      const data = await getAllPhotos();
+      res.json(data); // should check users level of authentication here
+    });
+    router.get("/api/photos/clear", async (req: Request, res: Response, next: NextFunction) => {
+      const data = await clearPhotos();
+      res.json(data); // should check users level of authentication here
     });
 
     router.get("/upload", (req: Request, res: Response, next: NextFunction) => {
@@ -16,20 +22,21 @@ export class UploadRouter extends BaseRoute {
     });
 
     router.post("/api/upload", (req: Request, res: Response, next: NextFunction) => {
-      if (!req.session!.user) return res.status(401).redirect("/");
-
-      uploadPhoto(req, res, next);
-    }, (req: Request, res: Response, next: NextFunction) => {
-      console.log('Test');
-      console.log(req.files);
-      if ('avatar' in req.files) {
-        console.log(req.files.avatar[0].filename);
-        req.flash('result', 'Successfully uploaded avatar');
-        // Submit request to db to set users profile picture
-      } else if ('gallery' in req.files) {
-        req.flash('result', 'Successfully uploaded to gallery');
+      if (!req.session!.user) {
+        return res.status(401).redirect("/");
       }
-      res.redirect('/upload');
+      return next();
+    }, uploadPhoto,
+    uploadToGCP,
+    (req: Request, res: Response, next: NextFunction) => {
+      if ("avatar" in req.files) {
+        console.log(req.files.avatar[0].originalname);
+        req.flash("result", "Successfully uploaded avatar");
+        // Submit request to db to set users profile picture
+      } else if ("gallery" in req.files) {
+        req.flash("result", "Successfully uploaded to gallery");
+      }
+      res.redirect("/upload");
     });
   }
 
@@ -43,7 +50,9 @@ export class UploadRouter extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public upload(req: Request, res: Response, next: NextFunction) {
-    if (!req.session!.user) return res.status(401).redirect("/");
+    if (!req.session!.user) {
+      return res.status(401).redirect("/");
+    }
 
     this.render(req, res, "upload");
   }

@@ -1,30 +1,30 @@
 /* Type interface for the returned JSON for user returned by DB query */
 export interface UserDataJSON {
-  bio: string,
-  name: string,
-  username: string,
-  email: string,
-  city: string,
-  province: string,
-  password: string,
-  _id: string,
+  bio: string;
+  name: string;
+  username: string;
+  email: string;
+  city: string;
+  province: string;
+  password: string;
+  _id: string;
 }
 
 /* UserDTO object to transfer data between model and view */
 export class UserDTO {
-  public bio: string = '';
+  public bio: string = "";
 
-  public name: string = '';
+  public name: string = "";
 
-  public username: string = '';
+  public username: string = "";
 
-  public email: string = '';
+  public email: string = "";
 
-  public city: string = '';
+  public city: string = "";
 
-  public province: string = '';
+  public province: string = "";
 
-  public _id: string = '';
+  public _id: string = "";
 
   /* 
    * Could add these later:
