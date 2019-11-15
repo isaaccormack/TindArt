@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { getUserByUsername, updateUserBio } from "../handlers/likes";
+import { getMoreLikes } from "../handlers/likes";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 
 
@@ -40,20 +40,20 @@ export class LikesRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public async likesPage(req: Request, res: Response, next: NextFunction) {
-    if (!req.session!.user) return res.redirect("/");
+    if (!req.session!.user) {
+      return res.redirect("/");
+    }
 
     // Try to get likes page from user's request
     try {
-      //TODO: get some liked photos
-      const result: PhotoDataJSON = await getLikesByUserID(req, res, next)
-
-      const photoDTO: PhotoDTO = new PhotoDTO(result);
-
-      this.render(req, res, "likes-page", photoDTO);
+      const result = await getMoreLikes(req, res, next);
+      // TODO: do something with result
+      // TODO: add likes-page frontend page
+      this.render(req, res, "likes-page");
     } catch (err) {
       console.error(err);
       req.flash("serverError", "We can't show you your liked artwork right now");
-      return res.status(500).render('error');
+      return res.status(500).render("error");
     }
   }
 
