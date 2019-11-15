@@ -7,8 +7,8 @@ import { ArtworkDataJSON } from "../DTOs/ArtworkDTO";
 import { LikeDataJSON } from "../DTOs/LikeDTO";
 
 export async function likeArtwork(req: Request, res: Response, next: NextFunction) {
-  const userId = req.session!.user;
-  const artworkId = req.body.artworkId;
+  const userId: string = req.session!.user;
+  const artworkId: string = req.body.artworkId;
 
   try {
     await addArtworkLike(userId, artworkId);
@@ -21,8 +21,8 @@ export async function likeArtwork(req: Request, res: Response, next: NextFunctio
 }
 
 export async function unlikeArtwork(req: Request, res: Response, next: NextFunction) {
-  const userId = req.session!.user;
-  const artworkId = req.body.artworkId;
+  const userId: string = req.session!.user;
+  const artworkId: string = req.body.artworkId;
 
   try {
     await removeArtworkLike(userId, artworkId);
@@ -35,8 +35,8 @@ export async function unlikeArtwork(req: Request, res: Response, next: NextFunct
 }
 
 export async function getMoreLikes(req: Request, res: Response, next: NextFunction) {
-  const userId = req.session!.user;
-  const numToSkip = req.body.likesSeen;
+  const userId: string = req.session!.user;
+  const numToSkip: number = req.body.likesSeen ? req.body.likesSeen : 0;
 
   try {
     const results = await getNextLikes(userId, numToSkip);
