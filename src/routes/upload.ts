@@ -31,11 +31,12 @@ export class UploadRouter extends BaseRoute {
     (req: Request, res: Response, next: NextFunction) => {
       if ("avatar" in req.files) {
         console.log(req.files.avatar[0].originalname);
-        req.flash("result", "Successfully uploaded avatar");
+        req.flash("avatar", "Successfully uploaded avatar");
         // Submit request to db to set users profile picture
       } else if ("gallery" in req.files) {
-        req.flash("result", "Successfully uploaded to gallery");
+        req.flash("gallery", "Successfully uploaded to gallery");
       }
+
       res.redirect("/upload");
     });
   }

@@ -71,20 +71,11 @@ async function upload(exFile: Express.Multer.File, userId: string) {
 
 export async function uploadToGCP(req: Request, res: Response, next: NextFunction) {
   if ("avatar" in req.files) {
-    console.log(req.files.avatar[0].filename);
     await upload(req.files.avatar[0], req.session!.user._id);
-    req.flash("result", "Successfully uploaded avatar");
   } else if ("gallery" in req.files) {
-    req.flash("result", "Successfully uploaded to gallery");
     const all = req.files.gallery.map((file) => upload(file, req.session!.user._id));
     const combine = Promise.all(all);
-    const details = await combine;
-    for (const item of details) {
-      console.log(`
-    Name: ${item._id}
-    Alias: ${item.userId}
-      `);
-    }
+    await combine;
   }
   next();
 }
