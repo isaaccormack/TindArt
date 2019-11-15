@@ -17,7 +17,9 @@ export class RegisterRoute extends BaseRoute {
     });
 
     router.post("/api/register", (req: Request, res: Response, next: NextFunction) => {
-      if (req.session!.user) return res.redirect("/");
+      if (req.session!.user) {
+        return res.redirect("/");
+      }
 
       createUser(req, res, next);
     });
@@ -43,7 +45,9 @@ export class RegisterRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public register(req: Request, res: Response, next: NextFunction) {
-    if (req.session!.user) return res.redirect("/");
+    if (req.session!.user) {
+      return res.redirect("/");
+    }
 
     this.render(req, res, "register");
   }

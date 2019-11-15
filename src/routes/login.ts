@@ -26,7 +26,9 @@ export class LoginRoute extends BaseRoute {
     });
 
     router.post("/api/login", (req: Request, res: Response, next: NextFunction) => {
-      if (req.session!.user) return res.redirect("/");
+      if (req.session!.user) {
+        return res.redirect("/");
+      }
 
       loginUser(req, res, next);
     });
@@ -52,7 +54,9 @@ export class LoginRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public login(req: Request, res: Response, next: NextFunction) {
-    if (req.session!.user) return res.redirect("/");
+    if (req.session!.user) {
+      return res.redirect("/");
+    }
 
     this.render(req, res, "login");
   }

@@ -47,12 +47,12 @@ export class IndexRoute extends BaseRoute {
    */
   public index(req: Request, res: Response, next: NextFunction) {
     if (req.session!.user) { // If user logged in
-      this.render(req, res, 'home', {
+      this.render(req, res, "home", {
         name: req.session!.user.name,
         username: req.session!.user.username,
       });
     } else {
-      this.render(req, res, 'index');
+      this.render(req, res, "index");
     }
   }
 }

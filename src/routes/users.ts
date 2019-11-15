@@ -4,7 +4,6 @@ import { BaseRoute } from "./route";
 import { getUserByUsername, updateUserBio } from "../handlers/users";
 import { UserDataJSON, UserDTO } from "../DTOs/UserDTO";
 
-
 /**
  * / route
  *
@@ -19,7 +18,9 @@ export class UserRoute extends BaseRoute {
     });
 
     router.post("/api/user/updateBio", (req: Request, res: Response, next: NextFunction) => {
-      if (!req.session!.user) return res.redirect("/");
+      if (!req.session!.user) {
+        return res.redirect("/");
+      }
 
       updateUserBio(req, res, next);
     });
@@ -28,7 +29,7 @@ export class UserRoute extends BaseRoute {
   /**
    * Constructor
    *
-   * @class UsersRouter
+   * @class UserRoute
    * @constructor
    */
   constructor() {
@@ -45,14 +46,15 @@ export class UserRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public async userPage(req: Request, res: Response, next: NextFunction) {
-    if (!req.session!.user) return res.redirect("/");
+    if (!req.session!.user) {
+      return res.redirect("/");
+    }
 
     // Try to get user page from user's request
     try {
-      const result: UserDataJSON = await getUserByUsername(req, res, next)
+      const result: UserDataJSON = await getUserByUsername(req, res, next);
 
-      const userDTO: UserDTO = new UserDTO();
-      userDTO.create(result);
+      const userDTO: UserDTO = new UserDTO(result);
 
       if (req.session!.user.username === req.params.username) {
         this.render(req, res, "authenticated-user-page", userDTO);
@@ -62,7 +64,7 @@ export class UserRoute extends BaseRoute {
     } catch (err) {
       console.error(err);
       req.flash("serverError", "We couldn't find that account right now");
-      return res.status(500).render('error');
+      return res.status(500).render("error");
     }
   }
 }
