@@ -34,14 +34,10 @@ export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
 
 async function upload(exFile: Express.Multer.File, userId: string) {
   return new Promise<PhotoDTO>(async (res) => {
-    const { err, result }: DbPhotoResult = await insertNewPhoto(userId);
-    // Create new user DTO and set the session variable with it
-    if (err) {
-      throw err;
-    }
+    const result: PhotoDataJSON = await insertNewPhoto(userId);
 
     const photoDTO: PhotoDTO = new PhotoDTO();
-    photoDTO.create(result!);
+    photoDTO.create(result);
     const file = bucket.file(photoDTO._id);
     const stream = file.createWriteStream({
       metadata: {
