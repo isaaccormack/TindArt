@@ -8,14 +8,14 @@ export class User {
   @IsLength(2, 32, {
     message: "Name must be between 2 and 32 characters"
   })
-  private name: string = '';
+  private name: string = "";
 
-  /* Generic username regexp from https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username */
+  /* Generic username regexp from https://stackoverflow.com/a/12019115 */
   @Matches(RegExp("^(?=.{2,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"))
-  private username: string = '';
+  private username: string = "";
 
   @IsEmail()
-  private email: string = '';
+  private email: string = "";
 
   @IsAlpha({
     message: "City must be alphabetical"
@@ -23,7 +23,7 @@ export class User {
   @IsLength(2, 32, {
     message: "City must be between 2 and 32 characters"
   })
-  private city: string = '';
+  private city: string = "";
 
   @IsNumeric({
     message: "Province code must be numeric"
@@ -32,12 +32,12 @@ export class User {
   @IsIn(["10", "11", "12", "13", "24", "35", "46", "47", "48", "59", "60", "61", "62", "72", "73"], {
     message: "Province code does not map to a province"
   })
-  private provinceCode: string = '';
+  private provinceCode: string = "";
 
   @IsLength(2, 32, {
     message: "Password must be between 2 and 32 characters"
   })
-  private password: string = '';
+  private password: string = "";
 
   public create(userData: any) {
     this.name = userData.name;
@@ -72,5 +72,5 @@ export class User {
     }
     return "Province undefined";
   }
-  public clearPassword() { this.password = ''; }
+  public clearPassword() { this.password = ""; }
 }
