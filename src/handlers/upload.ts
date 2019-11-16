@@ -22,6 +22,9 @@ const storage = new Storage({
 });
 const bucket = storage.bucket(BUCKET_NAME);
 
+/**
+ * Add New Photo
+ */
 export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
   uploader(req, res, (err: any) => {
     if (err) {

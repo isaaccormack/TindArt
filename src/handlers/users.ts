@@ -4,6 +4,7 @@ import { Validator } from "validator.ts/Validator";
 import { findUserByUsername, updateUserBioByID } from "../services/user";
 import { UserDataJSON } from "../DTOs/UserDTO";
 
+const userNotFoundString: string = "Couldn't find user account";
 
 /**
  * Get User By Username
@@ -12,17 +13,20 @@ import { UserDataJSON } from "../DTOs/UserDTO";
 export async function getUserByUsername(req: Request, res: Response, next: NextFunction): Promise<UserDataJSON> {
   // Validate user name
   const validator: Validator = new Validator();
-  const validUsername: Boolean = validator.matches(req.params.username,
+  const validUsername: boolean = validator.matches(req.params.username,
     new RegExp("^(?=.{2,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"));
 
-  if (!validUsername) throw new Error('Couldn\'t find user account');
+  if (!validUsername) {
+    throw new Error(userNotFoundString);
+  }
 
   const result: UserDataJSON | null = await findUserByUsername(req.params.username); // This throws
-  if (!result) throw new Error('Couldn\'t find user account'); // No user with given username exists
+  if (!result) {
+    throw new Error(userNotFoundString); // No user with given username exists
+  }
 
   return result;
 }
-
 
 /**
  * Update User Bio
@@ -31,10 +35,10 @@ export async function updateUserBio(req: Request, res: Response, next: NextFunct
   // Validate user input bio
   const bio: string = req.body.bio;
   const validator: Validator = new Validator();
-  const validBio: Boolean = validator.isLength(bio, 1, 300);
+  const validBio: boolean = validator.isLength(bio, 1, 300);
 
   if (!validBio) {
-    if (bio.length == 0) {
+    if (bio.length === 0) {
       req.flash("bioError", "Please enter a bio");
     } else {
       req.flash("bioError", "Bio is too long, max 300 characters");
@@ -44,7 +48,9 @@ export async function updateUserBio(req: Request, res: Response, next: NextFunct
 
   try {
     const success: boolean = await updateUserBioByID(req.session!.user._id, bio);
-    if (!success) throw new Error('Couldn\'t find user account'); // No user with given username exists
+    if (!success) {
+      throw new Error(userNotFoundString); // No user with given username exists
+    }
 
     req.session!.user.bio = bio; // Set bio in session
   } catch (err) {
