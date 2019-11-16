@@ -2,23 +2,13 @@ import { Photo } from "../models/Photo";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 import { getDb } from "../database/dbclient";
 
-export interface DbPhotoResult { // Type returned by insertNewPhoto
-  // Types can be undefined so result can be falsey if error present and vice versa
-  err?: {
-    type: string;
-    message: string;
-  };
-  result?: PhotoDataJSON;
-}
-
 /**
  * Insert new Photo into database
  * @param photo the Photo object to add to the photos database
- * @return a Promise for a DbResult object, which contains either the PhotoDataJSON object
- * of the new photo, or an error message. An error message is returned if the photo failed
- * to upload.
+ * @return a Promise for a DbResult object, which contains the PhotoDataJSON object
+ * of the new photo.
  */
-export async function insertNewPhoto(userId: string): Promise<DbPhotoResult> {
+export async function insertNewPhoto(userId: string): Promise<PhotoDataJSON> {
   try {
     const result: any = await getDb().collection("photos").insertOne({
       "user": userId
@@ -28,7 +18,7 @@ export async function insertNewPhoto(userId: string): Promise<DbPhotoResult> {
         throw new Error("Database insert error");
     }
     console.log("Upload: " + result.insertedId);
-    return { result: result.ops[0] as PhotoDataJSON };
+    return result.ops[0] as PhotoDataJSON;
   } catch (err) {
     err.message = "Database error";
     throw err;
@@ -45,9 +35,9 @@ export async function removePhotoById(photoId: string) {
 }
 
 /**
- * @return a Promise for either a PhotoDataJSON array containing all photo data
+ * @return a Promise for a PhotoDataJSON array containing all photo data
  */
-export async function getAllPhotos(): Promise<PhotoDTO[] | null> {
+export async function getAllPhotos(): Promise<PhotoDTO[]> {
   try {
     const photos = await getDb().collection("photos").find().toArray();
     return photos.map((photo) => {
