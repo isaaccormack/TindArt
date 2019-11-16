@@ -4,7 +4,7 @@ import express from "express";
 import { Request, Response, NextFunction } from "express";
 import flash = require("express-flash");
 import logger from "morgan";
-import mustache from 'mustache-express';
+import mustache from "mustache-express";
 import path from "path";
 import session = require("express-session");
 
@@ -65,9 +65,9 @@ export class Server {
     this.app.use(express.static(path.join(__dirname, "../public")));
 
     // configure mustache
-    this.app.engine('mustache', mustache());
-    this.app.set('view engine', 'mustache');
-    this.app.set('views', __dirname + '/../src/views');
+    this.app.engine("mustache", mustache());
+    this.app.set("view engine", "mustache");
+    this.app.set("views", __dirname + "/../src/views");
 
     // mount logger
     this.app.use(logger("dev"));
@@ -128,7 +128,7 @@ export class Server {
     UserRoute.create(router); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
-    //use router middleware
+    // use router middleware
     this.app.use(router);
   }
 
