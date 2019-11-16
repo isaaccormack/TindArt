@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Storage } from "@google-cloud/storage";
 import multer from "multer";
-import { DbPhotoResult, insertNewPhoto, removePhotoById } from "../services/photo";
+import { insertNewPhoto, removePhotoById } from "../services/photo";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 
 const uploader = multer({
