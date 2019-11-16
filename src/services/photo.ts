@@ -5,8 +5,7 @@ import { getDb } from "../database/dbclient";
 /**
  * Insert new Photo into database
  * @param photo the Photo object to add to the photos database
- * @return a Promise for a DbResult object, which contains the PhotoDataJSON object
- * of the new photo.
+ * @return a Promise for the PhotoDataJSON object of the new photo.
  */
 export async function insertNewPhoto(userId: string): Promise<PhotoDataJSON> {
   try {
