@@ -1,8 +1,5 @@
-import { Photo } from "../models/Photo";
-import { ObjectId } from "mongodb";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 import { getDb } from "../database/dbclient";
-import { type } from "os";
 
 /**
  * Insert new Photo into database
