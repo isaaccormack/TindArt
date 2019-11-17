@@ -16,6 +16,9 @@
   <div id="bio">
   </div>
   <h6>{{bio}}</h6>
+  <div id="phone-number">
+  </div>
+  <h6>{{phoneNumber}}</h6>
 
   <h3><a href="/api/logout">Log Out?</a></h3>
   <h3><a href="/upload">Upload Photo?</a></h3>
@@ -32,6 +35,7 @@
   <h4>{{messages.serverError}}</h4>
 </body>
 
+<!-- JS for Bio Edit Field  -->
 <script>
   document.onload = buildEditBioBtn();
 
@@ -72,6 +76,50 @@
 
     document.getElementById('update-bio-form').remove(); // Delete edit bio form on DOM
     buildEditBioBtn();
+  }
+</script>
+
+<!-- JS for Phone Number Edit Field  -->
+<script>
+  document.onload = buildEditPhoneNumBtn();
+
+  function buildEditPhoneNumBtn() {
+    document.getElementById('phone-number').innerHTML +=
+      '<div id="edit-phone-number">' +
+      '<button type="button" onclick="handleEditPhoneNumBtnClick(event);">Edit Phone Number</button>' +
+      '{{messages.phoneNumberError}}' +
+      '</div>';
+  }
+
+  function buildEditPhoneNumForm() {
+    document.getElementById('phone-number').innerHTML +=
+      '<form id="update-phone-number-form" action="/api/user/updatePhoneNumber" method="post">' +
+      '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
+      '<div class="c-form__row">' +
+      '<label for="bio-input" class="c-label">Phone Number</label>' +
+      '<input type="text" name="phoneNumber" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="32" required />' +
+      '</div>' +
+      '<div class="c-form__row">' +
+      '<button class="c-button" onclick="handleCancelEditPhoneNumBtnClick(event);" type="submit">Cancel</button>' +
+      '</div>' +
+      '<div class="c-form__row">' +
+      '<button class="c-button" type="submit">Save</button>' +
+      '</div>' +
+      '</form>'
+  }
+
+  function handleEditPhoneNumBtnClick(e) {
+    e.preventDefault();
+
+    document.getElementById('edit-phone-number').remove(); // Delete edit phone number button on DOM
+    buildEditPhoneNumForm();
+  }
+
+  function handleCancelEditPhoneNumBtnClick(e) {
+    e.preventDefault();
+
+    document.getElementById('update-phone-number-form').remove(); // Delete edit phone number form on DOM
+    buildEditPhoneNumBtn();
   }
 </script>
 

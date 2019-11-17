@@ -10,6 +10,7 @@ export interface UserDataJSON {
   province: string;
   password: string;
   _id: string;
+  phoneNumber: string;
 }
 
 /* UserDTO object to transfer data between model and view */
@@ -30,6 +31,8 @@ export class UserDTO {
 
   public photoURLs: string[] = [];
 
+  public phoneNumber: string = "";
+
   /**
    * Could add these later:
    * Phone number
@@ -48,5 +51,6 @@ export class UserDTO {
     this.city = res.city;
     this.province = res.province;
     this._id = res._id;
+    this.phoneNumber = res.phoneNumber;
   }
 }
