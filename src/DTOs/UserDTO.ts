@@ -1,3 +1,5 @@
+import { PhotoDataJSON } from "../DTOs/PhotoDTO"
+
 /* Type interface for the returned JSON for user returned by DB query */
 export interface UserDataJSON {
   bio: string;
@@ -25,6 +27,8 @@ export class UserDTO {
   public province: string = "";
 
   public _id: string = "";
+
+  public photoURLs: string[] = [];
 
   /**
    * Could add these later:

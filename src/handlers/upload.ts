@@ -9,7 +9,7 @@ const uploader = multer({
   limits: {
     fileSize: 5 * 1024 * 1024 // no larger than 5mb
   }
- }).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 8 }]);
+}).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 8 }]);
 
 const GCP_PROJECT_ID = "seng350f19-project-team-3-1";
 const BUCKET_NAME = "majabris";
@@ -39,8 +39,7 @@ async function upload(exFile: Express.Multer.File, userId: string) {
   return new Promise<PhotoDTO>(async (res) => {
     const result: PhotoDataJSON = await insertNewPhoto(userId);
 
-    const photoDTO: PhotoDTO = new PhotoDTO();
-    photoDTO.create(result);
+    const photoDTO: PhotoDTO = new PhotoDTO(result);
     const file = bucket.file(photoDTO._id);
     const stream = file.createWriteStream({
       metadata: {
@@ -53,7 +52,7 @@ async function upload(exFile: Express.Multer.File, userId: string) {
     stream.on("error", async (errr) => {
       try {
         await removePhotoById(photoDTO._id);
-      } catch (err)  {
+      } catch (err) {
         console.log("Error Deleting: " + photoDTO._id);
       }
       res();

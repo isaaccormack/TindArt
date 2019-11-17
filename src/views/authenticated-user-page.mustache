@@ -19,6 +19,16 @@
 
   <h3><a href="/api/logout">Log Out?</a></h3>
   <h3><a href="/upload">Upload Photo?</a></h3>
+
+  <div>
+    <ul>
+      <h3>{{name}}'s Photos :)</h3>
+      {{#photoURLs}}
+      <li><img src={{.}} height="400"></a></li>
+      {{/photoURLs}}
+    </ul>
+  </div>
+
   <h4>{{messages.serverError}}</h4>
 </body>
 

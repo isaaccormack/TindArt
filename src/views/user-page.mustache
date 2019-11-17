@@ -13,6 +13,15 @@
   <p>This is {{name}}'s profile</p>
   <p>{{city}}, {{province}}</p>
   <h6>{{bio}}</h6>
+
+  <div>
+    <ul>
+      <h3>{{name}}'s Photos :)</h3>
+      {{#photoURLs}}
+      <li><img src={{.}} height="400"></a></li>
+      {{/photoURLs}}
+    </ul>
+  </div>
 </body>
 
 </html>
