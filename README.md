@@ -70,6 +70,37 @@ To contribute:
 4. Push to the Branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
 
+
+# Milestone 3.5
+
+## Functionality
+In this milestone the following functionality was implemented:
+1. A user page API was implemented allowing users of the application to view their own user page along with other users pages. This API works by parsing the requested unique username from the URL, the querying the database for data and photos owned by the account associated with that username. The server then renders this data onto the page, and sends back the URLs of the users photos which are hosted on a google cloud storage. The client side page uses a simple img tag with image source attribute to request the images from the given URLs.
+
+On the user page, the ability of the authenticated user to update their bio and phone number was added. This used a simple POST endpoint on the server to first validate the users input, then update the field in the database with the respective value. The templating engine Mustache automatically escapes all user input to protect against persistant XSS attacks.
+
+2. A database abstraction layer (DAL) was added in the server to seperate concerns between modules, increasing their cohesion. The DAL is a wrapper around database calls which provides a simple API that can be called to perform database operations. The DAL makes testing of the handlers easier as the calls to functions in the DAL can be stubbed. Overall, the DAL increases modulatiry and testability of the application.
+
+3. The login and register handlers were made asynchronous using async/await. The asynchronous components of these handlers were abstracted into their own async functions to flatten the topography of the source code. 
+
+4. <continuous database connection>
+  
+5. <photo upload stuff>
+  
+6. <docker stuff>
+  
+7. <frontend stuff>
+
+## User Stories Addressed
+In this milestone user stories 2 and 3 were addressed. User pages were implemented such that a user is able to update their bio and phone number, along with add photos to their account.
+
+The upload photo endpoint was revised to upload photos to google cloud storage. The url for these photos are made unique by using their mongodb id in the url. The server then stores the images owner and id in the database. When a user page is loaded, a query is made to the photos collections in the database to return all photos with the user id of the user page's owner.
+
+## Design Problems Faced
+
+The design has not notably changed since conception.
+
+
 # Milestone 3
 
 ## Functionality
