@@ -1,4 +1,3 @@
-import { DbResult } from "./user";
 import { ObjectId, Db } from "mongodb";
 import { User } from "../models/User";
 import { UserDataJSON } from "../DTOs/UserDTO";
@@ -52,36 +51,17 @@ export async function insertNewUser(user: User, hash: string): Promise<DbResult>
 }
 
 /**
- * Find a User in the database by searching for its email
- * @param email User to search for
+ * Find a User in the database by searching for a unique user attribute such as email or username
+ * @param attr Unique attribute to search by (ie. username, email, )
+ * @param val Value of attribute
  * @return a Promise for either a UserDataJSON object containing the user's
  * data or null if the user does not exist
  */
-export async function findUserByEmail(email: string): Promise<UserDataJSON | null> {
+export async function findOneUserByAttr(attr: string, val: string): Promise<UserDataJSON | null> {
   const db: Db = getDb();
   try {
-    const results = await db.collection("users").find({ email }).toArray();
-    if (results.length !== 1) {
-      return null; // Couldn't find email
-    } else {
-      return results[0]; // Found email
-    }
-  } catch (err) {
-    err.message = "Database find error";
-    throw err;
-  }
-}
+    const results = await db.collection("users").find({ [attr]: val }).toArray();
 
-/**
- * Find a User in the database by searching for its username
- * @param username User to search for
- * @return a Promise for either a UserDataJSON object containing the user's
- * data or null if the user does not exist
- */
-export async function findUserByUsername(username: string): Promise<UserDataJSON | null> {
-  const db: Db = getDb();
-  try {
-    const results = await db.collection("users").find({ username }).toArray();
     if (results.length !== 1) {
       return null; // Couldn't find username
     } else {
@@ -94,15 +74,16 @@ export async function findUserByUsername(username: string): Promise<UserDataJSON
 }
 
 /**
- * Update a User's Bio by searching for its ID
+ * Update a User's attribute by searching for their ID
  * @param _id User ID to search for
- * @param bio Updated Bio contents
+ * @param attr an attribute to be updated
+ * @param val the updated value of the attribute
  * @return a Promise with a boolean success/failure value
  */
-export async function updateUserBioByID(_id: string, bio: string): Promise<boolean> {
+export async function updateUserAttrByID(_id: string, attr: string, val: string): Promise<boolean> {
   const db: Db = getDb();
   try {
-    const result = await db.collection("users").updateOne({ _id: new ObjectId(_id) }, { $set: { bio } });
+    const result = await db.collection("users").updateOne({ _id: new ObjectId(_id) }, { $set: { [attr]: val } });
     if (result.matchedCount !== 1) {
       return false;
     } else {

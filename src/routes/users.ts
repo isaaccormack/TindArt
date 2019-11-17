@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { getUserByUsername, updateUserBio } from "../handlers/users";
+import { getUserByUsername, updateBio, updatePhoneNumber } from "../handlers/users";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 import { UserDataJSON, UserDTO } from "../DTOs/UserDTO";
 import { findUserPhotosByID } from "../services/photo";
@@ -24,7 +24,15 @@ export class UserRoute extends BaseRoute {
         return res.redirect("/");
       }
 
-      updateUserBio(req, res, next);
+      updateBio(req, res, next);
+    });
+
+    router.post("/api/user/updatePhoneNumber", (req: Request, res: Response, next: NextFunction) => {
+      if (!req.session!.user) {
+        return res.redirect("/");
+      }
+
+      updatePhoneNumber(req, res, next);
     });
   }
 

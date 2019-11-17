@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 
 import { UserDataJSON, UserDTO } from "../DTOs/UserDTO";
-import { findUserByEmail } from "../services/user";
+import { findOneUserByAttr } from "../services/user";
 
 /**
  * Compare Hashed Passwords Util
@@ -38,7 +38,7 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
   }
 
   try {
-    const result: UserDataJSON | null = await findUserByEmail(req.body.email);
+    const result: UserDataJSON | null = await findOneUserByAttr("email", req.body.email);
     if (!result) {
       req.flash("loginError", "The email you entered does not belong to any account");
       return res.redirect("/login");
