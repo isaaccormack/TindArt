@@ -83,11 +83,11 @@ On the user page, the ability of the authenticated user to update their bio and 
 
 3. The login and register handlers were made asynchronous using async/await. The asynchronous components of these handlers were abstracted into their own async functions to flatten the topography of the source code. 
 
-4. <continuous database connection>
+4. A continuous database connection was implemented to improve response time of database queries.
   
-5. <photo upload stuff>
+5. A google storage server added to the applciation to host photos on. This server stores the photos based on their mongodb id value such that every url is unique. When photos are requested, a query to the database is made for the photo id's which are then returned to the client formatted into a url. From there the client renders the images using a simple img tag with the remote source.
   
-6. <docker stuff>
+6. A docker image for the application was created, and should the travis build pass when enough code coverage occurs, the docker image will be deployed on dockerhub.
   
 7. <frontend stuff>
 
@@ -97,6 +97,11 @@ In this milestone user stories 2 and 3 were addressed. User pages were implement
 The upload photo endpoint was revised to upload photos to google cloud storage. The url for these photos are made unique by using their mongodb id in the url. The server then stores the images owner and id in the database. When a user page is loaded, a query is made to the photos collections in the database to return all photos with the user id of the user page's owner.
 
 ## Design Problems Faced
+Implementing asynchronous server functions proved to be a larger job than initially expected, both in time and in complexity. The control flow of the routes of the application were difficult to define with a promise thenable chain, so async functions were used such that the function can return if a condition occurs in which it should not continue executing, yet an exception is not thrown (ie. no user found during log in).
+
+The issue of moving data returned from database queries to the client in a uniform manner was solved this release. Data transfer objects (DTOs) were implemented for both the user and photo class such that a DTO is created with the data from a database query. A DTO provides a simple way to organize this data. Although the class definitions for DTOs and models look similar, it is important to note that they serve different purposes. Models are used for client data validation before inserting data into the database, where as DTOs are used to orchastrate the valid data returned from the database to provide a uniform interface for downstream consumers. An important distinction in implementation here is that a model has well defined methods for setting / getting internal members, and all internal members are private where as all members of DTO classes are public.
+
+The architecture in place for this release aims to provide adequate seperation of concerns between server module such that there is good coupling in place between modules and each module has medium to high cohesion. It proved to be difficult to find the line of seperation between modules, are less modules makes for quicker development since less time is spent organizing a moving code around, but also hinders maintenance, as the modules are monolithic. Creating too many modules is cumbersome to develop with and unnecessary. The architecture in place now uses _routes_ to route user requests into _handlers_ (controllers), which implement business logic, making use of _models_ to validate user input before calling _services_ to interact with the database. The _handlers_ also utilize _DTOs_ to organize data returned from the _services_. Finally, the _routes_ render _views_ with the data returned from the handler in the form of _DTOs_ to display the content to the user.
 
 The design has not notably changed since conception.
 
