@@ -1,7 +1,7 @@
 /* Type interface for the returned JSON for like sent to or returned by DB query */
 export interface LikeDataJSON {
   userId: string;
-  artworkId: string;
+  photoId: string;
   _id: string;
 }
 
@@ -9,7 +9,7 @@ export interface LikeDataJSON {
 export class LikeDTO {
   public userId: string = "";
 
-  public artworkId: string = "";
+  public photoId: string = "";
 
   public _id: string = "";
 
@@ -19,7 +19,7 @@ export class LikeDTO {
 
   public create(res: LikeDataJSON) {
     this.userId = res.userId;
-    this.artworkId = res.artworkId;
+    this.photoId = res.photoId;
     this._id = res._id;
   }
 }

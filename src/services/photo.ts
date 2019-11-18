@@ -23,6 +23,41 @@ export async function insertNewPhoto(userId: string): Promise<PhotoDataJSON> {
   }
 }
 
+export async function findPhotoById(photoId: string): Promise<PhotoDTO> {
+  try {
+    const result: PhotoDataJSON | null = await getDb().collection("photos").findOne({
+      "_id": photoId
+    });
+    if (!result) {
+      throw new Error();
+    }
+    return new PhotoDTO(result);
+  } catch (err) {
+    err.message = "Database find error on getting photo";
+    throw err;
+  }
+}
+
+export async function findPhotosById(photoIds: string[]): Promise<PhotoDTO[]> {
+  if (photoIds.length === 0) {
+    return [];
+  }
+  try {
+    const results: PhotoDataJSON[] | null = await getDb().collection("photos").findOne({
+      _id: { $in: photoIds }
+    });
+    if (results === null) {
+      throw new Error();
+    }
+    return results.map((photo) => {
+      return new PhotoDTO(photo);
+    });
+  } catch (err) {
+    err.message = "Database find error on getting photo";
+    throw err;
+  }
+}
+
 export async function removePhotoById(photoId: string) {
   const result: any = await getDb().collection("photos").deleteOne({ "_id": photoId });
   // Photo couldn't be created, but insertOne() did not throw

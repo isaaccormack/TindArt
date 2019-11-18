@@ -1,9 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { getMoreLikes } from "../handlers/likes";
+import { getAllLikes } from "../handlers/likes";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
-
 
 /**
  * /likes route
@@ -31,7 +30,7 @@ export class LikesRoute extends BaseRoute {
   }
 
   /**
-   * The likes page route.
+   * The likes page route. Gets all liked photos and displays them.
    *
    * @class LikesRoute
    * @method likesPage
@@ -46,18 +45,12 @@ export class LikesRoute extends BaseRoute {
 
     // Try to get likes page from user's request
     try {
-      const result = await getMoreLikes(req, res, next);
-      // TODO: do something with result
-      // TODO: add likes-page frontend page
-      this.render(req, res, "likes-page");
+      const results: PhotoDTO[] = await getAllLikes(req, res, next);
+      this.render(req, res, "likes", { "photoURLs": results.map((photo) => photo.url) });
     } catch (err) {
       console.error(err);
       req.flash("serverError", "We can't show you your liked artwork right now");
       return res.status(500).render("error");
     }
   }
-
-  /**
-   * Get another page's worth of liked artwork
-   */
 }

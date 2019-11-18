@@ -18,7 +18,7 @@ export async function addArtworkLike(userId: string, artworkId: string): Promise
     if (err.code === 11000) {
       return; // Do nothing: duplicate like entry
     }
-    err.message = "Database error";
+    err.message = "Database insert error on adding like";
     throw err;
   }
 }
@@ -31,12 +31,24 @@ export async function removeArtworkLike(userId: string, artworkId: string): Prom
       artworkId,
     });
   } catch (err) {
-    err.message = "Database error";
+    err.message = "Database delete error on removing like";
     throw err;
   }
 }
 
-export async function getNextLikes(userId: string, numToSkip: number): Promise<LikeDataJSON[]> {
+export async function findAllLikes(userId: string): Promise<LikeDataJSON[]> {
+  const db: Db = getDb();
+  try {
+    return await db.collection("likes").find({
+      userId,
+    }).toArray();
+  } catch (err) {
+    err.message = "Database find error on getting all likes";
+    throw err;
+  }
+}
+
+export async function findNextLikes(userId: string, numToSkip: number): Promise<LikeDataJSON[]> {
   const db: Db = getDb();
   try {
     return await db.collection("likes").find({
@@ -46,7 +58,7 @@ export async function getNextLikes(userId: string, numToSkip: number): Promise<L
       skip: numToSkip,
     }).toArray();
   } catch (err) {
-    err.message = "Database error";
+    err.message = "Database find error on gettting more likes";
     throw err;
   }
 }
