@@ -69,7 +69,7 @@ export async function updatePhoneNumber(req: Request, res: Response, next: NextF
   // Validate user input phone number
   const phoneNumber: string = req.body.phoneNumber;
   const validator: Validator = new Validator();
-  const validPhoneNumber: boolean = validator.isMobilePhone(phoneNumber, 'en-US');
+  const validPhoneNumber: boolean = validator.isMobilePhone(phoneNumber, "en-US");
 
   if (!validPhoneNumber) {
     req.flash("phoneNumberError", "Please enter a valid phone number");

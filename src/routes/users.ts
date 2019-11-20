@@ -66,11 +66,11 @@ export class UserRoute extends BaseRoute {
       const userDTO: UserDTO = new UserDTO(userResult);
       const photoResults: PhotoDataJSON[] | null = await findUserPhotosByID(userDTO._id);
 
-      // Add the URL of each result to the photoURLs array in the userDTO 
+      // Add the URL of each result to the photoURLs array in the userDTO
       photoResults.forEach((photoResult) => {
         const photoDTO: PhotoDTO = new PhotoDTO(photoResult);
         userDTO.photoURLs.push(photoDTO.url);
-      })
+      });
 
       if (req.session!.user.username === req.params.username) {
         this.render(req, res, "authenticated-user-page", userDTO);

@@ -1,4 +1,4 @@
-import { PhotoDataJSON } from "../DTOs/PhotoDTO"
+import { PhotoDataJSON } from "../DTOs/PhotoDTO";
 
 /* Type interface for the returned JSON for user returned by DB query */
 export interface UserDataJSON {
