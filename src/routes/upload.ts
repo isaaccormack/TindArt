@@ -4,7 +4,7 @@ import { BaseRoute } from "./route";
 import { uploadPhoto, uploadToGCP } from "../handlers/upload";
 import { clearPhotos, getAllPhotos } from "../services/photo";
 
-export class UploadRouter extends BaseRoute {
+export class UploadRoute extends BaseRoute {
   public static create(router: Router) {
     console.log("[UploadRoute::create] Creating UploadRoutes route.");
 
@@ -18,7 +18,7 @@ export class UploadRouter extends BaseRoute {
     });
 
     router.get("/upload", (req: Request, res: Response, next: NextFunction) => {
-      new UploadRouter().upload(req, res, next);
+      new UploadRoute().upload(req, res, next);
     });
 
     router.post("/api/upload", (req: Request, res: Response, next: NextFunction) => {

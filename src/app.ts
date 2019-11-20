@@ -14,7 +14,7 @@ import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
 import { RegisterRoute } from "./routes/register";
 import { UserRoute } from "./routes/users";
-import { UploadRouter } from "./routes/upload";
+import { UploadRoute } from "./routes/upload";
 
 /**
  * The server.
@@ -124,7 +124,7 @@ export class Server {
     RegisterRoute.create(router);
     LoginRoute.create(router);
     LogoutRoute.create(router);
-    UploadRouter.create(router);
+    UploadRoute.create(router);
     UserRoute.create(router); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
