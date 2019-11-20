@@ -7,14 +7,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TindArt</title>
+  <link rel="icon" type="image" href="../assets/icons8-fire-30.png" />
 </head>
 
-<body>
+{{! No header for unauthenticated landing page }}
+
+<body class="unauth">
   <div class="landing-page">
     <h1>TindArt</h1>
-    <h6><a href="/register">Create Account!</a></h6>
-    <h6><a href="/login">Login!</a></h6>
+    <div class="buttons">
+      <a href="/login" class="button">Log In</a>
+      <br />
+      <a href="/register" class="button">Sign Up</a>
+    </div>
+    <p class="bold larger">Paintings. Photography. Sculptures.</p>
+    <p class="bold medium">At your fingertips.</p>
   </div>
 </body>
+
+{{! No footer }}
 
 </html>

@@ -89,7 +89,8 @@ On the user page, the ability of the authenticated user to update their bio and 
   
 6. A docker image for the application was created, and should the travis build pass when enough code coverage occurs, the docker image will be deployed on dockerhub.
   
-7. <frontend stuff>
+7. Updates to the frontend for this milestone included that the entire home page design for the unauthorized individuals was redone. This was to progress towards a smaller goal of having a usable frontend. Additionally, the login and register pages were modified in keeping with the changes to the unauthorized frontend. Finally, changes to the aesthetic of the frontend for authorized users have been started as a header and a footer have been added to each of the pages. This increases the usability of th application.
+
 
 ## User Stories Addressed
 In this milestone user stories 2 and 3 were addressed. User pages were implemented such that a user is able to update their bio and phone number, along with add photos to their account.
