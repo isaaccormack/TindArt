@@ -1,5 +1,6 @@
 import { User } from "../models/User";
 import { DBService } from "./DBService";
+import { ObjectId } from "mongodb";
 import { UserDataJSON } from "../DTOs/UserDTO";
 
 export interface DbResult { // Type returned by insertNewUser
@@ -80,7 +81,8 @@ export class UserService extends DBService {
    */
   public static async updateUserAttrByID(_id: string, attr: string, val: string): Promise<boolean> {
     try {
-      const result = await UserService.db.collection("users").updateOne({ _id: new ObjectId(_id) }, { $set: { [attr]: val } });
+      const result = await UserService.db.collection("users")
+                              .updateOne({ _id: new ObjectId(_id) }, { $set: { [attr]: val } });
       if (result.matchedCount !== 1) {
         return false;
       } else {
