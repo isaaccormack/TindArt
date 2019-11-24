@@ -4,7 +4,7 @@ import { BaseRoute } from "./route";
 import { getUserByUsername, updateBio, updatePhoneNumber } from "../handlers/users";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 import { UserDataJSON, UserDTO } from "../DTOs/UserDTO";
-import { findUserPhotosByID } from "../services/photo";
+import { PhotoService } from "../services/PhotoService";
 
 /**
  * / route
@@ -64,7 +64,7 @@ export class UserRoute extends BaseRoute {
     try {
       const userResult: UserDataJSON = await getUserByUsername(req, res, next);
       const userDTO: UserDTO = new UserDTO(userResult);
-      const photoResults: PhotoDataJSON[] | null = await findUserPhotosByID(userDTO._id);
+      const photoResults: PhotoDataJSON[] | null = await PhotoService.findUserPhotosByID(userDTO._id);
 
       // Add the URL of each result to the photoURLs array in the userDTO
       photoResults.forEach((photoResult) => {

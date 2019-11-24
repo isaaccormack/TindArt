@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
 
-import { DbResult, insertNewUser } from "../services/user";
+import { DbResult, UserService } from "../services/UserService";
 import { User } from "../models/User";
 import { UserDTO } from "../DTOs/UserDTO";
 
@@ -105,7 +105,7 @@ export async function createUser(req: Request, res: Response, next: NextFunction
 
     const hash: string = await getHashedPassword(req.body.password);
 
-    const { err, result }: DbResult = await insertNewUser(user, hash);
+    const { err, result }: DbResult = await UserService.insertNewUser(user, hash);
     if (err) {
       req.flash(err.type, err.message);
       return res.redirect("/register");

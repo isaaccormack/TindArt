@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Storage } from "@google-cloud/storage";
 import multer from "multer";
-import { insertNewPhoto, removePhotoById } from "../services/photo";
+import { PhotoService } from "../services/PhotoService";
 import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 
 const uploader = multer({
@@ -37,7 +37,7 @@ export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
 
 async function upload(exFile: Express.Multer.File, userId: string) {
   return new Promise<PhotoDTO>(async (res) => {
-    const result: PhotoDataJSON = await insertNewPhoto(userId);
+    const result: PhotoDataJSON = await PhotoService.insertNewPhoto(userId);
 
     const photoDTO: PhotoDTO = new PhotoDTO(result);
     const file = bucket.file(photoDTO._id);
@@ -51,7 +51,7 @@ async function upload(exFile: Express.Multer.File, userId: string) {
 
     stream.on("error", async (errr) => {
       try {
-        await removePhotoById(photoDTO._id);
+        await PhotoService.removePhotoById(photoDTO._id);
       } catch (err) {
         console.log("Error Deleting: " + photoDTO._id);
       }

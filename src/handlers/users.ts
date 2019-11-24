@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 
-import { findOneUserByAttr, updateUserAttrByID } from "../services/user";
+import { UserService } from "../services/UserService";
 import { UserDataJSON } from "../DTOs/UserDTO";
 
 const userNotFoundString: string = "Couldn't find user account";
@@ -19,8 +19,8 @@ export async function getUserByUsername(req: Request, res: Response, next: NextF
   if (!validUsername) {
     throw new Error(userNotFoundString);
   }
-
-  const result: UserDataJSON | null = await findOneUserByAttr("username", req.params.username); // This throws
+  // This throws
+  const result: UserDataJSON | null = await UserService.findOneUserByAttr("username", req.params.username);
   if (!result) {
     throw new Error(userNotFoundString); // No user with given username exists
   }
@@ -47,7 +47,7 @@ export async function updateBio(req: Request, res: Response, next: NextFunction)
   }
 
   try {
-    const success: boolean = await updateUserAttrByID(req.session!.user._id, "bio", bio);
+    const success: boolean = await UserService.updateUserAttrByID(req.session!.user._id, "bio", bio);
     if (!success) {
       throw new Error(userNotFoundString); // No user with given username exists
     }
@@ -76,7 +76,7 @@ export async function updatePhoneNumber(req: Request, res: Response, next: NextF
     return res.redirect("back"); // reload current page
   }
   try {
-    const success: boolean = await updateUserAttrByID(req.session!.user._id, "phoneNumber", phoneNumber);
+    const success: boolean = await UserService.updateUserAttrByID(req.session!.user._id, "phoneNumber", phoneNumber);
     if (!success) {
       throw new Error(userNotFoundString); // No user with given username exists
     }

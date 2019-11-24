@@ -2,18 +2,18 @@ import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
 import { uploadPhoto, uploadToGCP } from "../handlers/upload";
-import { clearPhotos, getAllPhotos } from "../services/photo";
+import { PhotoService } from "../services/PhotoService";
 
 export class UploadRoute extends BaseRoute {
   public static create(router: Router) {
     console.log("[UploadRoute::create] Creating UploadRoutes route.");
 
     router.get("/api/photos", async (req: Request, res: Response, next: NextFunction) => {
-      const data = await getAllPhotos();
+      const data = await PhotoService.getAllPhotos();
       res.json(data); // should check users level of authentication here
     });
     router.get("/api/photos/clear", async (req: Request, res: Response, next: NextFunction) => {
-      const data = await clearPhotos();
+      const data = await PhotoService.clearPhotos();
       res.json(data); // should check users level of authentication here
     });
 
