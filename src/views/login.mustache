@@ -13,30 +13,32 @@
 {{! This page is different -- no header }}
 
 <body>
-    <div class="form-page">
-        <a href="/"><img class="pad-top" src="../assets/icons8-fire-80.png" /></a>
-        <br />
-        <p class="title">Log in to TindArt</p>
-        <form class="boilerform" id="form" action='/api/login' method="post">    
-            {{messages.loginError}}
-            {{messages.emailError}}
-            {{messages.passwordError}}
-            <fieldset class="c-form">
-                <div class="c-form__row">
-                    <label for="email" class="c-label"><b>Email</b></label> <br />
-                    <input type="email" name="email" id="email" placeholder="Enter Email" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
-                </div>
-                <div class="c-form__row">
-                    <label for="password" class="c-label"><b>Password</b></label> <br />
-                    <input type="password" name="password" id="password" placeholder="Enter Password" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
+    <div class="container">
+        <div class="form-page">
+            <a href="/"><img class="pad-top" src="../assets/icons8-fire-80.png" /></a>
+            <br />
+            <p class="title">Log in to TindArt</p>
+            <form class="boilerform" id="form" action='/api/login' method="post">    
+                {{messages.loginError}}
+                {{messages.emailError}}
+                {{messages.passwordError}}
+                <fieldset class="c-form">
+                    <div class="c-form__row">
+                        <label for="email" class="c-label"><b>Email</b></label> <br />
+                        <input type="email" name="email" id="email" placeholder="Enter Email" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
+                    </div>
+                    <div class="c-form__row">
+                        <label for="password" class="c-label"><b>Password</b></label> <br />
+                        <input type="password" name="password" id="password" placeholder="Enter Password" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
 
-                </div>
-                <div class="c-form__row">
-                    <button class="c-button" type="submit">Submit</button>
-                </div>
-            </fieldset>
-        </form>
-        <p>New to TindArt? <a href="/register">Sign Up</a></p>
+                    </div>
+                    <div class="c-form__row">
+                        <button class="c-button" type="submit">Submit</button>
+                    </div>
+                </fieldset>
+            </form>
+            <p>New to TindArt? <a href="/register">Sign Up</a></p>
+        </div>
     </div>
 </body>
 

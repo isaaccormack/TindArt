@@ -5,6 +5,14 @@
             <p class="title">TindArt</h1>
         </a> 
     </div>
+    <div class="header-spacer">
+    </div>
+    <div class="header-search">
+        <form class="example" action="action_page.php">
+            <input type="text" placeholder="Search for another user" name="search">
+            <button type="submit">Search</button>
+        </form>
+    </div>
     {{#username}} {{! If authenticated, these options will be visible }}
     <div class="header-right">
         <a href="/user/{{username}}"><img src="../assets/icons8-user-30.png" /></a> {{! This will be changed to include the profile picture if they have one }}

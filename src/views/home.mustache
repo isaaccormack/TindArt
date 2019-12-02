@@ -15,7 +15,30 @@
 <body>
   <div class="container">
     <!-- Only users which are logged in are shown this home page, otherwise index -->
-    <p>Welcome {{name}}</p>
+    <div class="carousel-container">
+      <div class="carousel my-carousel carousel--translate">
+      <ul>
+        {{#artpieces}}
+          <li id={{artId}}><img src={{url}} alt="artwork {{artId}}" /></li>
+        {{/artpieces}}
+      </ul>
+      </div>
+     {{!  .carousel.my-carousel.carousel--translate
+    - var panels = ['F', 'G', 'H', 'I', 'J']
+    each val in panels
+      input.carousel__activator(type="radio", name="carousel", id=val, checked=(val == panels[0]))
+    each val, idx in panels
+      .carousel__controls
+        label.carousel__control.carousel__control--backward(for=`${(idx == 0) ? panels[panels.length - 1] : panels[idx - 1]}` )
+        label.carousel__control.carousel__control--forward(for= `${(idx == panels.length - 1) ? panels[0] : panels[idx + 1]}`)
+    .carousel__track
+      each val in panels
+        li.carousel__slide
+          h1= val
+    .carousel__indicators
+      each val in panels
+        label.carousel__indicator(for=val) }}
+    </div>
     <h3><a href="/user/{{username}}">Your Profile</a></h3>
     <h3><a href="/api/logout">Log Out?</a></h3>
     <h3><a href="/upload">Upload Photo?</a></h3>

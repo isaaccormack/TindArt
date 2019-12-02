@@ -13,26 +13,41 @@
 {{> header}} {{! This is the header that will be on almost all of the pages }}
 
 <body>
-  <p>Welcome to your user page {{name}}</p>
-  <p>{{city}}, {{province}}</p>
+  <h1>{{name}}, this is your profile.</h1>
+  <h3>{{city}}, {{province}}</h3>
   <!-- Edit bio button / form dynamically created in below div -->
-  <div id="bio">
+  <div class="profile">
+    <span class="avatar">
+      {{#avatar}}
+        <img src={{avatar}} class="user-avatar" alt="User Avatar" />
+      {{/avatar}}
+      {{^avatar}}
+        <img src="../assets/icons8-user-30.png" class="user-avatar" alt="User Avatar" />
+      {{/avatar}}
+      <a href="/upload"><img src="../assets/icons8-user-80.png" class="edit-pencil" alt="Edit" /></a>
+    </span>
+    <span class="bio">
+      <div id="bio">
+      </div>
+      <p>{{bio}}</p>
+      <div id="phone-number">
+      </div>
+      <p>{{phoneNumber}}</p>
+    </span>
   </div>
-  <h6>{{bio}}</h6>
-  <div id="phone-number">
-  </div>
-  <h6>{{phoneNumber}}</h6>
 
-  <h3><a href="/api/logout">Log Out?</a></h3>
-  <h3><a href="/upload">Upload Photo?</a></h3>
-
-  <div>
-    <ul>
-      <h3>{{name}}'s Photos :)</h3>
-      {{#photoURLs}}
-      <li><img src={{.}} height="400"></a></li>
-      {{/photoURLs}}
-    </ul>
+  <div class="user-owned-photos">
+    <h3>
+      Your Uploaded Photos <span class="spacer"></span>
+      <a href="/upload"><img src="../assets/icons8-user-80.png" class="edit-pencil" alt="Edit" /></a>
+    </h3>
+    <div class="photo-box">
+      <ul>
+        {{#photoURLs}}
+        <li><img src={{.}} width="200"></a></li>
+        {{/photoURLs}}
+      </ul>
+    </div>
   </div>
 
   <h4>{{messages.serverError}}</h4>
@@ -56,7 +71,7 @@
       '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
       '<div class="c-form__row">' +
       '<label for="bio-input" class="c-label">Bio</label>' +
-      '<input type="text" name="bio" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="32" required />' +
+      '<input type="text" name="bio" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="255" required />' +
       '</div>' +
       '<div class="c-form__row">' +
       '<button class="c-button" onclick="handleCancelEditBioBtnClick(event);" type="submit">Cancel</button>' +
@@ -100,7 +115,7 @@
       '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
       '<div class="c-form__row">' +
       '<label for="bio-input" class="c-label">Phone Number</label>' +
-      '<input type="text" name="phoneNumber" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="32" required />' +
+      '<input type="tel" name="phoneNumber" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="10" required />' +
       '</div>' +
       '<div class="c-form__row">' +
       '<button class="c-button" onclick="handleCancelEditPhoneNumBtnClick(event);" type="submit">Cancel</button>' +
