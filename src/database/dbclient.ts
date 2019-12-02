@@ -10,20 +10,20 @@ let db: Db;
  * callback. This way, the (singular) database connection is available
  * synchonously throughout the life of the server.
  */
-export function initDb(callback: (err: MongoError | null, db: Db | undefined) => void): void {
-  if (db) {
-    return callback(null, db);
-  }
-
-  function onConnected(err: MongoError, client: MongoClient) {
-    if (err) {
-      return callback(err, undefined);
+export function initDb(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    if (db) {
+      resolve(db);
     }
-    db = client.db("myapp");
-    return callback(null, db);
-  }
-
-  MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true }, onConnected);
+    function onConnected(err: MongoError, client: MongoClient) {
+      if (err) {
+        return reject(err);
+      }
+      db = client.db("myapp");
+      return resolve(db);
+    }
+    MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true }, onConnected);
+  });
 }
 
 /**

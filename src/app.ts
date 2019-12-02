@@ -15,6 +15,15 @@ import { NotFoundRoute } from "./routes/notFound";
 import { RegisterRoute } from "./routes/register";
 import { UserRoute } from "./routes/users";
 import { UploadRoute } from "./routes/upload";
+import { LoginHandler } from "./handlers/login";
+import { UserService } from "./services/UserService";
+import { IUserService } from "./services/IUserService";
+import { initDb, getDb } from "./database/dbclient";
+import { PhotoService } from "./services/PhotoService";
+import { IPhotoService } from "./services/IPhotoService";
+import { UploadHandler } from "./handlers/upload";
+import { UserHandler } from "./handlers/users";
+import { RegisterHandler } from "./handlers/register";
 
 /**
  * The server.
@@ -50,8 +59,28 @@ export class Server {
     // configure application
     this.config();
 
-    // add routes
-    this.routes();
+    // connect to db
+    this.connectDb().then(this.routes);
+  }
+
+  /**
+   * Connect to the database
+   *
+   * @class Server
+   * @method connectDb
+   */
+  private async connectDb() {
+
+    /**
+     * Connect to database.
+     */
+    try {
+      const result = await initDb();
+      console.log("Successfully connected to database.");
+    } catch (err) {
+      console.log("Failed to connect to database.");
+      throw err;
+    }
   }
 
   /**
@@ -60,7 +89,7 @@ export class Server {
    * @class Server
    * @method config
    */
-  public config() {
+  private config() {
     // add static paths
     this.app.use(express.static(path.join(__dirname, "../public")));
 
@@ -119,13 +148,20 @@ export class Server {
   private routes() {
     let router: express.Router;
     router = express.Router();
+    const userService: IUserService = new UserService({db: getDb()});
+    const photoService: IPhotoService = new PhotoService({db: getDb()});
+
+    const loginHandler = new LoginHandler(userService);
+    const userHandler = new UserHandler(userService);
+    const registerHandler = new RegisterHandler(userService);
+    const uploadHandler = new UploadHandler(photoService);
 
     IndexRoute.create(router);
-    RegisterRoute.create(router);
-    LoginRoute.create(router);
+    RegisterRoute.create(router, registerHandler);
+    LoginRoute.create(router, loginHandler);
     LogoutRoute.create(router);
-    UploadRoute.create(router);
-    UserRoute.create(router); // 2nd last due to URL parsing
+    UploadRoute.create(router, uploadHandler, photoService);
+    UserRoute.create(router, userHandler, photoService); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
     // use router middleware

@@ -1,21 +1,24 @@
 import { Service } from "./Service";
-import { ObjectId, Db } from "mongodb";
+import { Db } from "mongodb";
 
 export class DBService extends Service {
-  private static _db: Db;
+  private _db: Db;
 
-  static get db(): Db {
-    if (!DBService._db) {
-      throw new Error("Db has not been initialized. Call initService first.");
-    }
-    return DBService._db;
-  }
-
-  public static initService(options: any): void {
+  constructor(options: any) {
+    super(options);
     if (!options.db) {
-      throw new Error("db not defined");
+      throw new Error("db not defined.");
     }
-    DBService._db = options.db;
+    if (!(options.db instanceof Db)) {
+      throw new Error("db must be of type Db");
+    }
+    this._db = options.db;
   }
 
+  get db(): Db {
+    if (!this._db) {
+      throw new Error("db has not been initialized.");
+    }
+    return this._db;
+  }
 }

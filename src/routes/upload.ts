@@ -1,20 +1,20 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { uploadPhoto, uploadToGCP } from "../handlers/upload";
-import { PhotoService } from "../services/PhotoService";
+import { UploadHandler } from "../handlers/upload";
+import { IPhotoService } from "../services/IPhotoService";
 
 export class UploadRoute extends BaseRoute {
-  public static create(router: Router) {
+  public static create(router: Router, uploadHandler: UploadHandler, photoService: IPhotoService) {
     console.log("[UploadRoute::create] Creating UploadRoutes route.");
 
     router.get("/api/photos", async (req: Request, res: Response, next: NextFunction) => {
-      const data = await PhotoService.getAllPhotos();
+      const data = await photoService.getAllPhotos();
       res.json(data); // should check users level of authentication here
     });
     router.get("/api/photos/clear", async (req: Request, res: Response, next: NextFunction) => {
-      const data = await PhotoService.clearPhotos();
-      res.json(data); // should check users level of authentication here
+      photoService.clearPhotos();
+      res.json({}); // should check users level of authentication here
     });
 
     router.get("/upload", (req: Request, res: Response, next: NextFunction) => {
@@ -26,8 +26,8 @@ export class UploadRoute extends BaseRoute {
         return res.status(401).redirect("/");
       }
       return next();
-    }, uploadPhoto,
-    uploadToGCP,
+    }, uploadHandler.uploadPhoto,
+    uploadHandler.uploadToGCP,
     (req: Request, res: Response, next: NextFunction) => {
       if ("avatar" in req.files) {
         console.log(req.files.avatar[0].originalname);

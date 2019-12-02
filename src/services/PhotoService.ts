@@ -1,47 +1,43 @@
-import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
 import { DBService } from "./DBService";
+import { IPhotoService, IPhotoResult, IPhotoDataJSON } from "./IPhotoService";
 
-export class PhotoService extends DBService {
+export class PhotoService extends DBService implements IPhotoService {
   /**
    * Insert new Photo into database
    * @param photo the Photo object to add to the photos database
    * @return a Promise for the PhotoDataJSON object of the new photo.
    */
-  public static async insertNewPhoto(userId: string): Promise<PhotoDataJSON> {
+  public async insertNewPhoto(userId: string): Promise<IPhotoResult> {
     try {
-      const result: any = await PhotoService.db.collection("photos").insertOne({
+      const result: any = await this.db.collection("photos").insertOne({
         "user": userId
       });
       // Photo couldn't be created, but insertOne() did not throw
       if (!result || result.ops.length !== 1) {
-        throw new Error("Database insert error");
+        return { err: { type: "DBError", message: "Database insert error" } };
       }
       console.log("Upload: " + result.insertedId);
-      return result.ops[0] as PhotoDataJSON;
+      return { result: result.ops[0] as IPhotoDataJSON };
     } catch (err) {
-      err.message = "Database error";
-      throw err;
+      return { err: { type: "DBError", message: "Database error" } };
     }
   }
 
-  public static async removePhotoById(photoId: string) {
-    const result: any = await PhotoService.db.collection("photos").deleteOne({ "_id": photoId });
+  public async removePhotoById(photoId: string): Promise<boolean> {
+    const result: any = await this.db.collection("photos").deleteOne({ "_id": photoId });
     // Photo couldn't be created, but insertOne() did not throw
     if (!result || result.deletedCount !== 1) {
-      throw new Error("Database delete error");
+      return false;
     }
-    console.log("Deleted: " + photoId);
+    return true;
   }
 
   /**
    * @return a Promise for a PhotoDataJSON array containing all photo data
    */
-  public static async getAllPhotos(): Promise<PhotoDTO[]> {
+  public async getAllPhotos(): Promise<IPhotoDataJSON[]> {
     try {
-      const photos = await PhotoService.db.collection("photos").find().toArray();
-      return photos.map((photo: any) => {
-        return new PhotoDTO(photo);
-      });
+      return await this.db.collection("photos").find().toArray();
     } catch (err) {
       err.message = "Database photo error";
       console.error("Failed to get all photos: " + err);
@@ -54,17 +50,17 @@ export class PhotoService extends DBService {
    * @param userId the Photo object to add to the photos database
    * @return a Promise for an array of PhotoDataJSON objects
    */
-  public static async findUserPhotosByID(userId: string): Promise<PhotoDataJSON[]> {
+  public async findUserPhotosByID(userId: string): Promise<IPhotoDataJSON[]> {
     try {
       // For some reason this query doesn't match the user ID exactly, so check if user Id contains user Id
-      const result: any = await PhotoService.db.collection("photos").find(
+      const result: any = await this.db.collection("photos").find(
         { "user": { $regex: ".*" + userId + ".*" } })
         .toArray();
       if (!result) {
-        throw new Error("Database find error");
+        return [];
       }
 
-      return result as PhotoDataJSON[];
+      return result as IPhotoDataJSON[];
     } catch (err) {
       err.message = "Database find error";
       throw err;
@@ -74,7 +70,7 @@ export class PhotoService extends DBService {
   /**
    * Clears photo collection
    */
-  public static async clearPhotos() {
-    return await PhotoService.db.collection("photos").drop();
+  public async clearPhotos() {
+    return await this.db.collection("photos").drop();
   }
 }
