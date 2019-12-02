@@ -1,8 +1,8 @@
 import { expect, app, chai } from "./route.spec";
 
-describe("Index Route", () => {
-  it("should have no errors with get /", (done) => {
-    chai.request(app).get("/")
+describe("Logout Route", () => {
+  it("should logout and redirect to index", (done) => {
+    chai.request(app).get("/api/logout")
     .end((err, res) => {
       // tslint:disable-next-line: no-unused-expression
       expect(err).to.be.null;

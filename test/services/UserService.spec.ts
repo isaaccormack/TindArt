@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import "mocha";
 import { UserService } from "../../src/services/UserService";
-import { mock, when, instance, anything, notNull } from "ts-mockito";
-import { Db, InsertOneWriteOpResult, ObjectID, Collection, CollectionInsertOneOptions, Cursor } from "mongodb";
+import { mock, when, instance, anything, deepEqual } from "ts-mockito";
+import { Db, ObjectID, Collection, Cursor } from "mongodb";
 import { User } from "../../src/models/User";
 
 interface UserDBResultInterface {
@@ -69,12 +69,16 @@ describe("UserService object", async () => {
   .thenThrow(new DBError(99999, false));
 
   const mockedFoundCursor: Cursor = mock(Cursor);
-  //when(mockedFoundCursor.toArray()).thenResolve(dbResult.ops);
-  when(mockedUsers.find(anything())).thenReturn(mockedFoundCursor);
+  when(mockedFoundCursor.toArray()).thenResolve(dbResult.ops);
+  when(mockedUsers.find(deepEqual({ username: "Joe" }))).thenReturn(instance(mockedFoundCursor));
+
+  const mockedNotFoundCursor: Cursor = mock(Cursor);
+  when(mockedNotFoundCursor.toArray()).thenResolve([]);
+  when(mockedUsers.find(deepEqual({ username: "Bob" }))).thenReturn(instance(mockedNotFoundCursor));
 
   when(mockedDb.collection("users")).thenReturn(instance(mockedUsers));
   const db: Db = instance(mockedDb);
-  /*it("should throw an error while initializing the service", async () => {
+  it("should throw an error while initializing the service", async () => {
     // tslint:disable-next-line: no-use-of-empty-return-value
     expect(() => { UserService.initService({}); } ).to.throw();
 
@@ -90,7 +94,7 @@ describe("UserService object", async () => {
       // tslint:disable-next-line: no-duplicate-string
       expect(reason.message).to.equal("Database error");
     });
-    UserService.findOneUserByAttr("username", "").then(
+    /*UserService.findOneUserByAttr("username", "").then(
       (value) => {
         allFailed = false;
       }
@@ -98,7 +102,7 @@ describe("UserService object", async () => {
       // Log the rejection reason
      (reason) => {
       expect(reason.message).to.equal("Database find error");
-    });
+    });*/
     UserService.updateUserAttrByID("", "name", "").then(
       (value) => {
         allFailed = false;
@@ -111,7 +115,6 @@ describe("UserService object", async () => {
     // tslint:disable-next-line: no-unused-expression
     expect(allFailed).to.be.true;
   });
-*/
   it("should initialize the service", () => {
     // tslint:disable-next-line: no-use-of-empty-return-value
     expect(() => { UserService.initService({db}); } ).to.not.throw();
@@ -140,7 +143,7 @@ describe("UserService object", async () => {
       expect("No Error").to.equal(true);
     }
   });
-  /*it("should not find a user by username that doesn't exist", async () => {
+  it("should not find a user by username that doesn't exist", async () => {
     try {
       const result = await UserService.findOneUserByAttr("username", "Bob");
       // tslint:disable-next-line: no-unused-expression
@@ -149,7 +152,7 @@ describe("UserService object", async () => {
       console.log(error);
       expect("No Error").to.equal(true);
     }
-  });*/
+  });
   it("should throw an error on duplicate insert", async () => {
     try {
       const { err, result } = await UserService.insertNewUser(user, hash);

@@ -50,7 +50,7 @@ export class UploadRoute extends BaseRoute {
    */
   public upload(req: Request, res: Response, next: NextFunction) {
     if (!req.session!.user) {
-      return res.status(401).redirect("/");
+      return res.redirect(401, "/");
     }
 
     this.render(req, res, "upload");

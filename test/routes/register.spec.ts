@@ -1,8 +1,8 @@
 import { expect, app, chai } from "./route.spec";
 
-describe("Index Route", () => {
-  it("should have no errors with get /", (done) => {
-    chai.request(app).get("/")
+describe("Register Route", () => {
+  it("should have no errors navigating to register page", (done) => {
+    chai.request(app).get("/register")
     .end((err, res) => {
       // tslint:disable-next-line: no-unused-expression
       expect(err).to.be.null;

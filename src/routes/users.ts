@@ -24,7 +24,7 @@ export class UserRoute extends BaseRoute {
 
     router.post("/api/user/updateBio", (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
-        return res.redirect("/");
+        return res.redirect(401, "/");
       }
 
       userHandler.updateBio(req, res, next);
@@ -32,7 +32,7 @@ export class UserRoute extends BaseRoute {
 
     router.post("/api/user/updatePhoneNumber", (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
-        return res.redirect("/");
+        return res.redirect(401, "/");
       }
 
       userHandler.updatePhoneNumber(req, res, next);
@@ -61,7 +61,7 @@ export class UserRoute extends BaseRoute {
   // tslint:disable-next-line: max-line-length
   public async userPage(req: Request, res: Response, userHandler: UserHandler, artworkHandler: ArtworkHandler, next: NextFunction) {
     if (!req.session!.user) {
-      return res.redirect("/");
+      return res.redirect(401, "/");
     }
 
     // Try to get user page from user's request
