@@ -18,30 +18,35 @@
   </div>
 
   <!-- Boilerplate Form -->
-  <form class="boilerform" id="form" action='/api/upload' method="post" enctype="multipart/form-data">
-      <fieldset class="c-form">
-          <legend class="c-form__heading">Avatar Upload</legend>
-          <div class="c-form__row">
-              <label for="name" class="c-label">File</label>
-              <input type='file', accept="image/*" name='avatar' class="c-input-field" value="" autocorrect="off"/>
-              <input type='submit', value='Upload avatar'/>
-              {{messages.avatar}}
-          </div>
-      </fieldset>
-  </form>
-  <form class="boilerform" id="form2" action='/api/upload' method="post" enctype="multipart/form-data">
-      <fieldset class="c-form">
-          <legend class="c-form__heading">Gallery Upload</legend>
-          <div class="c-form__row">
-              <label for="name" class="c-label">File:</label>
-              <input type='file', accept="image/*" name='gallery' multiple class="c-input-field" value="" autocorrect="off"/>
-              <input type='submit', value='Upload to gallery'/>
-              {{messages.gallery}}
-          </div>
-      </fieldset>
-  </form>
-
-  <a href="/">Go Home?</a>
+  <div class="container">
+    <div class="form-page">
+      <form class="boilerform" id="form" action='/api/upload' method="post" enctype="multipart/form-data">
+          <fieldset class="c-form">
+              <legend class="c-form__heading">Avatar Upload</legend>
+              <div class="c-form__row">
+                  <label for="name" class="c-label">File</label>
+                  <input type='file', accept="image/*" name='avatar' class="c-input-field" value="" autocorrect="off"/>
+                  <input type='submit', value='Upload avatar'/>
+                  {{messages.avatar}}
+              </div>
+          </fieldset>
+      </form>
+      <br />
+      <br />
+      <form class="boilerform" id="form2" action='/api/upload' method="post" enctype="multipart/form-data">
+          <fieldset class="c-form">
+              <legend class="c-form__heading">Gallery Upload</legend>
+              <div class="c-form__row">
+                  <label for="name" class="c-label">File:</label>
+                  <input type='file', accept="image/*" name='gallery' multiple class="c-input-field" value="" autocorrect="off"/>
+                  <input type='submit', value='Upload to gallery'/>
+                  {{messages.gallery}}
+              </div>
+          </fieldset>
+      </form>
+    </div>
+  </div>
 </body>
 
+{{> footer}}
 </html>

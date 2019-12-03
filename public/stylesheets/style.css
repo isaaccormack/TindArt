@@ -16,6 +16,7 @@ body.unauth{
 
 .container {
   padding: 50px;
+  text-align: center;
 }
 
 h1 {
@@ -192,22 +193,24 @@ p.title{
   border-radius: 3px;
 }
 
-.container{
-  text-align: center;
-}
-
 .form-page{
   text-align: center;
   display: inline-block;
   width: 500px;
   border: 3px solid #f1f1f1;
-  margin-top: 30px;
+  /* margin-top: 30px; */
 }
 
-#form {
+#form, #form2 {
   width: 500px;
   display: block;
   text-align: center;
+}
+
+.c-form__heading{
+  color: darkgray;
+  font-size: 14pt;
+  font-weight: bold;
 }
 
 form fieldset{
@@ -382,4 +385,43 @@ h3#user-photos-title{
 
 #homer-doh{
   height: 350px;
+}
+
+/* Carousel CSS */
+.carousel-container div img{
+  max-height: 300px;
+  display: none;
+}
+
+/* Next button CSS */
+.next{
+  position: relative;
+  left: 300px;
+  padding: 20px;
+  color: #fff;
+  text-decoration: none;
+  background-color: darkgrey;
+}
+
+.next:hover{
+  background-color: #444;
+}
+
+/* Like button CSS */
+.like{
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid darkgray;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.like:hover{
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.like img{
+  width: 75px;
+  position: relative;
+  top: 5px;
 }

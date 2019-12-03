@@ -16,34 +16,40 @@
   <div class="container">
     <!-- Only users which are logged in are shown this home page, otherwise index -->
     <div class="carousel-container">
-      <div class="carousel my-carousel carousel--translate">
-      <ul>
-        {{#artpieces}}
-          <li id={{artId}}><img src={{url}} alt="artwork {{artId}}" /></li>
-        {{/artpieces}}
-      </ul>
-      </div>
-     {{!  .carousel.my-carousel.carousel--translate
-    - var panels = ['F', 'G', 'H', 'I', 'J']
-    each val in panels
-      input.carousel__activator(type="radio", name="carousel", id=val, checked=(val == panels[0]))
-    each val, idx in panels
-      .carousel__controls
-        label.carousel__control.carousel__control--backward(for=`${(idx == 0) ? panels[panels.length - 1] : panels[idx - 1]}` )
-        label.carousel__control.carousel__control--forward(for= `${(idx == panels.length - 1) ? panels[0] : panels[idx + 1]}`)
-    .carousel__track
-      each val in panels
-        li.carousel__slide
-          h1= val
-    .carousel__indicators
-      each val in panels
-        label.carousel__indicator(for=val) }}
+        {{#artwork}}
+          <div id={{artID}} class="slide">
+            <img src={{url}} alt="artwork {{artID}}" />
+          </div>
+        {{/artwork}}
+      <a class="next" href="" onclick="nextart()">&#10095;</a>
     </div>
-    <h3><a href="/user/{{username}}">Your Profile</a></h3>
-    <h3><a href="/api/logout">Log Out?</a></h3>
-    <h3><a href="/upload">Upload Photo?</a></h3>
+    <form class="like-button" action="/api/likes" method="post">
+      <button class="like" type="button"><img src="../assets/icons8-heart-80.png" alt="Like Button" /></button>
+    </form>
   </div>
 </body>
+
+<script>
+var slideShown = 1;
+showSlide(1);
+
+function showSlide(num){
+  var i;
+  var slides = document.getElementsByClassName("slide");
+  alert(slides[slideShown].style.display)
+  if (num > slides.length) {slideShown = 1}
+  if (num < 1) {slideShown = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  slides[slideShown-1].style.display = "block";
+}
+
+function nextart(){
+  return false;
+}
+
+</script>
 
 {{> footer}}
 </html>
