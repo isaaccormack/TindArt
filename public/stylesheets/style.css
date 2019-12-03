@@ -300,7 +300,7 @@ form.example input[type=text]::placeholder{
 
 .profile .bio{
   position: absolute;
-  left: 100px;
+  left: 120px;
   text-align: left;
   margin: 20px;
   padding: 15px;
@@ -344,6 +344,8 @@ img.edit-pencil{
   position: absolute;
   top: 110px;
   text-align: left;
+  padding-left: 5px;
+  max-width: 115px;
 }
 
 .lower p{
