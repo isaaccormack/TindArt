@@ -21,7 +21,7 @@ dbModule.initDb((err, db) => {
   console.log("Successfully connected to database. Starting app.");
 
   /* Create the Express server object. */
-  var app = appModule.Server.bootstrap().app;
+  var app = appModule.Server.bootstrap(db).app;
 
   /* Get port from environment and store in Express. */
   var port = normalizePort(process.env.PORT || "3000");
