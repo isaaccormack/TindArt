@@ -1,6 +1,6 @@
 import { IPhotoDataJSON } from "../services/IPhotoService";
+import { GCP_URL } from "../services/GCPService";
 
-const BUCKET_NAME = "majabris";
 
 /* PhotoDTO object to transfer data between model and view */
 export class PhotoDTO {
@@ -15,6 +15,6 @@ export class PhotoDTO {
   public create(res: IPhotoDataJSON) {
     this.userId = res.user;
     this._id = res._id.toString();
-    this.url = `https://storage.googleapis.com/${BUCKET_NAME}/${this._id}`;
+    this.url = GCP_URL(this._id);
   }
 }

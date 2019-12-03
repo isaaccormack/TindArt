@@ -1,4 +1,5 @@
 import { IUserDataJSON } from "../services/IUserService";
+import { GCP_URL } from "../services/GCPService";
 
 /* UserDTO object to transfer data between model and view */
 export class UserDTO {
@@ -20,6 +21,8 @@ export class UserDTO {
 
   public phoneNumber: string = "";
 
+  public avatar: string = "";
+
   /**
    * Could add these later:
    * Phone number
@@ -39,5 +42,6 @@ export class UserDTO {
     this.province = res.province;
     this._id = res._id;
     this.phoneNumber = res.phoneNumber;
+    this.avatar = GCP_URL(this.username) + "?" + Math.round(new Date().getTime() / 1000);
   }
 }
