@@ -1,34 +1,32 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { uploadPhoto, uploadToGCP } from "../handlers/upload";
-import { clearPhotos, getAllPhotos } from "../services/photo";
+import { UploadHandler } from "../handlers/upload";
+import { IPhotoService } from "../services/IPhotoService";
 
-export class UploadRouter extends BaseRoute {
-  public static create(router: Router) {
+export class UploadRoute extends BaseRoute {
+  public static create(router: Router, uploadHandler: UploadHandler, photoService: IPhotoService) {
     console.log("[UploadRoute::create] Creating UploadRoutes route.");
 
     router.get("/api/photos", async (req: Request, res: Response, next: NextFunction) => {
-      const data = await getAllPhotos();
+      const data = await photoService.getAllPhotos();
       res.json(data); // should check users level of authentication here
     });
     router.get("/api/photos/clear", async (req: Request, res: Response, next: NextFunction) => {
-      const data = await clearPhotos();
-      res.json(data); // should check users level of authentication here
+      photoService.clearPhotos();
+      res.json({}); // should check users level of authentication here
     });
 
     router.get("/upload", (req: Request, res: Response, next: NextFunction) => {
-      new UploadRouter().upload(req, res, next);
+      new UploadRoute().upload(req, res, next);
     });
 
-    router.post("/api/upload", (req: Request, res: Response, next: NextFunction) => {
+    router.post("/api/upload", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.status(401).redirect("/");
       }
-      return next();
-    }, uploadPhoto,
-    uploadToGCP,
-    (req: Request, res: Response, next: NextFunction) => {
+      uploadHandler.uploadPhoto(req, res, next);
+    }, (req: Request, res: Response, next: NextFunction) => {
       if ("avatar" in req.files) {
         console.log(req.files.avatar[0].originalname);
         req.flash("avatar", "Successfully uploaded avatar");

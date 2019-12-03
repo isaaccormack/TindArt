@@ -10,11 +10,10 @@ let db: Db;
  * callback. This way, the (singular) database connection is available
  * synchonously throughout the life of the server.
  */
-export function initDb(callback: (err: MongoError | null, db: Db | undefined) => void): void {
+export function initDb(callback: (err: Error | null, db: Db | undefined) => void): void {
   if (db) {
-    return callback(null, db);
+    return callback(new Error("Cannot initialize database twice"), undefined);
   }
-
   function onConnected(err: MongoError, client: MongoClient) {
     if (err) {
       return callback(err, undefined);
@@ -22,7 +21,6 @@ export function initDb(callback: (err: MongoError | null, db: Db | undefined) =>
     db = client.db("myapp");
     return callback(null, db);
   }
-
   MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true }, onConnected);
 }
 

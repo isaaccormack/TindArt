@@ -1,42 +1,39 @@
 #!/usr/bin/env node
-
+/* tslint:disable */
 /**
  * Module dependencies.
  */
 
-var appModule = require('../dist/app');
-var dbModule = require('../dist/database/dbclient');
-var debug = require('debug')('myapp:server');
-var http = require('http');
-var app = appModule.Server.bootstrap().app;
+var appModule = require("../dist/app");
+var dbModule = require("../dist/database/dbclient");
+var debug = require("debug")("myapp:server");
+var http = require("http");
 
 /**
- * Get port from environment and store in Express.
+ * Initialize database before creating HTTP server.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
-
-/**
- * Connect to database, then listen on provided port, on all network interfaces.
- */
-
-dbModule.initDb((err) => {
+dbModule.initDb((err, db) => {
+  /* We can only run the app if we have a working database. */
   if (err) {
-    console.log('Failed to connect to database.');
+    console.log("Failed to connect to database. Cannot start the app.");
     throw err;
   }
-  console.log('Successfully connected to database.');
+  console.log("Successfully connected to database. Starting app.");
+
+  /* Create the Express server object. */
+  var app = appModule.Server.bootstrap().app;
+
+  /* Get port from environment and store in Express. */
+  var port = normalizePort(process.env.PORT || "3000");
+  app.set("port", port);
+
+  /* Create the server and start listening. */
+  var server = http.createServer(app);
+  server.on("error", onError);
+  server.on("listening", () => onListening(server));
   server.listen(port);
 });
-server.on('error', onError);
-server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -63,22 +60,22 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== "listen") {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === "string"
+    ? "Pipe " + port
+    : "Port " + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
       process.exit(1);
       break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
       process.exit(1);
       break;
     default:
@@ -90,10 +87,10 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+function onListening(server) {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  var bind = typeof addr === "string"
+    ? "pipe " + addr
+    : "port " + addr.port;
+  debug("Listening on " + bind);
 }

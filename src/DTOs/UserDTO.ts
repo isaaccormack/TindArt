@@ -1,17 +1,4 @@
-import { PhotoDataJSON } from "../DTOs/PhotoDTO"
-
-/* Type interface for the returned JSON for user returned by DB query */
-export interface UserDataJSON {
-  bio: string;
-  name: string;
-  username: string;
-  email: string;
-  city: string;
-  province: string;
-  password: string;
-  _id: string;
-  phoneNumber: string;
-}
+import { IUserDataJSON } from "../services/IUserService";
 
 /* UserDTO object to transfer data between model and view */
 export class UserDTO {
@@ -39,11 +26,11 @@ export class UserDTO {
    * Personal Website
    * Social media links - facebook, twitter, etc.
    */
-  constructor(res: UserDataJSON) {
+  constructor(res: IUserDataJSON) {
     this.create(res);
   }
 
-  public create(res: UserDataJSON) {
+  public create(res: IUserDataJSON) {
     this.bio = res.bio;
     this.name = res.name;
     this.username = res.username;
