@@ -21,14 +21,12 @@ export class UploadRoute extends BaseRoute {
       new UploadRoute().upload(req, res, next);
     });
 
-    router.post("/api/upload", (req: Request, res: Response, next: NextFunction) => {
+    router.post("/api/upload", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.status(401).redirect("/");
       }
-      return next();
-    }, uploadHandler.uploadPhoto,
-    uploadHandler.uploadToGCP,
-    (req: Request, res: Response, next: NextFunction) => {
+      uploadHandler.uploadPhoto(req, res, next);
+    }, (req: Request, res: Response, next: NextFunction) => {
       if ("avatar" in req.files) {
         console.log(req.files.avatar[0].originalname);
         req.flash("avatar", "Successfully uploaded avatar");

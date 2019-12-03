@@ -37,8 +37,9 @@ export class UploadHandler {
       if (err) {
         console.error("Upload failed: " + err);
         req.flash("error", "Photo upload failed!");
+        return next(err);
       }
-      return next(err);
+      this.uploadToGCP(req, res, next);
     });
   }
 

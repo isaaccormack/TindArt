@@ -59,8 +59,7 @@ export class Server {
     // configure application
     this.config();
 
-    // connect to db
-    this.connectDb().then(this.routes);
+    this.routes();
   }
 
   /**
@@ -145,9 +144,12 @@ export class Server {
    * @method routes
    * @return void
    */
-  private routes() {
+  private async routes() {
     let router: express.Router;
     router = express.Router();
+
+    // connect to db
+    await this.connectDb();
     const userService: IUserService = new UserService({db: getDb()});
     const photoService: IPhotoService = new PhotoService({db: getDb()});
 
