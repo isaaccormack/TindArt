@@ -4,7 +4,7 @@ import express from "express";
 import { Request, Response, NextFunction } from "express";
 import flash = require("express-flash");
 import logger from "morgan";
-import mustache from 'mustache-express';
+import mustache from "mustache-express";
 import path from "path";
 import session = require("express-session");
 
@@ -12,8 +12,18 @@ import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
-import { RegisterRouter } from "./routes/register";
-import { UploadRouter } from "./routes/upload";
+import { RegisterRoute } from "./routes/register";
+import { UserRoute } from "./routes/users";
+import { UploadRoute } from "./routes/upload";
+import { LoginHandler } from "./handlers/login";
+import { UserService } from "./services/UserService";
+import { IUserService } from "./services/IUserService";
+import { initDb, getDb } from "./database/dbclient";
+import { PhotoService } from "./services/PhotoService";
+import { IPhotoService } from "./services/IPhotoService";
+import { UploadHandler } from "./handlers/upload";
+import { UserHandler } from "./handlers/users";
+import { RegisterHandler } from "./handlers/register";
 
 /**
  * The server.
@@ -49,7 +59,6 @@ export class Server {
     // configure application
     this.config();
 
-    // add routes
     this.routes();
   }
 
@@ -59,14 +68,14 @@ export class Server {
    * @class Server
    * @method config
    */
-  public config() {
+  private config() {
     // add static paths
     this.app.use(express.static(path.join(__dirname, "../public")));
 
     // configure mustache
-    this.app.engine('mustache', mustache());
-    this.app.set('view engine', 'mustache');
-    this.app.set('views', __dirname + '/../src/views');
+    this.app.engine("mustache", mustache());
+    this.app.set("view engine", "mustache");
+    this.app.set("views", __dirname + "/../src/views");
 
     // mount logger
     this.app.use(logger("dev"));
@@ -116,17 +125,25 @@ export class Server {
    * @return void
    */
   private routes() {
-    let router: express.Router;
-    router = express.Router();
+    const router: express.Router = express.Router();
+
+    const userService: IUserService = new UserService({db: getDb()});
+    const photoService: IPhotoService = new PhotoService({db: getDb()});
+
+    const loginHandler: LoginHandler = new LoginHandler(userService);
+    const userHandler: UserHandler = new UserHandler(userService);
+    const registerHandler: RegisterHandler = new RegisterHandler(userService);
+    const uploadHandler: UploadHandler = new UploadHandler(photoService);
 
     IndexRoute.create(router);
-    RegisterRouter.create(router);
+    RegisterRoute.create(router, registerHandler);
+    LoginRoute.create(router, loginHandler);
     LogoutRoute.create(router);
-    LoginRoute.create(router);
-    UploadRouter.create(router);
+    UploadRoute.create(router, uploadHandler, photoService);
+    UserRoute.create(router, userHandler, photoService); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
-    //use router middleware
+    // use router middleware
     this.app.use(router);
   }
 

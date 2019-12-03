@@ -13,14 +13,18 @@
 {{> header}} {{! This is the header that will be on almost all of the pages }}
 
 <body>
-  <div class="container">
-    <!-- Only users which are logged in are shown this home page, otherwise index -->
-    <p>Welcome {{name}}</p>
-    <h3><a href="/user/{{username}}">Your Profile</a></h3>
-    <h3><a href="/api/logout">Log Out?</a></h3>
-    <h3><a href="/upload">Upload Photo?</a></h3>
+  <p>This is {{name}}'s profile</p>
+  <p>{{city}}, {{province}}</p>
+  <h6>{{bio}}</h6>
+
+  <div>
+    <ul>
+      <h3>{{name}}'s Photos :)</h3>
+      {{#photoURLs}}
+      <li><img src={{.}} height="400"></a></li>
+      {{/photoURLs}}
+    </ul>
   </div>
 </body>
 
-{{> footer}}
 </html>

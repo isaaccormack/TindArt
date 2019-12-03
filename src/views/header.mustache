@@ -1,0 +1,15 @@
+<div class="overall-header"> 
+    <div class="header-left">  
+        <a href="/">
+            <img src="../assets/icons8-fire-80.png" />
+            <p class="title">TindArt</h1>
+        </a> 
+    </div>
+    {{#username}} {{! If authenticated, these options will be visible }}
+    <div class="header-right">
+        <a href="/user/{{username}}"><img src="../assets/icons8-user-30.png" /></a> {{! This will be changed to include the profile picture if they have one }}
+        <a href="/"><img src="../assets/icons8-heart-outline-30.png" /></a> {{! Likes page will be created }}
+        <a href="/api/logout"><img src="../assets/icons8-lock-128.png" /></a> {{! This will be an icon in the future }}
+    </div>
+    {{/username}}
+</div>

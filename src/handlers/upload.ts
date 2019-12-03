@@ -1,63 +1,91 @@
-import { Request, Response, NextFunction } from 'express';
-import { Db } from 'mongodb';
+import { Request, Response, NextFunction } from "express";
+import { Storage } from "@google-cloud/storage";
+import multer from "multer";
+import { PhotoDTO } from "../DTOs/PhotoDTO";
+import { IPhotoResult, IPhotoService } from "../services/IPhotoService";
 
-const DbClient = require('../DbClient');
-const multer = require('multer');
+const uploader = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // no larger than 5mb
+  }
+}).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 8 }]);
 
-const storage = multer.diskStorage({
-  destination: function (req: any, file: any, cb: any) {
-    cb(null, 'uploads')
-  },
-  filename: function (req: any, file: any, cb: any) {
-    getNextPhotoID(req).then((filename: string) => {
-      cb(null, filename + '.' + file.originalname.split('.').pop());
+const GCP_PROJECT_ID = "seng350f19-project-team-3-1";
+const BUCKET_NAME = "majabris";
+const CLOUD_CREDENTIAL_FILE = "./src/seng350f19-project-team-3-1-5df5aeb4df61.json";
+
+// Creates reference to storage and bucket
+const storage = new Storage({
+  projectId: GCP_PROJECT_ID,
+  keyFilename: CLOUD_CREDENTIAL_FILE
+});
+const bucket = storage.bucket(BUCKET_NAME);
+
+export class UploadHandler {
+  private photoService: IPhotoService;
+
+  constructor(photoService: IPhotoService) {
+    this.photoService = photoService;
+   }
+
+  /**
+   * Add New Photo
+   */
+  public uploadPhoto(req: Request, res: Response, next: NextFunction) {
+    uploader(req, res, (err: any) => {
+      if (err) {
+        console.error("Upload failed: " + err);
+        req.flash("error", "Photo upload failed!");
+        return next(err);
+      }
+      this.uploadToGCP(req, res, next);
     });
   }
-});
 
-const uploader = multer({ storage: storage }).fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }]);
+  public async upload(exFile: Express.Multer.File, userId: string) {
+    return new Promise<PhotoDTO>(async (res) => {
+      const result: IPhotoResult = await this.photoService.insertNewPhoto(userId);
+      if (result.err) {
+        return null;
+      }
 
-/**
-* Get All Photos
-*/
-export function getAllPhotos(req: Request, res: Response, next: NextFunction) {
-  DbClient.connect()
-    .then((db: any) => {
-      return db!.collection("photos").find().toArray();
-    })
-    .then((photos: any) => {
-      console.log(photos);
-      res.send(photos);
-    })
-    .catch((err: any) => {
-      console.error("Database conn failed: " + err);
-    })
-}
+      const photoDTO: PhotoDTO = new PhotoDTO(result.result!);
+      const file = bucket.file(photoDTO._id);
+      const stream = file.createWriteStream({
+        metadata: {
+          contentType: exFile.mimetype,
+          cacheControl: "public, max-age=31536000"
+        },
+        resumable: false
+      });
 
-/**
-* Add New Photo
-*/
-export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
-  uploader(req, res, (err: any) => {
-    if (err) {
-      console.error("Upload failed: " + err);
-      req.flash('error', 'Photo upload failed!');
+      stream.on("error", async (errr) => {
+        try {
+          await this.photoService.removePhotoById(photoDTO._id);
+        } catch (err) {
+          console.log("Error Deleting: " + photoDTO._id);
+        }
+        res();
+      });
+
+      stream.on("finish", () => {
+        console.log(`${photoDTO._id} uploaded to ${BUCKET_NAME}.`);
+        res(photoDTO);
+      });
+
+      stream.end(exFile.buffer);
+    });
+  }
+
+  public async uploadToGCP(req: Request, res: Response, next: NextFunction) {
+    if ("avatar" in req.files) {
+      await this.upload(req.files.avatar[0], req.session!.user._id);
+    } else if ("gallery" in req.files) {
+      const all = req.files.gallery.map((file) => this.upload(file, req.session!.user._id));
+      const combine = Promise.all(all);
+      await combine;
     }
     next();
-  });
-}
-
-function getNextPhotoID(req: Request) {
-  return DbClient.connect()
-    .then((db: Db) => {
-      return db!.collection("photos").insertOne({
-        "user": req.session!.user._id
-      });
-    })
-    .then((result: any) => { // handle database response
-      if (result) {
-        console.log('Upload: ' + result.insertedId);
-        return result.insertedId.toString();
-      }
-    });
+  }
 }

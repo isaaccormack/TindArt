@@ -1,31 +1,38 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { getAllUsers, createUser } from "../handlers/register";
+import { RegisterHandler } from "../handlers/register";
 
 /**
  * / route
  *
- * @class RegisterRouter
+ * @class RegisterRoute
  */
-export class RegisterRouter extends BaseRoute {
-  public static create(router: Router) {
-    console.log("[RegisterRoute::create] Creating RegisterRoutes route.");
-
-    // Endpoint for development and testing
-    router.get("/api/register/users", (req: Request, res: Response, next: NextFunction) => {
-      getAllUsers(req, res, next);
-    });
+export class RegisterRoute extends BaseRoute {
+  public static create(router: Router, registerHandler: RegisterHandler) {
+    console.log("[RegisterRoute::create] Creating register route.");
 
     router.get("/register", (req: Request, res: Response, next: NextFunction) => {
-      new RegisterRouter().register(req, res, next);
+      new RegisterRoute().register(req, res, next);
     });
 
     router.post("/api/register", (req: Request, res: Response, next: NextFunction) => {
-      if (req.session!.user) return res.redirect("/");
+      if (req.session!.user) {
+        return res.redirect("/");
+      }
 
-      createUser(req, res, next);
+      registerHandler.createUser(req, res, next);
     });
+  }
+
+  /**
+   * Constructor
+   *
+   * @class RegisterRoute
+   * @constructor
+   */
+  constructor() {
+    super();
   }
 
   /**
@@ -38,7 +45,9 @@ export class RegisterRouter extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public register(req: Request, res: Response, next: NextFunction) {
-    if (req.session!.user) return res.redirect("/");
+    if (req.session!.user) {
+      return res.redirect("/");
+    }
 
     this.render(req, res, "register");
   }
