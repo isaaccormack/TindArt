@@ -8,9 +8,9 @@
     <div class="header-spacer">
     </div>
     <div class="header-search">
-        <form class="example" action="action_page.php">
-            <input type="text" placeholder="Search for another user" name="search">
-            <button type="submit">Search</button>
+    <form>
+        <input  id="searchbar" type="text" placeholder="Search for another user" name="search" />
+        <button type="submit" onclick="search_user(event)">Search</button>
         </form>
     </div>
     {{#username}} {{! If authenticated, these options will be visible }}
@@ -21,3 +21,11 @@
     </div>
     {{/username}}
 </div>
+
+<script type="text/javascript">
+function search_user(e) {
+    e.preventDefault();
+    window.location.pathname = '/user/'+document.getElementById('searchbar').value;
+    return false;
+}
+</script>
