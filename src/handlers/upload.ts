@@ -3,17 +3,14 @@ import { Storage } from "@google-cloud/storage";
 import multer from "multer";
 import { PhotoDTO } from "../DTOs/PhotoDTO";
 import { IPhotoResult, IPhotoService } from "../services/IPhotoService";
+import { GCP_PROJECT_ID, CLOUD_CREDENTIAL_FILE, BUCKET_NAME } from "../services/GCPService";
 
 const uploader = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024 // no larger than 5mb
   }
-}).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 8 }]);
-
-const GCP_PROJECT_ID = "seng350f19-project-team-3-1";
-const BUCKET_NAME = "majabris";
-const CLOUD_CREDENTIAL_FILE = "./src/seng350f19-project-team-3-1-5df5aeb4df61.json";
+}).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 1 }]);
 
 // Creates reference to storage and bucket
 const storage = new Storage({
@@ -33,25 +30,38 @@ export class UploadHandler {
    * Add New Photo
    */
   public uploadPhoto(req: Request, res: Response, next: NextFunction) {
-    uploader(req, res, (err: any) => {
+    uploader(req, res, async (err: any) => {
       if (err) {
         console.error("Upload failed: " + err);
         req.flash("error", "Photo upload failed!");
         return next(err);
       }
-      this.uploadToGCP(req, res, next);
+
+      if ("avatar" in req.files) {
+        console.log(req.session!.user._id);
+        await this.uploadToGCP(req.files.avatar[0], req.session!.user.username);
+      } else if ("gallery" in req.files) {
+        const all = req.files.gallery.map((file) => this.uploadArtworkPhoto(file, req.session!.user._id));
+        const combine = Promise.all(all);
+        await combine;
+      }
+      next();
     });
   }
 
-  public async upload(exFile: Express.Multer.File, userId: string) {
-    return new Promise<PhotoDTO>(async (res) => {
-      const result: IPhotoResult = await this.photoService.insertNewPhoto(userId);
-      if (result.err) {
-        return null;
-      }
+  private async uploadArtworkPhoto(exFile: Express.Multer.File, userId: string) {
+    const result: IPhotoResult = await this.photoService.insertNewPhoto(userId);
+    if (result.err) {
+      return null;
+    }
 
-      const photoDTO: PhotoDTO = new PhotoDTO(result.result!);
-      const file = bucket.file(photoDTO._id);
+    const photoDTO: PhotoDTO = new PhotoDTO(result.result!);
+    await this.uploadToGCP(exFile, photoDTO._id);
+  }
+
+  private async uploadToGCP(exFile: Express.Multer.File, photoId: string) {
+    return new Promise<void>(async (res) => {
+      const file = bucket.file(photoId);
       const stream = file.createWriteStream({
         metadata: {
           contentType: exFile.mimetype,
@@ -62,30 +72,18 @@ export class UploadHandler {
 
       stream.on("error", async (errr) => {
         try {
-          await this.photoService.removePhotoById(photoDTO._id);
+          await this.photoService.removePhotoById(photoId);
         } catch (err) {
-          console.log("Error Deleting: " + photoDTO._id);
+          console.log("Error Deleting: " + photoId);
         }
         res();
       });
 
       stream.on("finish", () => {
-        console.log(`${photoDTO._id} uploaded to ${BUCKET_NAME}.`);
-        res(photoDTO);
+        console.log(`${photoId} uploaded to ${BUCKET_NAME}.`);
+        res();
       });
-
       stream.end(exFile.buffer);
     });
-  }
-
-  public async uploadToGCP(req: Request, res: Response, next: NextFunction) {
-    if ("avatar" in req.files) {
-      await this.upload(req.files.avatar[0], req.session!.user._id);
-    } else if ("gallery" in req.files) {
-      const all = req.files.gallery.map((file) => this.upload(file, req.session!.user._id));
-      const combine = Promise.all(all);
-      await combine;
-    }
-    next();
   }
 }
