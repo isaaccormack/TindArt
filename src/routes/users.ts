@@ -2,11 +2,12 @@ import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
 import { UserHandler } from "../handlers/users";
+import { ArtworkHandler } from "../handlers/artwork";
 import { PhotoDTO } from "../DTOs/PhotoDTO";
 import { UserDTO } from "../DTOs/UserDTO";
-import { PhotoService } from "../services/PhotoService";
 import { IUserDataJSON } from "../services/IUserService";
-import { IPhotoService, IPhotoDataJSON } from "../services/IPhotoService";
+import { IArtworkDataJSON } from "../services/IArtworkService";
+import { ArtworkDTO } from "../DTOs/ArtworkDTO";
 
 /**
  * / route
@@ -14,11 +15,11 @@ import { IPhotoService, IPhotoDataJSON } from "../services/IPhotoService";
  * @class UserRoute
  */
 export class UserRoute extends BaseRoute {
-  public static create(router: Router, userHandler: UserHandler, photoService: IPhotoService) {
+  public static create(router: Router, userHandler: UserHandler, artworkHandler: ArtworkHandler) {
     console.log("[UserRoute::create] Creating user route.");
 
     router.get("/user/:username", (req: Request, res: Response, next: NextFunction) => {
-      new UserRoute().userPage(req, res, userHandler, photoService, next);
+      new UserRoute().userPage(req, res, userHandler, artworkHandler, next);
     });
 
     router.post("/api/user/updateBio", (req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +59,7 @@ export class UserRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   // tslint:disable-next-line: max-line-length
-  public async userPage(req: Request, res: Response, userHandler: UserHandler, photoService: IPhotoService, next: NextFunction) {
+  public async userPage(req: Request, res: Response, userHandler: UserHandler, artworkHandler: ArtworkHandler, next: NextFunction) {
     if (!req.session!.user) {
       return res.redirect("/");
     }
@@ -67,12 +68,13 @@ export class UserRoute extends BaseRoute {
     try {
       const userResult: IUserDataJSON = await userHandler.getUserByUsername(req, res, next);
       const userDTO: UserDTO = new UserDTO(userResult);
-      const photoResults: IPhotoDataJSON[] = await photoService.findUserPhotosByID(userDTO._id);
-
+      const artworkResults: IArtworkDataJSON[] = await artworkHandler.findUserArtwork(req, res, next);
       // Add the URL of each result to the photoURLs array in the userDTO
-      photoResults.forEach((photoResult) => {
-        const photoDTO: PhotoDTO = new PhotoDTO(photoResult);
-        userDTO.photoURLs.push(photoDTO.url);
+      artworkResults.forEach((artworkResult) => {
+        const artworkDTO: ArtworkDTO = new ArtworkDTO(artworkResult);
+        artworkDTO.photos.forEach((photo) => {
+          userDTO.photoURLs.push(photo);
+        });
       });
 
       if (req.session!.user.username === req.params.username) {

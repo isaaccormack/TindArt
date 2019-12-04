@@ -1,19 +1,15 @@
-/* Type interface for the returned JSON for artwork sent to or returned by DB query */
-export interface ArtworkDataJSON {
-  userId: string;
-  photoIds: string[];
-  title: string;
-  description: string;
-  price: number;
-  dimensions: number[];
-  _id: string;
-}
+import { IArtworkDataJSON } from "../services/IArtworkService";
+import { GCP_URL } from "../services/GCPService";
 
 /* ArtworkDTO object to transfer data between model and view */
 export class ArtworkDTO {
+  public _id: string = "";
+
   public userId: string = "";
 
-  public photoIds: string[] = [];
+  public location: string = "";
+
+  public photos: string[] = [];
 
   public title: string = "";
 
@@ -23,19 +19,24 @@ export class ArtworkDTO {
 
   public dimensions: number[] = [0, 0, 0];
 
-  public _id: string = "";
+  public city: string = "";
 
-  constructor(res: ArtworkDataJSON) {
+  public province: string = "";
+
+  constructor(res: IArtworkDataJSON) {
     this.create(res);
   }
 
-  public create(res: ArtworkDataJSON) {
+  public create(res: IArtworkDataJSON) {
+    this._id = res._id.toString();
     this.userId = res.userId;
-    this.photoIds = res.photoIds;
     this.title = res.title;
     this.description = res.description;
     this.price = res.price;
     this.dimensions = res.dimensions;
-    this._id = res._id;
+    this.city = res.city;
+    this.province = res.province;
+    // Remap photo ids from the database to the GCP urls
+    this.photos = res.photos.map((p) => GCP_URL(p));
   }
 }
