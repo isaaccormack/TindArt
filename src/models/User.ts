@@ -39,6 +39,10 @@ export class User {
   })
   private password: string = "";
 
+  constructor(userData: any) {
+    this.create(userData);
+  }
+
   public create(userData: any) {
     this.name = userData.name;
     this.username = userData.username;

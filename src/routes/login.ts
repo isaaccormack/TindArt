@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 
 import { BaseRoute } from "./route";
-import { loginUser } from "../handlers/login";
+import { LoginHandler } from "../handlers/login";
 
 /**
  * / route
@@ -17,7 +17,7 @@ export class LoginRoute extends BaseRoute {
    * @method create
    * @static
    */
-  public static create(router: Router) {
+  public static create(router: Router, loginHandler: LoginHandler) {
     // log
     console.log("[LoginRoute::create] Creating login route.");
 
@@ -30,7 +30,7 @@ export class LoginRoute extends BaseRoute {
         return res.redirect("/");
       }
 
-      loginUser(req, res, next);
+      loginHandler.loginUser(req, res, next);
     });
   }
 
