@@ -7,23 +7,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TindArt</title>
+  <link rel="icon" type="image" href="../assets/icons8-fire-80.png" />
 </head>
 
+{{> header}}
 <body>
-  <p>Welcome to your likes page</p>
-
-  <h3><a href="/api/logout">Log Out?</a></h3>
-
+  <p>Your Likes</p>
   <div>
-    <ul>
-      <h3>Likes</h3>
-      {{#photoURLs}}
-      <li><img src={{.}} height="400"></a></li>
-      {{/photoURLs}}
-    </ul>
+      <div class="liked-photos">
+        <div class="photo-box">
+            {{#photos}}
+            <div class="photo">
+                <button type="button" id={{artworkId}} class="liked-art" onclick="openpopup(this.id)">
+                    <img src={{url}} alt="Like image" />
+                </button>
+            </div>
+            <div class="popup" id="pop{{artworkId}}">
+                <div class="popup-content">
+                    <span class="close" id="{{artworkId}}2" onclick="close(this.id)">&times;</span>
+                    <div class="title">
+                        <h2>{{title}}</h2>
+                    </div>
+                    <div class="text">
+                        <p>{{description}}</p>
+                        <p>{{price}}$</p>
+                    </div>
+                </div>
+            </div>
+            {{/photos}}
+            {{^photos}}
+            You have not liked any photos, check out the home page to <a href="/">browse</a> artwork.
+            {{/photos}}
+        </div>
+    </div>
   </div>
 
   <h4>{{messages.serverError}}</h4>
 </body>
 
+<script type="text/javascript">
+var span = document.getElementsByClassName("close")[0];
+
+function openpopup(id){
+    id="pop"+id;
+    var popup = document.getElementById(id);
+    popup.style.display = "block";
+}
+
+span.onclick = function() { // this won't work
+    console.log(span)
+ // popup.style.display = "none";
+}
+/* This didn't work
+function close(id) {
+    console.log(id)
+    id = id.substring(0, id.length-1);
+    id = "pop" +id;
+    var popup = document.getElementById(id);
+    popup.style.display = "none";
+}
+
+/* TODO: allow click outside of popup to close it */
+/* window.onclick = function(event) {
+  if (event.target == popup) {
+    popup.style.display = "none";
+  }
+} */
+</script>
+
+{{> footer}}
 </html>
