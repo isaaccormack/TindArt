@@ -50,17 +50,27 @@ export class IndexRoute extends BaseRoute {
       this.render(req, res, "home", {
         name: req.session!.user.name,
         username: req.session!.user.username,
-        artwork: [ // This is temporary to develop the carousel
-          { artID: 1, url: "../assets/tempforcarousel/1.jpg" },
-          { artID: 2, url: "../assets/tempforcarousel/2.jpg" },
-          { artID: 3, url: "../assets/tempforcarousel/3.jpg" },
-          { artID: 4, url: "../assets/tempforcarousel/4.jpg" },
-          { artID: 5, url: "../assets/tempforcarousel/5.jpg" },
-          { artID: 6, url: "../assets/tempforcarousel/6.jpg" },
-          { artID: 7, url: "../assets/tempforcarousel/7.jpg" },
-          { artID: 8, url: "../assets/tempforcarousel/8.jpg" },
-          { artID: 9, url: "../assets/tempforcarousel/9.jpg" },
-          { artID: 10, url: "../assets/tempforcarousel/10.jpg" }
+        photos: [ // This is temporary to develop the carousel
+          { artworkID: 1, url: "../assets/tempforcarousel/1.jpg", title: "1", description: "desc1",
+         city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 2, url: "../assets/tempforcarousel/2.jpg", title: "2", description: "desc2",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 3, url: "../assets/tempforcarousel/3.jpg", title: "3", description: "desc23",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 4, url: "../assets/tempforcarousel/4.jpg", title: "4", description: "desc24",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 5, url: "../assets/tempforcarousel/5.jpg", title: "5", description: "desc5",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 6, url: "../assets/tempforcarousel/6.jpg", title: "6", description: "desc66",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 7, url: "../assets/tempforcarousel/7.jpg", title: "7", description: "desc7",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 8, url: "../assets/tempforcarousel/8.jpg", title: "8", description: "desc18",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 9, url: "../assets/tempforcarousel/9.jpg", title: "8", description: "desc19",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] },
+          { artworkID: 10, url: "../assets/tempforcarousel/10.jpg", title: "10", description: "desc110",
+          city: "Victoria", province: "BC", dimensions: [1, 1, 1] }
         ]
       });
     } else {

@@ -22,6 +22,7 @@ export class LikesHandler {
 
     try {
       await this.likeService.addArtworkLike(userId, artworkId);
+      next();
       // TODO: what to do in this case? flash success of some sort? -> depends on frontend
     } catch (err) {
       console.error(err);

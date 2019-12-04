@@ -398,6 +398,7 @@ h3#user-photos-title{
   background-color: #ddd;
   max-height: 300px;
   max-width: 690px;
+  margin: 0px;
 }
 
 .carousel-container div img{
@@ -412,7 +413,7 @@ h3#user-photos-title{
 /* Next button CSS */
 .next{
   position: relative;
-  left: 280px;
+  left: 160px;
   bottom: 250px;
   padding: 20px;
   color: #fff;

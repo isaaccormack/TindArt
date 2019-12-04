@@ -18,19 +18,19 @@
   <div class="container">
     <!-- Only users which are logged in are shown this home page, otherwise index -->
     <div class="carousel-container">
-        {{#artwork}}
-          <div id={{artID}} class="slide">
-            <div id="mypanel">
-              <img src={{url}} alt="artwork {{artID}}" />
-            </div>
+        {{#photos}}
+          <div id={{artworkID}} class="slide">
+            <img src={{url}} alt="artwork {{artworkID}}" />
           </div>
           {{! This like button action doesn't do the post properly }}
-          <form class="like-button" action="/api/likes" method="post">
-            <button class="like" id="load" type="button" name="artworkId" value={{artID}}>
+          <form class="like-button" action="/api/like" method="post">
+            <button class="like" id="load_{{artworkId}}" type="submit" name="artworkId"
+            value={{artworkID}} onclick="like(this.id)">
               <img src="../assets/icons8-heart-80.png" alt="Like Button" />
             </button>
+            <input type="text" name="artworkId" value={{artworkID}} style="display: none" />
           </form>
-        {{/artwork}}
+        {{/photos}}
       <a class="next" href="" onclick="nextart(event)">&#10095;</a>
     </div>
   </div>
@@ -61,10 +61,6 @@ function nextart(e){
   return false;
 }
 
-</script>
-
-{{> footer}}
-<script>
 // This has to be changed to only run through the current group of art before actually submitting this api post request
 $(function() { 
   $("#btn").on('click', function() {
@@ -74,9 +70,17 @@ $(function() {
       + "<li><img src={{photos.0}} height=\"400\"></a></li>" 
       + "{{/.}}";
       var html = Mustache.render(template, data);   
-      $("#mypanel").html(html);
+      $(".carousel-container").html(html);
     });
   });
 }); 
+</script>
+
+{{> footer}}
+<script>
+function like(id){
+  id = id.substring(5, id.length);
+  $.post("/api/like", { artworkId: id});
+}
 </script>
 </html>
