@@ -9,7 +9,7 @@ export interface IArtworkService {
   clearArtwork(): void;
 }
 
-export interface IArtworkResult { // Type returned by insertNewPhoto
+export interface IArtworkResult { // Type returned by insertNewArtwork
   // Types can be undefined so result can be falsey if error present and vice versa
   err?: {
     type: string;

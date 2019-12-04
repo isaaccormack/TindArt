@@ -44,6 +44,8 @@ export class ArtworkHandler {
 
   public async addNewArtwork(req: Request, res: Response, next: NextFunction) {
     // Create Artwork object to validate user input
+    req.body.city = req.session!.user.city;
+    req.body.province = req.session!.user.province;
     const artwork: Artwork = new Artwork(req.body);
     const validator: Validator = new Validator();
     const errors: ValidationErrorInterface[] = validator.validate(artwork);
@@ -54,11 +56,6 @@ export class ArtworkHandler {
     }
 
     try {
-      const valid: boolean = await this.validateLocation(artwork.getCity(), artwork.getProvinceCode());
-      if (!valid) {
-        req.flash("locationError", "City could not be found");
-        return res.redirect("/upload");
-      }
       let photos: string[] = [];
       if ("gallery" in req.files) {
         // Filter out bad uploads
@@ -88,24 +85,6 @@ export class ArtworkHandler {
   }
 
   /**
-   * Validate Location Util
-   */
-  private async validateLocation(city: string, provinceCode: string): Promise<boolean> {
-    const url: string =
-      "http://geogratis.gc.ca/services/geoname/en/geonames.json" +
-      "?q=" + city + "&province=" + provinceCode + "&concise=CITY";
-    try {
-      const res = await axios.get(url);
-      const matchingCities = res.data.items;
-      // If we don't find any matching cities, or the user input city name doesn't match the name returned
-      return matchingCities.length > 0 && matchingCities[0].name.toLowerCase() === city.toLowerCase();
-    } catch (err) {
-      err.message = "Canadian geographical database error";
-      throw err;
-    }
-  }
-
-  /**
    * Render Artwork Validation Errors Util
    */
   private registerArtworkErrorRes(req: Request, res: Response, errors: ValidationErrorInterface[]) {
@@ -117,12 +96,6 @@ export class ArtworkHandler {
           break;
         case "description":
           req.flash("descriptionError", error.errorMessage);
-          break;
-        case "city":
-          req.flash("locationError", error.errorMessage);
-          break;
-        case "provinceCode":
-          req.flash("locationError", error.errorMessage);
           break;
         case "price":
           req.flash("priceError", error.errorMessage);
