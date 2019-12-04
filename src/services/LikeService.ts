@@ -12,8 +12,6 @@ export class LikeService extends DBService implements ILikeService {
   // TODO: return inserted like or err. See PhotoService for similar situation.
   public async addArtworkLike(userId: string, artworkId: string): Promise<void> {
     try {
-      // TODO: "Likes" collection should have unique index on "userId" and "artworkId"
-      // i.e. db.collection("likes").createIndex({"userId":1, "artworkId":1}, {unique:true});
       await this.db.collection("likes").insertOne({
         userId,
         artworkId,
