@@ -24,6 +24,7 @@
               <img src={{url}} alt="artwork {{artID}}" />
             </div>
           </div>
+          {{! This like button action doesn't do the post properly }}
           <form class="like-button" action="/api/likes" method="post">
             <button class="like" id="load" type="button" name="artworkId" value={{artID}}>
               <img src="../assets/icons8-heart-80.png" alt="Like Button" />
@@ -64,6 +65,7 @@ function nextart(e){
 
 {{> footer}}
 <script>
+// This has to be changed to only run through the current group of art before actually submitting this api post request
 $(function() { 
   $("#btn").on('click', function() {
     $.getJSON("/api/artwork/next", function(data) {
