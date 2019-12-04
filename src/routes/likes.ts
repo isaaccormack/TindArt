@@ -17,6 +17,21 @@ export class LikesRoute extends BaseRoute {
       new LikesRoute().likesPage(req, res, next, likesHandler);
     });
 
+    router.post("/api/like", async (req: Request, res: Response, next: NextFunction) => {
+      if (!req.session!.user) {
+        return res.status(401).redirect("/");
+      }
+
+      likesHandler.likeArtwork(req, res, next);
+    });
+
+    router.post("/api/dislike", async (req: Request, res: Response, next: NextFunction) => {
+      if (!req.session!.user) {
+        return res.status(401).redirect("/");
+      }
+
+      likesHandler.unlikeArtwork(req, res, next);
+    });
   }
 
   /**

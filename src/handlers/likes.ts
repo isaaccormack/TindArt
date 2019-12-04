@@ -18,28 +18,28 @@ export class LikesHandler {
 
   public async likeArtwork(req: Request, res: Response, next: NextFunction) {
     const userId: string = req.session!.user;
-    const artworkId: string = req.body.photoIdId;
+    const artworkId: string = req.body.artworkId;
 
     try {
       await this.likeService.addArtworkLike(userId, artworkId);
       // TODO: what to do in this case? flash success of some sort? -> depends on frontend
     } catch (err) {
       console.error(err);
-      req.flash("serverError", "We couldn't like that photo right now");
+      req.flash("serverError", "We couldn't like that artwork right now");
       return res.status(500).redirect("back");
     }
   }
 
   public async unlikeArtwork(req: Request, res: Response, next: NextFunction) {
     const userId: string = req.session!.user;
-    const artworkId: string = req.body.photoId;
+    const artworkId: string = req.body.artworkId;
 
     try {
       await this.likeService.removeArtworkLike(userId, artworkId);
       // TODO: what to do in this case? flash success of some sort? -> depends on frontend
     } catch (err) {
       console.error(err);
-      req.flash("serverError", "We couldn't unlike that photo right now");
+      req.flash("serverError", "We couldn't un-like that artwork right now");
       return res.status(500).redirect("back");
     }
   }
