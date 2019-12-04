@@ -96,6 +96,28 @@ export class ArtworkService extends DBService implements IArtworkService {
   }
 
   /**
+   * Get artworks by their ID
+   * @param artworkIds the artwork IDs to search for
+   * @return a Promise for an array of ArtworkDataJSON objects
+   */
+  public async findArtworkByArtworkID(artworkIds: string[]): Promise<IArtworkDataJSON[]> {
+    try {
+      // For some reason this query doesn't match the user ID exactly, so check if user Id contains user Id
+      const result: any = await this.db.collection("artworks").find(
+        { "_id": { $regex: ".*" + artworkIds + ".*" } })
+        .toArray();
+      if (!result) {
+        return [];
+      }
+
+      return result as IArtworkDataJSON[];
+    } catch (err) {
+      err.message = "Database error";
+      throw err;
+    }
+  }
+
+  /**
    * Clears artwork collection
    */
   public async clearArtwork() {
