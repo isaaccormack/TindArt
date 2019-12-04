@@ -92,8 +92,7 @@ export class RegisterHandler {
   /* Known defect - all req.body params must be present or server will crash */
   public async createUser(req: Request, res: Response, next: NextFunction) {
     // Create User object to validate user input
-    const user: User = new User();
-    user.create(req.body);
+    const user: User = new User(req.body);
     const validator: Validator = new Validator();
     const errors: ValidationErrorInterface[] = validator.validate(user);
     user.clearPassword();

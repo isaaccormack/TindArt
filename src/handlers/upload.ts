@@ -10,7 +10,7 @@ const uploader = multer({
   limits: {
     fileSize: 5 * 1024 * 1024 // no larger than 5mb
   }
-}).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 1 }]);
+}).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 8 }]);
 
 // Creates reference to storage and bucket
 const storage = new Storage({
@@ -38,7 +38,6 @@ export class UploadHandler {
       }
 
       if ("avatar" in req.files) {
-        console.log(req.session!.user._id);
         await this.uploadToGCP(req.files.avatar[0], req.session!.user.username);
       } else if ("gallery" in req.files) {
         const all = req.files.gallery.map((file) => this.uploadArtworkPhoto(file, req.session!.user._id));
@@ -49,14 +48,16 @@ export class UploadHandler {
     });
   }
 
-  private async uploadArtworkPhoto(exFile: Express.Multer.File, userId: string) {
-    const result: IPhotoResult = await this.photoService.insertNewPhoto(userId);
+  private async uploadArtworkPhoto(exFile: Express.Multer.File, userId: string): Promise<IPhotoResult> {
+    const result = await this.photoService.insertNewPhoto(userId);
     if (result.err) {
-      return null;
+      exFile.filename = "-1";
+      return result;
     }
-
     const photoDTO: PhotoDTO = new PhotoDTO(result.result!);
     await this.uploadToGCP(exFile, photoDTO._id);
+    exFile.filename = photoDTO._id;
+    return result;
   }
 
   private async uploadToGCP(exFile: Express.Multer.File, photoId: string) {

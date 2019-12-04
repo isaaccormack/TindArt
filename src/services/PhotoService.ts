@@ -25,7 +25,6 @@ export class PhotoService extends DBService implements IPhotoService {
 
   public async removePhotoById(photoId: string): Promise<boolean> {
     const result: any = await this.db.collection("photos").deleteOne({ "_id": photoId });
-    // Photo couldn't be created, but insertOne() did not throw
     if (!result || result.deletedCount !== 1) {
       return false;
     }

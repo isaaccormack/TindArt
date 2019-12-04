@@ -1,21 +1,19 @@
-import { IsLength, IsEmail, IsAlpha, Matches, IsNumeric, IsIn } from "validator.ts/decorator/Validation";
+import { IsLength, IsAlpha, Matches, IsNumeric, IsIn, IsAlphanumeric, MinLength, MaxLength, MinNumber } from "validator.ts/decorator/Validation";
 
-/* User object to validate user input */
-export class User {
+/* Artwork object to validate artwork input */
+export class Artwork {
   @IsAlpha({
-    message: "Name must be alphabetical"
+    message: "Title must be alphabetical"
   })
-  @IsLength(2, 32, {
-    message: "Name must be between 2 and 32 characters"
+  @IsLength(3, 32, {
+    message: "Description must be included, up to 32 characters"
   })
-  private name: string = "";
+  private title: string = "";
 
-  /* Generic username regexp from https://stackoverflow.com/a/12019115 */
-  @Matches(RegExp("^(?=.{2,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"))
-  private username: string = "";
-
-  @IsEmail()
-  private email: string = "";
+  @IsLength(2, 50, {
+    message: "Description must be included, up to 50 characters"
+  })
+  private description: string = "";
 
   @IsAlpha({
     message: "City must be alphabetical"
@@ -34,27 +32,32 @@ export class User {
   })
   private provinceCode: string = "";
 
-  @IsLength(2, 32, {
-    message: "Password must be between 2 and 32 characters"
+  @IsNumeric({
+    message: "Price must be a number"
   })
-  private password: string = "";
+  @MinNumber(0.0, {
+    each: true,
+    message: "Price must be a positive number"
+  })
+  private price: number = 0.0;
 
-  constructor(userData: any) {
-    this.create(userData);
+  private dimensions: number[] = [0, 0, 0];
+
+  constructor(artworkData: any) {
+    this.create(artworkData);
   }
 
-  public create(userData: any) {
-    this.name = userData.name;
-    this.username = userData.username;
-    this.email = userData.email;
-    this.city = userData.city;
-    this.provinceCode = userData.provinceCode;
-    this.password = userData.password;
+  public create(artworkData: any) {
+    this.title = artworkData.title;
+    this.description = artworkData.description;
+    this.city = artworkData.city;
+    this.provinceCode = artworkData.provinceCode;
+    this.price = artworkData.price;
+    this.dimensions = JSON.parse(artworkData.dimensions) as number[];
   }
 
-  public getName(): string { return this.name; }
-  public getUsername(): string { return this.username; }
-  public getEmail(): string { return this.email; }
+  public getTitle(): string { return this.title; }
+  public getDescription(): string { return this.description; }
   public getCity(): string { return this.city; }
   public getProvinceCode(): string { return this.provinceCode; }
   // Map province code to province
@@ -76,5 +79,6 @@ export class User {
     }
     return "Province undefined";
   }
-  public clearPassword() { this.password = ""; }
+  public getPrice() { return this.price; }
+  public getDimensions() { return this.dimensions; }
 }

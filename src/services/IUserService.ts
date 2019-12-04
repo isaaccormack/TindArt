@@ -1,5 +1,7 @@
+import { User } from "../models/User";
+
 export interface IUserService {
-  insertNewUser(user: any, hash: string): Promise<IUserResult>;
+  insertNewUser(user: User, hash: string): Promise<IUserResult>;
   findOneUserByAttr(attr: string, val: string): Promise<IUserResult>;
   updateUserAttrByID(_id: string, attr: string, val: string): Promise<boolean>;
 }
