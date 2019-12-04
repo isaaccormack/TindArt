@@ -4,10 +4,12 @@ import axios from "axios";
 import { IArtworkDataJSON, IArtworkResult, IArtworkService } from "../services/IArtworkService";
 import { Artwork } from "../models/Artwork";
 import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
+import { ArtworkDTO } from "../DTOs/ArtworkDTO";
 
 const artworkNotFoundString: string = "Could not find artwork";
 
 export class ArtworkHandler {
+  private static PAGE_SIZE: number = 10;
   private artworkService: IArtworkService;
 
   constructor(artworkService: IArtworkService) {
@@ -32,7 +34,25 @@ export class ArtworkHandler {
     * All artwork
     */
    public async getAllArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    return  await this.artworkService.getAllArtwork();
+    return await this.artworkService.getAllArtwork();
+  }
+
+  /**
+   * Get a page of artwork based on the last request
+   */
+  public async getArtworkPage(req: Request, res: Response, next: NextFunction) {
+      let lastId = "";
+      if (req.session!.lastId) {
+        lastId = req.session!.lastId;
+      }
+
+      let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, lastId, req.session!.user.city, req.session!.user.province);
+      if (result[0].length === 0 && lastId.length !== 0) {
+        // Hit the end of the artwork pagination, go back to the beginning
+        result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, "", req.session!.user.city, req.session!.user.province);
+      }
+      req.session!.lastId = result[1];
+      return result[0].map((r) => new ArtworkDTO(r));
   }
 
   /**
