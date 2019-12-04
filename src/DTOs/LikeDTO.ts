@@ -1,25 +1,20 @@
-/* Type interface for the returned JSON for like sent to or returned by DB query */
-export interface LikeDataJSON {
-  userId: string;
-  photoId: string;
-  _id: string;
-}
+import { ILikeDataJSON } from "../services/ILikeService";
 
 /* LikeDTO object to transfer data between model and view */
 export class LikeDTO {
   public userId: string = "";
 
-  public photoId: string = "";
+  public artworkId: string = "";
 
   public _id: string = "";
 
-  constructor(res: LikeDataJSON) {
+  constructor(res: ILikeDataJSON) {
     this.create(res);
   }
 
-  public create(res: LikeDataJSON) {
+  public create(res: ILikeDataJSON) {
     this.userId = res.userId;
-    this.photoId = res.photoId;
+    this.artworkId = res.artworkId;
     this._id = res._id;
   }
 }

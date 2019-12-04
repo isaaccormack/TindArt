@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+/*import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 
-import { addArtworkLike, removeArtworkLike, findAllLikes, findNextLikes } from "../services/likes";
-import { findPhotosById } from "../services/photo";
-import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
-import { LikeDataJSON } from "../DTOs/LikeDTO";
+import { addArtworkLike, removeArtworkLike, findAllLikes, findNextLikes } from "../services/LikeService";
+import { IPhotoDataJSON, IPhotoService } from "../services/IPhotoService";
+import { PhotoDTO } from "../DTOs/PhotoDTO";
+import { LikeDTO } from "../DTOs/LikeDTO";
 
 export async function likeArtwork(req: Request, res: Response, next: NextFunction) {
   const userId: string = req.session!.user;
@@ -39,7 +39,6 @@ export async function unlikeArtwork(req: Request, res: Response, next: NextFunct
  * @param req express request object
  * @param res express response object
  * @param next express callback
- */
 export async function getAllLikes(req: Request, res: Response, next: NextFunction): Promise<PhotoDTO[]> {
   const userId: string = req.session!.user;
 
@@ -58,7 +57,6 @@ export async function getAllLikes(req: Request, res: Response, next: NextFunctio
  * @param req express request object
  * @param res express response object
  * @param next express callback
- */
 export async function getMoreLikes(req: Request, res: Response, next: NextFunction): Promise<PhotoDTO[]> {
   const userId: string = req.session!.user;
   const numToSkip: number = req.body.likesSeen ? req.body.likesSeen : 0;
@@ -70,4 +68,4 @@ export async function getMoreLikes(req: Request, res: Response, next: NextFuncti
     console.error(err);
     throw err;
   }
-}
+}*/

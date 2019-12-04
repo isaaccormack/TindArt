@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
 import { getAllLikes } from "../handlers/likes";
-import { PhotoDataJSON, PhotoDTO } from "../DTOs/PhotoDTO";
+import { PhotoDTO } from "../DTOs/PhotoDTO";
 
 /**
  * /likes route
