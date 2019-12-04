@@ -19,7 +19,7 @@ export class LikeService extends DBService implements ILikeService {
         artworkId,
       });
     } catch (err) {
-      if (err.code === 11000) {
+      if (err.code && parseInt(err.code, 10) === 11000) {
         return; // Do nothing: duplicate like entry
       }
       err.message = "Database insert error on adding like";
