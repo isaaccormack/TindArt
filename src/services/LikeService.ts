@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 
 import { getDb } from "../database/dbclient";
 import { IPhotoDataJSON } from "../services/IPhotoService";
-import { ArtworkDataJSON } from "../DTOs/ArtworkDTO";
+import { IArtworkDataJSON } from "../services/IArtworkService";
 import { ILikeDataJSON } from "../services/ILikeService";
 
 export class LikeService extends DBService implements ILikeService {

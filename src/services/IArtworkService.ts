@@ -6,6 +6,7 @@ export interface IArtworkService {
   getAllArtwork(): Promise<IArtworkDataJSON[]>;
   findArtworkByUserID(userId: string): Promise<IArtworkDataJSON[]>;
   findArtworkByLocation(city: string, province: string): Promise<IArtworkDataJSON[]>;
+  findArtworkByArtworkID(artworkIds: string[]): Promise<IArtworkDataJSON[]>;
   clearArtwork(): void;
 }
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 
 import { ILikeDataJSON, ILikeService } from "./../services/ILikeService";
+import { IArtworkDataJSON, IArtworkService } from "./../services/IArtworkService";
 import { ArtworkDTO } from "./../DTOs/ArtworkDTO";
 import { PhotoDTO } from "../DTOs/PhotoDTO";
 import { LikeDTO } from "../DTOs/LikeDTO";
@@ -53,9 +54,11 @@ export class LikesHandler {
     const userId: string = req.session!.user;
 
     try {
-      const results: ILikeDataJSON[] = await this.likeService.findAllLikes(userId);
-      console.log("successfully found all likes:" + results.map((like) => like.artworkId));
-      return await this.artworkService.findArtworkById(results.map((like) => like.artworkId));
+      const likes: ILikeDataJSON[] = await this.likeService.findAllLikes(userId);
+      const artworkIds: string[] = likes.map((like) => like.artworkId);
+      console.log("successfully found all likes:" + artworkIds);
+      const artworks: IArtworkDataJSON[] = await this.artworkService.findArtworkByArtworkID(artworkIds);
+      return artworks.map((artwork) => new ArtworkDTO(artwork));
     } catch (err) {
       console.error(err);
       throw err;
@@ -75,7 +78,7 @@ export class LikesHandler {
 
     try {
       const results: ILikeDataJSON[] = await this.likeService.findNextLikes(userId, numToSkip);
-      return await this.artworkService.findArtworkById(results.map((like) => like.artworkId));
+      throw new Error("getMoreLikes not implemented");
     } catch (err) {
       console.error(err);
       throw err;

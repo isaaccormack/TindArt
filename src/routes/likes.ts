@@ -46,7 +46,7 @@ export class LikesRoute extends BaseRoute {
     // Try to get likes page from user's request
     try {
       const results: ArtworkDTO[] = await likesHandler.getAllLikes(req, res, next);
-      this.render(req, res, "likes", { });
+      this.render(req, res, "likes", results);
     } catch (err) {
       console.error(err);
       req.flash("serverError", "We can't show you your liked artwork right now");
