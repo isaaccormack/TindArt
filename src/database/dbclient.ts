@@ -19,6 +19,9 @@ export function initDb(callback: (err: Error | null, db: Db | undefined) => void
       return callback(err, undefined);
     }
     db = client.db("myapp");
+    db.collection("users").createIndex({ "username" : 1 }, { unique: true });
+    db.collection("users").createIndex({ "email" : 1 }, { unique: true });
+    db.collection("likes").createIndex({ "userId" : 1, "artworkId": 1 }, { unique: true });
     return callback(null, db);
   }
   MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true }, onConnected);
