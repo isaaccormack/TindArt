@@ -43,7 +43,14 @@ export class LikesRoute extends BaseRoute {
 
     // Try to get likes page from user's request
     try {
-      const fakeData = {};
+      const fakeData = {photoURLs: [
+        {url: "../assets/tempforcarousel/1.jpg", artworkId: 1,
+        title: "thing", desc: "desc", price: 1, dimensions: [1, 2, 3] },
+        {url: "../assets/tempforcarousel/2.jpg", artworkId: 1,
+        title: "thing2", desc: "desc2", price: 13, dimensions: [1, 2, 3]},
+        {url: "../assets/tempforcarousel/3.jpg", artworkId: 1,
+        title: "thing3", desc: "desc3", price: 14, dimensions: [1, 2, 3]}
+      ]};
       this.render(req, res, "likes", fakeData);
     } catch (err) {
       console.error(err);

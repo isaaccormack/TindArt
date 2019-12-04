@@ -20,12 +20,14 @@
           <div id={{artID}} class="slide">
             <img src={{url}} alt="artwork {{artID}}" />
           </div>
+          <form class="like-button" action="/api/likes" method="post">
+            <button class="like" type="button" name="artworkId" value={{artID}}>
+              <img src="../assets/icons8-heart-80.png" alt="Like Button" />
+            </button>
+          </form>
         {{/artwork}}
       <a class="next" href="" onclick="nextart(event)">&#10095;</a>
     </div>
-    <form class="like-button" action="/api/likes" method="post">
-      <button class="like" type="button"><img src="../assets/icons8-heart-80.png" alt="Like Button" /></button>
-    </form>
   </div>
 </body>
 
@@ -36,13 +38,16 @@ showSlide(1);
 function showSlide(num){
   var i;
   var slides = document.getElementsByClassName("slide");
+  var likeBut = document.getElementsByClassName("like-button");
   if (num > slides.length) {
     slideShown = 1;
   }
   for (i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";
+      likeBut[i].style.display = "none";
   }
   slides[slideShown-1].style.display = "block";
+  likeBut[slideShown-1].style.display = "block";
 }
 
 function nextart(e){

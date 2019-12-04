@@ -12,21 +12,58 @@
 
 {{> header}}
 <body>
-  <p>Welcome to your likes page</p>
-
-  <h3><a href="/api/logout">Log Out?</a></h3>
-
+  <p>Your Likes</p>
   <div>
-    <ul>
-      <h3>Likes</h3>
-      {{#photoURLs}}
-      <li><img src={{.}} height="400"></a></li>
-      {{/photoURLs}}
-    </ul>
+      <div class="liked-photos">
+        <div class="photo-box">
+            {{#photoURLs}}
+            <div class="photo">
+                <button type="button" class="liked-art" onclick="openpopup({{artworkId}})">
+                    <img src={{url}} alt="Like image" />
+                </button>
+            </div>
+            <div class="popup" id={{artworkId}}>
+                <div class="popup-content">
+                    <span class="close" onclick="close({{artworkId}})">&times;</span>
+                    <div class="title">
+                        <h2>{{title}}</h2>
+                    </div>
+                    <div class="text">
+                        <p>{{description}}</p>
+                        <p>{{price}}$</p>
+                    </div>
+                </div>
+            </div>
+            {{/photoURLs}}
+            {{^photoURLs}}
+            You have not liked any photos, check out the home page to <a href="/">browse</a> artwork.
+            {{/photoURLs}}
+        </div>
+    </div>
   </div>
 
   <h4>{{messages.serverError}}</h4>
 </body>
+
+<script type="text/javascript">
+
+function openpopup(id){
+    var popup = document.getElementById(id);
+    popup.style.display = "block";
+}
+
+
+function close(id) {
+    var popup = document.getElementById(id);
+    popup.style.display = "none";
+}
+
+/* window.onclick = function(event) {
+  if (event.target == popup) {
+    popup.style.display = "none";
+  }
+} */
+</script>
 
 {{> footer}}
 </html>

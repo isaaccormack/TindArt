@@ -18,20 +18,24 @@
   </div>
 
   <!-- Boilerplate Form -->
-  <form class="boilerform" id="form" action='/api/upload' method="post" enctype="multipart/form-data">
-      <fieldset class="c-form">
-          <legend class="c-form__heading">Avatar Upload</legend>
-          <div class="c-form__row">
-              <label for="name" class="c-label">File</label>
-              <input type='file', accept="image/*" name='avatar' class="c-input-field" value="" autocorrect="off"/>
-              <input type='submit', value='Upload avatar'/>
-              {{messages.avatar}}
-          </div>
-      </fieldset>
-  </form>
-  <form class="boilerform2" id="form" action='/api/artwork' method="post" enctype="multipart/form-data">
+  <div class="container">
+    {{messages.artworkError}}
+    {{messages.artworkSuccess}}
+    <div class="form-page">
+        <form class="boilerform" id="form" action='/api/upload' method="post" enctype="multipart/form-data">
             <fieldset class="c-form">
-              <legend class="c-form__heading">Artwork Upload</legend>
+                <legend class="c-form__heading">Avatar Upload</legend>
+                <div class="c-form__row">
+                    <label for="name" class="c-label">File</label>
+                    <input type='file', accept="image/*" name='avatar' class="c-input-field" value="" autocorrect="off"/>
+                    <input type='submit', value='Upload avatar'/>
+                    {{messages.avatar}}
+                </div>
+            </fieldset>
+        </form>
+        <form class="boilerform2" id="form" action='/api/artwork' method="post" enctype="multipart/form-data">
+            <fieldset class="c-form">
+                <legend class="c-form__heading">Artwork Upload</legend>
                 <div class="c-form__row">
                     <label for="name" class="c-label"><b>Title</b></label> <br />
                     <input type="text" name="title" id="title" class="c-input-field" value="" autocorrect="off" maxlength="32"
@@ -90,13 +94,11 @@
                 </div>
                 <div class="c-form__row">
                     <button class="c-button" type="submit">Submit</button>
-                    {{messages.artworkError}}
-                    {{messages.artworkSuccess}}
                 </div>
             </fieldset>
-        </form>
-
-  <a href="/">Go Home?</a>
+            </form>
+        </div>
+    </div>
 </body>
 
 {{> footer}}
