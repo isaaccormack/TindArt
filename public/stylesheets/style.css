@@ -201,6 +201,10 @@ p.title{
   margin-top: 30px;
 }
 
+#dimensions .c-input-field {
+  width: 50px;
+}
+
 #form {
   width: 500px;
   display: block;

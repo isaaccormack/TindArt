@@ -34,19 +34,19 @@
               <legend class="c-form__heading">Artwork Upload</legend>
                 <div class="c-form__row">
                     <label for="name" class="c-label"><b>Title</b></label> <br />
-                    <input type="text" name="title" id="title" class="c-input-field" value="Test" autocorrect="off" maxlength="32"
+                    <input type="text" name="title" id="title" class="c-input-field" value="" autocorrect="off" maxlength="32"
                         required />
                     {{messages.titleError}}
                 </div>
                 <div class="c-form__row">
                     <label for="name" class="c-label"><b>Description</b></label> <br />
-                    <input type="text" name="description" id="description" class="c-input-field" value="Test Description" autocorrect="off"
+                    <input type="text" name="description" id="description" class="c-input-field" value="" autocorrect="off"
                         maxlength="32" required />
                     {{messages.descriptionError}}
                 </div>
                 <div class="c-form__row">
                     <label for="name" class="c-label"><b>City</b></label> <br />
-                    <input type="text" name="city" id="city" class="c-input-field" value="Chilliwack" autocorrect="off" maxlength="32"
+                    <input type="text" name="city" id="city" class="c-input-field" value="" autocorrect="off" maxlength="32"
                         required />
                     <!-- Map provinces in drop down to their codes according to http://geogratis.gc.ca/services/geoname/en/codes/province -->
                     <select name="provinceCode" value="59">
@@ -68,17 +68,24 @@
                 </div>
                 <div class="c-form__row">
                     <label for="price" class="c-label"><b>Price</b></label> <br />
-                    <input type="number" name="price" id="price" class="c-input-field" min=0 value=50 required />
+                    <input type="text" name="price" id="price" class="c-input-field" required />
                     {{messages.priceError}}
                 </div>
                 <div class="c-form__row">
                     <label for="dimensions" class="c-label"><b>Dimensions</b></label> <br />
-                    <input type="text" name="dimensions" id="dimensions" class="c-input-field" value="[2,2,2]" maxlength="32" required />
+                    <div id="dimensions">
+                        <label for="width" class="c-label"><b>Width</b></label>
+                        <input type="text" name="width" id="width" class="c-input-field" value="" maxlength="5" required />
+                        <label for="height" class="c-label"><b>Height</b></label>
+                        <input type="text" name="height" id="height" class="c-input-field" value="" maxlength="5" required />
+                        <label for="depth" class="c-label"><b>Depth</b></label>
+                        <input type="text" name="depth" id="depth" class="c-input-field" value="" maxlength="5" />
+                    </div>
                     {{messages.dimensionsError}}
                 </div>
                 <div class="c-form__row">
                   <label for="gallery" class="c-label">File:</label>
-                  <input type='file', accept="image/*" name='gallery' class="c-input-field" value="" multiple autocorrect="off"/>
+                  <input type='file', accept="image/*" name='gallery' class="c-input-field" value="" multiple autocorrect="off" required/>
                   {{messages.gallery}}
                 </div>
                 <div class="c-form__row">

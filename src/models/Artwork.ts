@@ -6,12 +6,12 @@ export class Artwork {
     message: "Title must be alphabetical"
   })
   @IsLength(3, 32, {
-    message: "Description must be included, up to 32 characters"
+    message: "Title must be included, up to 32 characters"
   })
   private title: string = "";
 
-  @IsLength(2, 50, {
-    message: "Description must be included, up to 50 characters"
+  @IsLength(2, 250, {
+    message: "Description must be included, up to 250 characters"
   })
   private description: string = "";
 
@@ -35,13 +35,37 @@ export class Artwork {
   @IsNumeric({
     message: "Price must be a number"
   })
-  @MinNumber(0.0, {
-    each: true,
+  @MinNumber(0, {
     message: "Price must be a positive number"
   })
-  private price: number = 0.0;
+  private price: string = "";
 
-  private dimensions: number[] = [0, 0, 0];
+  @IsNumeric({
+    message: "Depth must be a number"
+  })
+  @MinNumber(0, {
+    message: "Depth must be a positive number"
+  })
+  @MinLength(1, {
+    message: ""
+  })
+  private depth: string = "";
+
+  @IsNumeric({
+    message: "Price must be a number"
+  })
+  @MinNumber(0, {
+    message: "Price must be a positive number"
+  })
+  private width: string = "";
+
+  @IsNumeric({
+    message: "Height must be a number"
+  })
+  @MinNumber(0, {
+    message: "Height must be a positive number"
+  })
+  private height: string = "";
 
   constructor(artworkData: any) {
     this.create(artworkData);
@@ -53,7 +77,12 @@ export class Artwork {
     this.city = artworkData.city;
     this.provinceCode = artworkData.provinceCode;
     this.price = artworkData.price;
-    this.dimensions = JSON.parse(artworkData.dimensions) as number[];
+    if (!artworkData.depth || artworkData.depth.length === 0) {
+      artworkData.depth = "0";
+    }
+    this.depth = artworkData.depth;
+    this.width = artworkData.width;
+    this.height = artworkData.height;
   }
 
   public getTitle(): string { return this.title; }
@@ -80,5 +109,5 @@ export class Artwork {
     return "Province undefined";
   }
   public getPrice() { return this.price; }
-  public getDimensions() { return this.dimensions; }
+  public getDimensions() { return [this.width, this.height, this.depth]; }
 }

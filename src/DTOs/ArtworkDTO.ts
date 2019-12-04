@@ -7,8 +7,6 @@ export class ArtworkDTO {
 
   public userId: string = "";
 
-  public location: string = "";
-
   public photos: string[] = [];
 
   public title: string = "";
