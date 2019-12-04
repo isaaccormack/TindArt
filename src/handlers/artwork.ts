@@ -46,9 +46,11 @@ export class ArtworkHandler {
         lastId = req.session!.lastId;
       }
 
+      // tslint:disable-next-line:max-line-length
       let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, lastId, req.session!.user.city, req.session!.user.province);
       if (result[0].length === 0 && lastId.length !== 0) {
         // Hit the end of the artwork pagination, go back to the beginning
+        // tslint:disable-next-line:max-line-length
         result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, "", req.session!.user.city, req.session!.user.province);
       }
       req.session!.lastId = result[1];

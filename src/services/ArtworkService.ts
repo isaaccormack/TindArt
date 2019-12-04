@@ -65,13 +65,13 @@ export class ArtworkService extends DBService implements IArtworkService {
       if (lastId.length === 0) {
         result = await this.db.collection("artworks")
           .find({
-              "city": { $regex: ".*" + city + ".*" }, 
+              "city": { $regex: ".*" + city + ".*" },
               "province": { $regex: ".*" + province + ".*" } })
           .limit(pageSize).toArray();
       } else {
         result = await this.db.collection("photos").find({
           "_id": {"$gt": new ObjectId(lastId)},
-          "city": { $regex: ".*" + city + ".*" }, 
+          "city": { $regex: ".*" + city + ".*" },
           "province": { $regex: ".*" + province + ".*" }
         }).limit(pageSize).toArray();
       }

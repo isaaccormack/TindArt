@@ -486,7 +486,26 @@ button.liked-art{
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 70%;
+  text-align: left;
+}
+
+.popup-content .title{
+  text-align: center;
+}
+
+.popup-content .title h2{
+  font-weight: black;
+}
+
+.popup-content .text .popup-header{
+  font-size: 14pt;
+  color: grey;
+  font-weight: bold;
+}
+
+.popup-content .text .popup-body{
+  font-size: 12pt;
 }
 
 .close {
@@ -494,6 +513,7 @@ button.liked-art{
   float: right;
   font-size: 28px;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .close:hover,

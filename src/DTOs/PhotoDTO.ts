@@ -1,7 +1,6 @@
 import { IPhotoDataJSON } from "../services/IPhotoService";
 import { GCP_URL } from "../services/GCPService";
 
-
 /* PhotoDTO object to transfer data between model and view */
 export class PhotoDTO {
   public _id: string = "";
