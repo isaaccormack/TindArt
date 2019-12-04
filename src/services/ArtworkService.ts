@@ -1,6 +1,7 @@
 import { DBService } from "./DBService";
 import { IArtworkService, IArtworkResult, IArtworkDataJSON } from "./IArtworkService";
 import { Artwork } from "../models/Artwork";
+import { ObjectId } from "mongodb";
 
 export class ArtworkService extends DBService implements IArtworkService {
   /**
@@ -47,6 +48,43 @@ export class ArtworkService extends DBService implements IArtworkService {
     } catch (err) {
       err.message = "Database artwork error";
       console.error("Failed to get all artworks: " + err);
+      throw err;
+    }
+  }
+
+  /**
+   * Get a page of artwork
+   * @param pageSize the number of artwork being requested
+   * @param lastId the id of the last request
+   * @return a Promise for an array of PhotoDataJSON objects and the lastId
+   */
+  // tslint:disable-next-line: max-line-length
+  public async getArtworkPage(pageSize: number, lastId: string, city: string, province: string): Promise<[IArtworkDataJSON[], string]> {
+    try {
+      let result = null;
+      if (lastId.length === 0) {
+        result = await this.db.collection("artworks")
+          .find({
+              "city": { $regex: ".*" + city + ".*" }, 
+              "province": { $regex: ".*" + province + ".*" } })
+          .limit(pageSize).toArray();
+      } else {
+        result = await this.db.collection("photos").find({
+          "_id": {"$gt": new ObjectId(lastId)},
+          "city": { $regex: ".*" + city + ".*" }, 
+          "province": { $regex: ".*" + province + ".*" }
+        }).limit(pageSize).toArray();
+      }
+
+      if (!result || result.length === 0) {
+        // No more photos left to paginate
+        return [[], ""];
+      }
+
+      // _id is sorted by default so last id will be the greatest
+      return [result as IArtworkDataJSON[], result[result.length - 1]._id];
+    } catch (err) {
+      err.message = "Database artwork find error";
       throw err;
     }
   }

@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TindArt</title>
@@ -19,8 +21,28 @@
     <h3><a href="/user/{{username}}">Your Profile</a></h3>
     <h3><a href="/api/logout">Log Out?</a></h3>
     <h3><a href="/upload">Upload Photo?</a></h3>
+    
+    <button id="btn">Load</button>
+    <div id="mypanel">
+    </div>
   </div>
 </body>
 
 {{> footer}}
+{{={{{ }}}=}}
+<script>
+$(function() { 
+        $("#btn").on('click', function() {
+
+            $.getJSON("/api/artwork/next", function(data) {
+                var template = "{{#.}}"
+                + "<li>{{title}}</li>" 
+                + "<li><img src={{photos.0}} height=\"400\"></a></li>" 
+                + "{{/.}}";
+                var html = Mustache.render(template, data);   
+                $("#mypanel").html(html);
+            });
+        });
+    }); 
+</script>
 </html>
