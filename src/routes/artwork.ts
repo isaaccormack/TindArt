@@ -18,16 +18,13 @@ export class ArtworkRoute extends BaseRoute {
     });
 
     router.post("/api/artwork", async (req: Request, res: Response, next: NextFunction) => {
-      console.log("Upload Artwork");
       if (!req.session!.user) {
         return res.redirect(401, "/");
       }
       next();
     }, (req: Request, res: Response, next: NextFunction) => {
-      console.log("UploadPhoto");
       uploadHandler.uploadPhoto(req, res, next);
     }, (req: Request, res: Response, next: NextFunction) => {
-      console.log("Add New Artwork");
       artworkHandler.addNewArtwork(req, res, next);
     });
   }

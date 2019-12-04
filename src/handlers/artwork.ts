@@ -94,21 +94,15 @@ export class ArtworkHandler {
     const url: string =
       "http://geogratis.gc.ca/services/geoname/en/geonames.json" +
       "?q=" + city + "&province=" + provinceCode + "&concise=CITY";
-    return new Promise((resolve, reject) => {
-      axios.get(url)
-        .then((res: any) => {
-          const matchingCities = res.data.items;
-          // If we don't find any matching cities, or the user input city name doesn't match the name returned
-          if (matchingCities.length > 0 && matchingCities[0].name.toLowerCase() === city.toLowerCase()) {
-            resolve(true);
-          }
-          resolve(false);
-        })
-        .catch((err: any) => {
-          err.message = "Canadian geographical database error";
-          reject(err);
-        });
-    });
+    try {
+      const res = await axios.get(url);
+      const matchingCities = res.data.items;
+      // If we don't find any matching cities, or the user input city name doesn't match the name returned
+      return matchingCities.length > 0 && matchingCities[0].name.toLowerCase() === city.toLowerCase();
+    } catch (err) {
+      err.message = "Canadian geographical database error";
+      throw err;
+    }
   }
 
   /**
@@ -117,7 +111,6 @@ export class ArtworkHandler {
   private registerArtworkErrorRes(req: Request, res: Response, errors: ValidationErrorInterface[]) {
     // Extract errors into their own object for ease of client side rendering
     errors.forEach((error: ValidationErrorInterface) => {
-      console.log(error.property);
       switch (error.property) {
         case "title":
           req.flash("titleError", error.errorMessage);
@@ -134,9 +127,15 @@ export class ArtworkHandler {
         case "price":
           req.flash("priceError", error.errorMessage);
           break;
-        case "dimensions":
+          case "depth":
+            req.flash("dimensionsError", error.errorMessage);
+            break;
+        case "width":
           req.flash("dimensionsError", error.errorMessage);
           break;
+        case "height":
+            req.flash("dimensionsError", error.errorMessage);
+            break;
       }
     });
 
