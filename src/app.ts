@@ -13,11 +13,16 @@ import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
 import { RegisterRoute } from "./routes/register";
+import { LikesRoute } from "./routes/likes";
+import { ArtworkRoute } from "./routes/artwork";
 import { UserRoute } from "./routes/users";
 import { UploadRoute } from "./routes/upload";
 import { LoginHandler } from "./handlers/login";
+import { ArtworkHandler } from "./handlers/artwork";
 import { UserService } from "./services/UserService";
 import { IUserService } from "./services/IUserService";
+import { ArtworkService } from "./services/ArtworkService";
+import { IArtworkService } from "./services/IArtworkService";
 import { initDb, getDb } from "./database/dbclient";
 import { PhotoService } from "./services/PhotoService";
 import { IPhotoService } from "./services/IPhotoService";
@@ -129,18 +134,22 @@ export class Server {
 
     const userService: IUserService = new UserService({db: getDb()});
     const photoService: IPhotoService = new PhotoService({db: getDb()});
+    const artworkService: IArtworkService = new ArtworkService({db: getDb()});
 
     const loginHandler: LoginHandler = new LoginHandler(userService);
     const userHandler: UserHandler = new UserHandler(userService);
     const registerHandler: RegisterHandler = new RegisterHandler(userService);
     const uploadHandler: UploadHandler = new UploadHandler(photoService);
+    const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService);
 
     IndexRoute.create(router);
     RegisterRoute.create(router, registerHandler);
     LoginRoute.create(router, loginHandler);
     LogoutRoute.create(router);
+    LikesRoute.create(router);
     UploadRoute.create(router, uploadHandler, photoService);
-    UserRoute.create(router, userHandler, photoService); // 2nd last due to URL parsing
+    ArtworkRoute.create(router, artworkHandler, uploadHandler);
+    UserRoute.create(router, userHandler, artworkHandler); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
     // use router middleware

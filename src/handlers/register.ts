@@ -55,21 +55,15 @@ export class RegisterHandler {
     const url: string =
       "http://geogratis.gc.ca/services/geoname/en/geonames.json" +
       "?q=" + city + "&province=" + provinceCode + "&concise=CITY";
-    return new Promise((resolve, reject) => {
-      axios.get(url)
-        .then((res: any) => {
-          const matchingCities = res.data.items;
-          // If we don't find any matching cities, or the user input city name doesn't match the name returned
-          if (matchingCities.length > 0 && matchingCities[0].name.toLowerCase() === city.toLowerCase()) {
-            resolve(true);
-          }
-          resolve(false);
-        })
-        .catch((err: any) => {
-          err.message = "Canadian geographical database error";
-          reject(err);
-        });
-    });
+    try {
+      const res = await axios.get(url);
+      const matchingCities = res.data.items;
+      // If we don't find any matching cities, or the user input city name doesn't match the name returned
+      return matchingCities.length > 0 && matchingCities[0].name.toLowerCase() === city.toLowerCase();
+    } catch (err) {
+      err.message = "Canadian geographical database error";
+      throw err;
+    }
   }
 
   /**
@@ -92,8 +86,7 @@ export class RegisterHandler {
   /* Known defect - all req.body params must be present or server will crash */
   public async createUser(req: Request, res: Response, next: NextFunction) {
     // Create User object to validate user input
-    const user: User = new User();
-    user.create(req.body);
+    const user: User = new User(req.body);
     const validator: Validator = new Validator();
     const errors: ValidationErrorInterface[] = validator.validate(user);
     user.clearPassword();

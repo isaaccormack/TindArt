@@ -34,8 +34,7 @@ describe('User object', () => {
     tooLongPasswordUserData.provinceCode = "thisIsMyTooLongPassword1234567890!@#$%^&*()";
 
     it('should create a user object given valid data', () => {
-        var user: User = new User();
-        user.create(userData);
+        var user: User = new User(userData);
 
         expect(user.getName()).to.equal(userData.name);
         expect(user.getUsername()).to.equal(userData.username);
@@ -44,8 +43,7 @@ describe('User object', () => {
         expect(user.getProvinceCode()).to.equal(userData.provinceCode);
     });
     it('should validate with no errors given valid data', () => {
-        var user: User = new User();
-        user.create(userData);
+        var user: User = new User(userData);
 
         var validator: Validator = new Validator();
         var errors: ValidationErrorInterface[] = validator.validate(user);
@@ -53,8 +51,7 @@ describe('User object', () => {
         expect(errors.length == 0);
     });
     it('should give validation error with non-alpha name', () => {
-        var user: User = new User();
-        user.create(nonAlphaNameUserData);
+        var user: User = new User(nonAlphaNameUserData);
 
         var validator: Validator = new Validator();
         var errors: ValidationErrorInterface[] = validator.validate(user);
@@ -63,8 +60,7 @@ describe('User object', () => {
         expect(errors[0].property == 'name');
     });
     it('should give validation error with non-regex matching username', () => {
-        var user: User = new User();
-        user.create(nonRegexUserNameUserData);
+        var user: User = new User(nonRegexUserNameUserData);
 
         var validator: Validator = new Validator();
         var errors: ValidationErrorInterface[] = validator.validate(user);
@@ -73,8 +69,7 @@ describe('User object', () => {
         expect(errors[0].property == 'username');
     });
     it('should give validation error with imvalid email', () => {
-        var user: User = new User();
-        user.create(nonValidEmailUserData);
+        var user: User = new User(nonValidEmailUserData);
 
         var validator: Validator = new Validator();
         var errors: ValidationErrorInterface[] = validator.validate(user);
@@ -83,8 +78,7 @@ describe('User object', () => {
         expect(errors[0].property == 'email');
     });
     it('should give validation error with non-alpha city', () => {
-        var user: User = new User();
-        user.create(nonAlphaCityUserData);
+        var user: User = new User(nonAlphaCityUserData);
 
         var validator: Validator = new Validator();
         var errors: ValidationErrorInterface[] = validator.validate(user);
@@ -93,8 +87,7 @@ describe('User object', () => {
         expect(errors[0].property == 'city');
     });
     it('should give validation error with non-existant province code', () => {
-        var user: User = new User();
-        user.create(nonExistantProvinceCodeUserData);
+        var user: User = new User(nonExistantProvinceCodeUserData);
 
         var validator: Validator = new Validator();
         var errors: ValidationErrorInterface[] = validator.validate(user);
@@ -103,8 +96,7 @@ describe('User object', () => {
         expect(errors[0].property == 'provinceCode');
     });
     it('should give validation error with password which is too long', () => {
-        var user: User = new User();
-        user.create(tooLongPasswordUserData);
+        var user: User = new User(tooLongPasswordUserData);
 
         var validator: Validator = new Validator();
         var errors: ValidationErrorInterface[] = validator.validate(user);

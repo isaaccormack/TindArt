@@ -29,17 +29,72 @@
           </div>
       </fieldset>
   </form>
-  <form class="boilerform2" id="form2" action='/api/upload' method="post" enctype="multipart/form-data">
-      <fieldset class="c-form">
-          <legend class="c-form__heading">Gallery Upload</legend>
-          <div class="c-form__row">
-              <label for="name" class="c-label">File:</label>
-              <input type='file', accept="image/*" name='gallery' class="c-input-field" value="" autocorrect="off"/>
-              <input type='submit', value='Upload to gallery'/>
-              {{messages.gallery}}
-          </div>
-      </fieldset>
-  </form>
+  <form class="boilerform2" id="form" action='/api/artwork' method="post" enctype="multipart/form-data">
+            <fieldset class="c-form">
+              <legend class="c-form__heading">Artwork Upload</legend>
+                <div class="c-form__row">
+                    <label for="name" class="c-label"><b>Title</b></label> <br />
+                    <input type="text" name="title" id="title" class="c-input-field" value="" autocorrect="off" maxlength="32"
+                        required />
+                    {{messages.titleError}}
+                </div>
+                <div class="c-form__row">
+                    <label for="name" class="c-label"><b>Description</b></label> <br />
+                    <input type="text" name="description" id="description" class="c-input-field" value="" autocorrect="off"
+                        maxlength="32" required />
+                    {{messages.descriptionError}}
+                </div>
+                <div class="c-form__row">
+                    <label for="name" class="c-label"><b>City</b></label> <br />
+                    <input type="text" name="city" id="city" class="c-input-field" value="" autocorrect="off" maxlength="32"
+                        required />
+                    <!-- Map provinces in drop down to their codes according to http://geogratis.gc.ca/services/geoname/en/codes/province -->
+                    <select name="provinceCode" value="59">
+                        <option value="48">AB</option>
+                        <option value="59">BC</option>
+                        <option value="46">MB</option>
+                        <option value="13">NB</option>
+                        <option value="10">NL</option>
+                        <option value="12">NS</option>
+                        <option value="61">NT</option>
+                        <option value="62">NU</option>
+                        <option value="35">ON</option>
+                        <option value="11">PE</option>
+                        <option value="24">QC</option>
+                        <option value="47">SK</option>
+                        <option value="60">YT</option>
+                    </select>
+                    {{messages.locationError}}
+                </div>
+                <div class="c-form__row">
+                    <label for="price" class="c-label"><b>Price</b></label> <br />
+                    <input type="text" name="price" id="price" class="c-input-field" required />
+                    {{messages.priceError}}
+                </div>
+                <div class="c-form__row">
+                    <label for="dimensions" class="c-label"><b>Dimensions</b></label> <br />
+                    <div id="dimensions">
+                        <label for="width" class="c-label"><b>Width</b></label>
+                        <input type="text" name="width" id="width" class="c-input-field" value="" maxlength="5" required />
+                        <label for="height" class="c-label"><b>Height</b></label>
+                        <input type="text" name="height" id="height" class="c-input-field" value="" maxlength="5" required />
+                        <label for="depth" class="c-label"><b>Depth</b></label>
+                        <input type="text" name="depth" id="depth" class="c-input-field" value="" maxlength="5" />
+                    </div>
+                    {{messages.dimensionsError}}
+                </div>
+                <div class="c-form__row">
+                  <label for="gallery" class="c-label">File:</label>
+                  <input type='file', accept="image/*" name='gallery' class="c-input-field" value="" multiple autocorrect="off" required/>
+                  {{messages.gallery}}
+                </div>
+                <div class="c-form__row">
+                    <button class="c-button" type="submit">Submit</button>
+                    {{messages.artworkError}}
+                    {{messages.artworkSuccess}}
+                </div>
+            </fieldset>
+        </form>
 
   <a href="/">Go Home?</a>
 </body>
