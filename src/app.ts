@@ -147,7 +147,7 @@ export class Server {
     const uploadHandler: UploadHandler = new UploadHandler(photoService);
     const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService);
 
-    IndexRoute.create(router);
+    IndexRoute.create(router, artworkHandler);
     RegisterRoute.create(router, registerHandler);
     LoginRoute.create(router, loginHandler);
     LogoutRoute.create(router);

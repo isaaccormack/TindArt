@@ -22,6 +22,7 @@ export class LikesRoute extends BaseRoute {
         return res.status(401).redirect("/");
       }
 
+      console.log("like sent! req.body=" + req.body);
       likesHandler.likeArtwork(req, res, next);
     });
 
@@ -60,7 +61,7 @@ export class LikesRoute extends BaseRoute {
 
     // Try to get likes page from user's request
     try {
-      // const results: ArtworkDTO[] = await likesHandler.getAllLikes(req, res, next);
+      const results: ArtworkDTO[] = await likesHandler.getAllLikes(req, res, next);
       const fake = {
         photos: [
           { url: "../assets/tempforcarousel/1.jpg", artworkId: 1,
@@ -68,8 +69,9 @@ export class LikesRoute extends BaseRoute {
           { url: "../assets/tempforcarousel/2.jpg", artworkId: 2,
           title: "second", description: "desc2", price: 2, dimensions: [2, 3, 4], city: "Calg", province: "AB"}
         ]
-      }
-      this.render(req, res, "likes", fake);
+      };
+      console.log(results);
+      this.render(req, res, "likes", results);
     } catch (err) {
       console.error(err);
       req.flash("serverError", "We can't show you your liked artwork right now");
