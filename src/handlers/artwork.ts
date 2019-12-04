@@ -4,10 +4,12 @@ import axios from "axios";
 import { IArtworkDataJSON, IArtworkResult, IArtworkService } from "../services/IArtworkService";
 import { Artwork } from "../models/Artwork";
 import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
+import { ArtworkDTO } from "../DTOs/ArtworkDTO";
 
 const artworkNotFoundString: string = "Could not find artwork";
 
 export class ArtworkHandler {
+  private static PAGE_SIZE: number = 10;
   private artworkService: IArtworkService;
 
   constructor(artworkService: IArtworkService) {
@@ -32,7 +34,25 @@ export class ArtworkHandler {
     * All artwork
     */
    public async getAllArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    return  await this.artworkService.getAllArtwork();
+    return await this.artworkService.getAllArtwork();
+  }
+
+  /**
+   * Get a page of artwork based on the last request
+   */
+  public async getArtworkPage(req: Request, res: Response, next: NextFunction) {
+      let lastId = "";
+      if (req.session!.lastId) {
+        lastId = req.session!.lastId;
+      }
+
+      let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, lastId, req.session!.user.city, req.session!.user.province);
+      if (result[0].length === 0 && lastId.length !== 0) {
+        // Hit the end of the artwork pagination, go back to the beginning
+        result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, "", req.session!.user.city, req.session!.user.province);
+      }
+      req.session!.lastId = result[1];
+      return result[0].map((r) => new ArtworkDTO(r));
   }
 
   /**
@@ -44,6 +64,8 @@ export class ArtworkHandler {
 
   public async addNewArtwork(req: Request, res: Response, next: NextFunction) {
     // Create Artwork object to validate user input
+    req.body.city = req.session!.user.city;
+    req.body.province = req.session!.user.province;
     const artwork: Artwork = new Artwork(req.body);
     const validator: Validator = new Validator();
     const errors: ValidationErrorInterface[] = validator.validate(artwork);
@@ -54,11 +76,6 @@ export class ArtworkHandler {
     }
 
     try {
-      const valid: boolean = await this.validateLocation(artwork.getCity(), artwork.getProvinceCode());
-      if (!valid) {
-        req.flash("locationError", "City could not be found");
-        return res.redirect("/upload");
-      }
       let photos: string[] = [];
       if ("gallery" in req.files) {
         // Filter out bad uploads
@@ -88,24 +105,6 @@ export class ArtworkHandler {
   }
 
   /**
-   * Validate Location Util
-   */
-  private async validateLocation(city: string, provinceCode: string): Promise<boolean> {
-    const url: string =
-      "http://geogratis.gc.ca/services/geoname/en/geonames.json" +
-      "?q=" + city + "&province=" + provinceCode + "&concise=CITY";
-    try {
-      const res = await axios.get(url);
-      const matchingCities = res.data.items;
-      // If we don't find any matching cities, or the user input city name doesn't match the name returned
-      return matchingCities.length > 0 && matchingCities[0].name.toLowerCase() === city.toLowerCase();
-    } catch (err) {
-      err.message = "Canadian geographical database error";
-      throw err;
-    }
-  }
-
-  /**
    * Render Artwork Validation Errors Util
    */
   private registerArtworkErrorRes(req: Request, res: Response, errors: ValidationErrorInterface[]) {
@@ -117,12 +116,6 @@ export class ArtworkHandler {
           break;
         case "description":
           req.flash("descriptionError", error.errorMessage);
-          break;
-        case "city":
-          req.flash("locationError", error.errorMessage);
-          break;
-        case "provinceCode":
-          req.flash("locationError", error.errorMessage);
           break;
         case "price":
           req.flash("priceError", error.errorMessage);

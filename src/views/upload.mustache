@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Upload Avatar or Artwork</title>
+  <title>Upload</title>
   <link rel="icon" type="image" href="../assets/icons8-fire-80.png" />
 </head>
 
@@ -47,28 +47,6 @@
                     <input type="text" name="description" id="description" class="c-input-field" value="" autocorrect="off"
                         maxlength="32" required />
                     {{messages.descriptionError}}
-                </div>
-                <div class="c-form__row">
-                    <label for="name" class="c-label"><b>City</b></label> <br />
-                    <input type="text" name="city" id="city" class="c-input-field" value="" autocorrect="off" maxlength="32"
-                        required />
-                    <!-- Map provinces in drop down to their codes according to http://geogratis.gc.ca/services/geoname/en/codes/province -->
-                    <select name="provinceCode" value="59">
-                        <option value="48">AB</option>
-                        <option value="59">BC</option>
-                        <option value="46">MB</option>
-                        <option value="13">NB</option>
-                        <option value="10">NL</option>
-                        <option value="12">NS</option>
-                        <option value="61">NT</option>
-                        <option value="62">NU</option>
-                        <option value="35">ON</option>
-                        <option value="11">PE</option>
-                        <option value="24">QC</option>
-                        <option value="47">SK</option>
-                        <option value="60">YT</option>
-                    </select>
-                    {{messages.locationError}}
                 </div>
                 <div class="c-form__row">
                     <label for="price" class="c-label"><b>Price</b></label> <br />

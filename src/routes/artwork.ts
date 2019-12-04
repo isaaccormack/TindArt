@@ -6,10 +6,17 @@ import { UploadHandler } from "../handlers/upload";
 
 export class ArtworkRoute extends BaseRoute {
   public static create(router: Router, artworkHandler: ArtworkHandler, uploadHandler: UploadHandler) {
-    console.log("[UploadRoute::create] Creating UploadRoutes route.");
+    console.log("[ArtworkRoute::create] Creating ArtworkRoutes route.");
 
     router.get("/api/artwork", async (req: Request, res: Response, next: NextFunction) => {
       const data = await artworkHandler.getAllArtwork(req, res, next);
+      res.json(data); // should check users level of authentication here
+    });
+    router.get("/api/artwork/next", async (req: Request, res: Response, next: NextFunction) => {
+      if (!req.session!.user) {
+        return res.redirect(401, "/");
+      }
+      const data = await artworkHandler.getArtworkPage(req, res, next);
       res.json(data); // should check users level of authentication here
     });
     router.get("/api/artwork/clear", async (req: Request, res: Response, next: NextFunction) => {
@@ -27,22 +34,5 @@ export class ArtworkRoute extends BaseRoute {
     }, (req: Request, res: Response, next: NextFunction) => {
       artworkHandler.addNewArtwork(req, res, next);
     });
-  }
-
-  /**
-   * The upload page route.
-   *
-   * @class UploadRoute
-   * @method upload
-   * @param req {Request} The express Request object.
-   * @param res {Response} The express Response object.
-   * @next {NextFunction} Execute the next method.
-   */
-  public upload(req: Request, res: Response, next: NextFunction) {
-    if (!req.session!.user) {
-      return res.status(401).redirect("/");
-    }
-
-    this.render(req, res, "upload");
   }
 }

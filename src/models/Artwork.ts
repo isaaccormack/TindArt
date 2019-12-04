@@ -15,22 +15,9 @@ export class Artwork {
   })
   private description: string = "";
 
-  @IsAlpha({
-    message: "City must be alphabetical"
-  })
-  @IsLength(2, 32, {
-    message: "City must be between 2 and 32 characters"
-  })
+  // Pass in from the user and has already been validated
   private city: string = "";
-
-  @IsNumeric({
-    message: "Province code must be numeric"
-  })
-  /* Province codes are defined in the following http://geogratis.gc.ca/services/geoname/en/codes/province */
-  @IsIn(["10", "11", "12", "13", "24", "35", "46", "47", "48", "59", "60", "61", "62", "72", "73"], {
-    message: "Province code does not map to a province"
-  })
-  private provinceCode: string = "";
+  private province: string = "";
 
   @IsNumeric({
     message: "Price must be a number"
@@ -75,7 +62,7 @@ export class Artwork {
     this.title = artworkData.title;
     this.description = artworkData.description;
     this.city = artworkData.city;
-    this.provinceCode = artworkData.provinceCode;
+    this.province = artworkData.province;
     this.price = artworkData.price;
     if (!artworkData.depth || artworkData.depth.length === 0) {
       artworkData.depth = "0";
@@ -88,25 +75,10 @@ export class Artwork {
   public getTitle(): string { return this.title; }
   public getDescription(): string { return this.description; }
   public getCity(): string { return this.city; }
-  public getProvinceCode(): string { return this.provinceCode; }
+  public getProvinceCode(): string { return this.province; }
   // Map province code to province
   public getProvince(): string {
-    switch (this.provinceCode) {
-      case "10": return "Newfoundland and Labrador";
-      case "11": return "Prince Edward Island";
-      case "12": return "Nova Scotia";
-      case "13": return "New Brunswick";
-      case "24": return "Quebec";
-      case "35": return "Ontario";
-      case "46": return "Manitoba";
-      case "47": return "Saskatchewan";
-      case "48": return "Alberta";
-      case "59": return "British Columbia";
-      case "60": return "Yukon";
-      case "61": return "Northwest Territories";
-      case "62": return "Nunavut";
-    }
-    return "Province undefined";
+    return this.province;
   }
   public getPrice() { return this.price; }
   public getDimensions() { return [this.width, this.height, this.depth]; }

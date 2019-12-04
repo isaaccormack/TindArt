@@ -18,9 +18,12 @@ import { ArtworkRoute } from "./routes/artwork";
 import { UserRoute } from "./routes/users";
 import { UploadRoute } from "./routes/upload";
 import { LoginHandler } from "./handlers/login";
+import { LikesHandler } from "./handlers/likes";
 import { ArtworkHandler } from "./handlers/artwork";
 import { UserService } from "./services/UserService";
 import { IUserService } from "./services/IUserService";
+import { LikeService } from "./services/LikeService";
+import { ILikeService } from "./services/ILikeService";
 import { ArtworkService } from "./services/ArtworkService";
 import { IArtworkService } from "./services/IArtworkService";
 import { initDb, getDb } from "./database/dbclient";
@@ -135,10 +138,12 @@ export class Server {
     const userService: IUserService = new UserService({db: getDb()});
     const photoService: IPhotoService = new PhotoService({db: getDb()});
     const artworkService: IArtworkService = new ArtworkService({db: getDb()});
+    const likeService: ILikeService = new LikeService({db: getDb()});
 
     const loginHandler: LoginHandler = new LoginHandler(userService);
     const userHandler: UserHandler = new UserHandler(userService);
     const registerHandler: RegisterHandler = new RegisterHandler(userService);
+    const likesHandler: LikesHandler = new LikesHandler(likeService, artworkService);
     const uploadHandler: UploadHandler = new UploadHandler(photoService);
     const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService);
 
@@ -146,7 +151,7 @@ export class Server {
     RegisterRoute.create(router, registerHandler);
     LoginRoute.create(router, loginHandler);
     LogoutRoute.create(router);
-    LikesRoute.create(router);
+    LikesRoute.create(router, likesHandler);
     UploadRoute.create(router, uploadHandler, photoService);
     ArtworkRoute.create(router, artworkHandler, uploadHandler);
     UserRoute.create(router, userHandler, artworkHandler); // 2nd last due to URL parsing

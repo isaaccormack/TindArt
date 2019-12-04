@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TindArt</title>
@@ -18,10 +20,12 @@
     <div class="carousel-container">
         {{#artwork}}
           <div id={{artID}} class="slide">
-            <img src={{url}} alt="artwork {{artID}}" />
+            <div id="mypanel">
+              <img src={{url}} alt="artwork {{artID}}" />
+            </div>
           </div>
           <form class="like-button" action="/api/likes" method="post">
-            <button class="like" type="button" name="artworkId" value={{artID}}>
+            <button class="like" id="load" type="button" name="artworkId" value={{artID}}>
               <img src="../assets/icons8-heart-80.png" alt="Like Button" />
             </button>
           </form>
@@ -59,4 +63,18 @@ function nextart(e){
 </script>
 
 {{> footer}}
+<script>
+$(function() { 
+  $("#btn").on('click', function() {
+    $.getJSON("/api/artwork/next", function(data) {
+      var template = "{{#.}}"
+      + "<li>{{title}}</li>" 
+      + "<li><img src={{photos.0}} height=\"400\"></a></li>" 
+      + "{{/.}}";
+      var html = Mustache.render(template, data);   
+      $("#mypanel").html(html);
+    });
+  });
+}); 
+</script>
 </html>

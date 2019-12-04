@@ -4,12 +4,15 @@ export interface IArtworkService {
   insertNewArtwork(artwork: Artwork, photoIds: string[], userid: string): Promise<IArtworkResult>;
   removeArtworkById(artworkId: string): Promise<boolean>;
   getAllArtwork(): Promise<IArtworkDataJSON[]>;
+  // tslint:disable-next-line: max-line-length
+  getArtworkPage(pageSize: number, lastId: string, city: string, province: string): Promise<[IArtworkDataJSON[], string]>;
   findArtworkByUserID(userId: string): Promise<IArtworkDataJSON[]>;
   findArtworkByLocation(city: string, province: string): Promise<IArtworkDataJSON[]>;
+  findArtworkByArtworkID(artworkIds: string[]): Promise<IArtworkDataJSON[]>;
   clearArtwork(): void;
 }
 
-export interface IArtworkResult { // Type returned by insertNewPhoto
+export interface IArtworkResult { // Type returned by insertNewArtwork
   // Types can be undefined so result can be falsey if error present and vice versa
   err?: {
     type: string;
