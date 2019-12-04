@@ -75,7 +75,7 @@ export class Artwork {
   public getTitle(): string { return this.title; }
   public getDescription(): string { return this.description; }
   public getCity(): string { return this.city; }
-  public getProvinceCode(): string { return this.provinceCode; }
+  public getProvinceCode(): string { return this.province; }
   // Map province code to province
   public getProvince(): string {
     return this.province;
