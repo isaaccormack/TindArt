@@ -9,6 +9,7 @@ import { ILikeDataJSON } from "../services/ILikeService";
 
 export class LikeService extends DBService implements ILikeService {
 
+  // TODO: return inserted like or err. See PhotoService for similar situation.
   public async addArtworkLike(userId: string, artworkId: string): Promise<void> {
     try {
       // TODO: "Likes" collection should have unique index on "userId" and "artworkId"
@@ -26,6 +27,7 @@ export class LikeService extends DBService implements ILikeService {
     }
   }
 
+  // TODO: return inserted like or err. See PhotoService for similar situation.
   public async removeArtworkLike(userId: string, artworkId: string): Promise<void> {
     try {
       await this.db.collection("likes").deleteMany({

@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { getAllLikes } from "../handlers/likes";
-import { PhotoDTO } from "../DTOs/PhotoDTO";
+import { ArtworkDTO } from "./../DTOs/ArtworkDTO";
+import { LikesHandler } from "../handlers/likes";
 
 /**
  * /likes route
@@ -10,11 +10,11 @@ import { PhotoDTO } from "../DTOs/PhotoDTO";
  * @class LikesRoute
  */
 export class LikesRoute extends BaseRoute {
-  public static create(router: Router) {
+  public static create(router: Router, likesHandler: LikesHandler) {
     console.log("[LikesRoute::create] Creating likes route.");
 
     router.get("/likes", (req: Request, res: Response, next: NextFunction) => {
-      new LikesRoute().likesPage(req, res, next);
+      new LikesRoute().likesPage(req, res, next, likesHandler);
     });
 
   }
@@ -38,15 +38,15 @@ export class LikesRoute extends BaseRoute {
    * @param res {Response} The express Response object.
    * @next {NextFunction} Execute the next method.
    */
-  public async likesPage(req: Request, res: Response, next: NextFunction) {
+  public async likesPage(req: Request, res: Response, next: NextFunction, likesHandler: LikesHandler) {
     if (!req.session!.user) {
       return res.redirect("/");
     }
 
     // Try to get likes page from user's request
     try {
-      const results: PhotoDTO[] = await getAllLikes(req, res, next);
-      this.render(req, res, "likes", { "photoURLs": results.map((photo) => photo.url) });
+      const results: ArtworkDTO[] = await likesHandler.getAllLikes(req, res, next);
+      this.render(req, res, "likes", { });
     } catch (err) {
       console.error(err);
       req.flash("serverError", "We can't show you your liked artwork right now");
