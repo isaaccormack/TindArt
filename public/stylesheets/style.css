@@ -388,15 +388,28 @@ h3#user-photos-title{
 }
 
 /* Carousel CSS */
-.carousel-container div img{
+.carousel-container div{
+  position: relative;
+  left: 83px;
+  background-color: #ddd;
   max-height: 300px;
+  max-width: 690px;
+}
+
+.carousel-container div img{
+  height: 300px;
+  max-width: 550px;
+}
+
+.slide{
   display: none;
 }
 
 /* Next button CSS */
 .next{
   position: relative;
-  left: 300px;
+  left: 280px;
+  bottom: 160px;
   padding: 20px;
   color: #fff;
   text-decoration: none;
