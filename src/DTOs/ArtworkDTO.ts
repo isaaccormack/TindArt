@@ -15,6 +15,8 @@ export class ArtworkDTO {
 
   public price: number = 0.00;
 
+  public units: string = "";
+
   public dimensions: number[] = [0, 0, 0];
 
   public city: string = "";
@@ -31,6 +33,7 @@ export class ArtworkDTO {
     this.title = res.title;
     this.description = res.description;
     this.price = res.price;
+    this.units = res.units;
     this.dimensions = res.dimensions;
     this.city = res.city;
     this.province = res.province;

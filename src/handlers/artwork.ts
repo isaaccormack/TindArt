@@ -14,26 +14,26 @@ export class ArtworkHandler {
 
   constructor(artworkService: IArtworkService) {
     this.artworkService = artworkService;
-   }
-
-   /**
-    * Find the current users artwork
-    */
-   public async findUserArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-     return  await this.artworkService.findArtworkByUserID(req.session!.user._id);
-   }
-
-   /**
-    * Find artwork for the current users location
-    */
-   public async findArtworkForUser(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    return  await this.artworkService.findArtworkByLocation(req.session!.user.city, req.session!.user.province);
   }
 
-   /**
-    * All artwork
-    */
-   public async getAllArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
+  /**
+   * Find the current users artwork
+   */
+  public async findUserArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
+    return await this.artworkService.findArtworkByUserID(req.session!.user._id);
+  }
+
+  /**
+   * Find artwork for the current users location
+   */
+  public async findArtworkForUser(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
+    return await this.artworkService.findArtworkByLocation(req.session!.user.city, req.session!.user.province);
+  }
+
+  /**
+   * All artwork
+   */
+  public async getAllArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
     return await this.artworkService.getAllArtwork();
   }
 
@@ -41,26 +41,26 @@ export class ArtworkHandler {
    * Get a page of artwork based on the last request
    */
   public async getArtworkPage(req: Request, res: Response, next: NextFunction) {
-      let lastId = "";
-      if (req.session!.lastId) {
-        lastId = req.session!.lastId;
-      }
+    let lastId = "";
+    if (req.session!.lastId) {
+      lastId = req.session!.lastId;
+    }
 
-      let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, lastId, req.session!.user.city, req.session!.user.province);
-      if (result[0].length === 0 && lastId.length !== 0) {
-        // Hit the end of the artwork pagination, go back to the beginning
-        result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, "", req.session!.user.city, req.session!.user.province);
-      }
-      req.session!.lastId = result[1];
-      return result[0].map((r) => new ArtworkDTO(r));
+    let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, lastId, req.session!.user.city, req.session!.user.province);
+    if (result[0].length === 0 && lastId.length !== 0) {
+      // Hit the end of the artwork pagination, go back to the beginning
+      result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, "", req.session!.user.city, req.session!.user.province);
+    }
+    req.session!.lastId = result[1];
+    return result[0].map((r) => new ArtworkDTO(r));
   }
 
   /**
    * All artwork
    */
   public clearArtwork(req: Request, res: Response, next: NextFunction) {
-   this.artworkService.clearArtwork();
- }
+    this.artworkService.clearArtwork();
+  }
 
   public async addNewArtwork(req: Request, res: Response, next: NextFunction) {
     // Create Artwork object to validate user input
@@ -89,7 +89,7 @@ export class ArtworkHandler {
       }
 
       const { err, result }: IArtworkResult =
-          await this.artworkService.insertNewArtwork(artwork, photos, req.session!.user._id);
+        await this.artworkService.insertNewArtwork(artwork, photos, req.session!.user._id);
       if (err) {
         req.flash(err.type, err.message);
         return res.redirect("/upload");
@@ -108,7 +108,7 @@ export class ArtworkHandler {
    * Render Artwork Validation Errors Util
    */
   private registerArtworkErrorRes(req: Request, res: Response, errors: ValidationErrorInterface[]) {
-    // Extract errors into their own object for ease of client side rendering
+    // Grab the first error to display to users in the list of errors
     errors.forEach((error: ValidationErrorInterface) => {
       switch (error.property) {
         case "title":
@@ -118,17 +118,17 @@ export class ArtworkHandler {
           req.flash("descriptionError", error.errorMessage);
           break;
         case "price":
-          req.flash("priceError", error.errorMessage);
+          req.flash("priceError", "Please enter a valid price");
           break;
-          case "depth":
-            req.flash("dimensionsError", error.errorMessage);
-            break;
+        case "depth":
+          req.flash("depthError", "Please enter a valid depth");
+          break;
         case "width":
-          req.flash("dimensionsError", error.errorMessage);
+          req.flash("widthError", "Please enter a valid width");
           break;
         case "height":
-            req.flash("dimensionsError", error.errorMessage);
-            break;
+          req.flash("heightError", "Please enter a valid height");
+          break;
       }
     });
 

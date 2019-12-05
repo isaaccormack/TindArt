@@ -50,24 +50,35 @@
                     </div>
                     <div class="c-form__row">
                         <label for="price" class="c-label"><b>Price (CAD)</b></label> <br />
-                        <input type="text" name="price" id="price" class="c-input-field" required />
+                        <input type="text" name="price" id="price" class="c-input-field" maxlength="10" required />
                         {{messages.priceError}}
                     </div>
                     <div class="c-form__row">
-                        <label for="dimensions" class="c-label"><b>Dimensions</b></label> <br />
+                        <label for="dimensions" class="c-label"><b>Dimensions</b></label>
+                        <select name="units">
+                            <option value="Inches">Inches</option>
+                            <option value="Feet">Feet</option>
+                            <option value="Millimeters">Millimeters</option>
+                            <option value="Centimeters">Centimeters</option>
+                            <option value="Meters">Meters</option>
+                        </select>
+                        <br />
                         <div id="dimensions">
                             <label for="width" class="c-label"><b>Width</b></label>
                             <input type="text" name="width" id="width" class="c-input-field" value="" maxlength="5"
                                 required />
+                            {{messages.widthError}}
                             <label for="height" class="c-label"><b>Height</b></label>
                             <input type="text" name="height" id="height" class="c-input-field" value="" maxlength="5"
                                 required />
+                            {{messages.heightError}}
                             <label for="depth" class="c-label"><b>Depth</b></label>
                             <input type="text" name="depth" id="depth" class="c-input-field" value="" maxlength="5" />
+                            {{messages.depthError}}
                         </div>
-                        {{messages.dimensionsError}}
                     </div>
                     <div class="c-form__row">
+                        <label for="gallery" class="c-label">File:</label>
                         <input type='file' , accept="image/*" name='gallery' class="c-input-field" value="" multiple
                             autocorrect="off" required />
                         {{messages.gallery}}

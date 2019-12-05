@@ -4,7 +4,6 @@ export interface IArtworkService {
   insertNewArtwork(artwork: Artwork, photoIds: string[], userid: string): Promise<IArtworkResult>;
   removeArtworkById(artworkId: string): Promise<boolean>;
   getAllArtwork(): Promise<IArtworkDataJSON[]>;
-  // tslint:disable-next-line: max-line-length
   getArtworkPage(pageSize: number, lastId: string, city: string, province: string): Promise<[IArtworkDataJSON[], string]>;
   findArtworkByUserID(userId: string): Promise<IArtworkDataJSON[]>;
   findArtworkByLocation(city: string, province: string): Promise<IArtworkDataJSON[]>;
@@ -30,6 +29,7 @@ export interface IArtworkDataJSON {
   city: string;
   province: string;
   price: number;
+  units: string;
   dimensions: number[];
   _id: string;
 }
