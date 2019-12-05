@@ -16,35 +16,34 @@
   <!-- Edit bio button / form dynamically created in below div -->
   <div class="profile">
     <span class="avatar">
-    <div>
-      {{#avatar}}
+      <div>
+        {{#avatar}}
         <img src={{avatar}} class="user-avatar" alt="User Avatar" />
-      {{/avatar}}
-      {{^avatar}}
+        {{/avatar}}
+        {{^avatar}}
         <img src="../assets/icons8-user-80-big.png" class="user-avatar" alt="User Avatar" />
-      {{/avatar}}
-      <a href="/upload"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
+        {{/avatar}}
+        <a href="/upload"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
       </div>
       <div class="lower">
         <p>{{name}}</p>
-        <p>{{username}}</p>
         <p class="location">{{city}}, {{province}}</p>
       </div>
     </span>
     <span class="bio">
-      <p class="bio-headers">Biography <span id="bio"></span></p> 
+      <p class="bio-headers">Biography <span id="bio"></span></p>
       {{#bio}}
-        <p>{{bio}}</p>
+      <p>{{bio}}</p>
       {{/bio}}
       {{^bio}}
-        <p>Click the edit pencil above to add a bio to your profile!</p>
+      <p>Click the edit pencil above to add a bio to your profile!</p>
       {{/bio}}
       <p class="bio-headers">Phone Number <span id="phone-number"></span></p>
       {{#phoneNumber}}
-        <p>{{phoneNumber}}</p>
+      <p>{{phoneNumber}}</p>
       {{/phoneNumber}}
       {{^phoneNumber}}
-        <p>Click the edit pencil above to add a phone number!</p>
+      <p>Click the edit pencil above to add a phone number!</p>
       {{/phoneNumber}}
     </span>
   </div>
@@ -54,9 +53,9 @@
   </h3>
   <div class="user-owned-photos">
     <div class="photo-box">
-        {{#photoURLs}}
-        <div class="photo"><img src={{.}} /></a></div>
-        {{/photoURLs}}
+      {{#photoURLs}}
+      <div class="photo"><img src={{.}} /></a></div>
+      {{/photoURLs}}
     </div>
   </div>
   <h4>{{messages.serverError}}</h4>
@@ -69,7 +68,7 @@
   function buildEditBioBtn() {
     document.getElementById('bio').innerHTML +=
       '<span id="edit-bio">' +
-      '<a href="" onclick="handleEditBioBtnClick(event);">'+
+      '<a href="" onclick="handleEditBioBtnClick(event);">' +
       '<img src="../assets/icons8-pencil-64.png" class="edit-pencil" /></a>' +
       '{{messages.bioError}}' +
       '</span>';

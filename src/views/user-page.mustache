@@ -13,50 +13,49 @@
 {{> header}} {{! This is the header that will be on almost all of the pages }}
 
 <body>
-<div class="profile">
+  <div class="profile">
     <span class="avatar">
-    <div>
-      {{#avatar}}
+      <div>
+        {{#avatar}}
         <img src={{avatar}} class="user-avatar" alt="User Avatar" />
-      {{/avatar}}
-      {{^avatar}}
+        {{/avatar}}
+        {{^avatar}}
         <img src="../assets/icons8-user-80-big.png" class="user-avatar" alt="User Avatar" />
-      {{/avatar}}
+        {{/avatar}}
       </div>
       <div class="lower">
         <p>{{name}}</p>
-        <p>{{username}}</p>
         <p class="location">{{city}}, {{province}}</p>
       </div>
     </span>
     <span class="bio">
-      <p class="bio-headers">Biography </p> 
+      <p class="bio-headers">Biography </p>
       {{#bio}}
-        <p>{{bio}}</p>
+      <p>{{bio}}</p>
       {{/bio}}
       {{^bio}}
-        <p>This user has not specified a bio.</p>
+      <p>This user has not specified a bio.</p>
       {{/bio}}
       <p class="bio-headers">Phone Number </p>
       {{#phoneNumber}}
-        <p>{{phoneNumber}}</p>
+      <p>{{phoneNumber}}</p>
       {{/phoneNumber}}
       {{^phoneNumber}}
-        <p>This user has not specified a phone number.</p>
+      <p>This user has not specified a phone number.</p>
       {{/phoneNumber}}
     </span>
   </div>
   <h3 id="user-photos-title">
-    {{name}}'s Artwork 
+    {{name}}'s Artwork
   </h3>
   <div class="user-owned-photos">
     <div class="photo-box">
-        {{#photoURLs}}
-          <div class="photo"><img src={{.}} /></a></div>
-        {{/photoURLs}}
-        {{^photoURLs}}
-          This user has not uploaded any artwork yet.
-        {{/photoURLs}}
+      {{#photoURLs}}
+      <div class="photo"><img src={{.}} /></a></div>
+      {{/photoURLs}}
+      {{^photoURLs}}
+      This user has not uploaded any artwork yet.
+      {{/photoURLs}}
     </div>
   </div>
 </body>

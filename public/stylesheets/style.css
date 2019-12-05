@@ -234,6 +234,7 @@ form fieldset{
 /* Search Box CSS */
 form input#searchbar {
   padding: 6px;
+  padding-left: 14px;
   font-size: 14px;
   border-radius: 15px;
   border: none;
