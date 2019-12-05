@@ -25,7 +25,7 @@ export class RegisterHandler {
     errors.forEach((error: ValidationErrorInterface) => {
       switch (error.property) {
         case "name":
-          req.flash("nameError", "Name is invalid");
+          req.flash("nameError", error.errorMessage ? error.errorMessage : "Name conatins invalid characters");
           break;
         case "username":
           req.flash("usernameError", "Usename is invalid - only alphanumeric . and _ characters allowed");
