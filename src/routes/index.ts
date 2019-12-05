@@ -55,7 +55,7 @@ export class IndexRoute extends BaseRoute {
       const tmpArtworkDTO: any[] = artworkDTOs.map((a) => { return {
         "artID": a._id,
         "url": a.photos[0]
-      }} );
+      }; } );
       console.log(tmpArtworkDTO);
       this.render(req, res, "home", {
         name: req.session!.user.name,

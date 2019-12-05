@@ -18,19 +18,19 @@
   <div class="container">
     <!-- Only users which are logged in are shown this home page, otherwise index -->
     <div class="carousel-container">
-        {{#photos}}
-          <div id={{artworkID}} class="slide">
-            <img src={{url}} alt="artwork {{artworkID}}" />
+        {{#artwork}}
+          <div id={{artID}} class="slide">
+            <img src={{url}} alt="artwork {{artID}}" />
           </div>
           {{! This like button action doesn't do the post properly }}
           <form class="like-button" action="/api/like" method="post">
-            <button class="like" id="load_{{artworkId}}" type="submit" name="artworkId"
-            value={{artworkID}} onclick="like(this.id)">
+            <button class="like" id="load}}" type="submit" name={{artID}}
+            value={{artID}} onclick="like(this.id)">
               <img src="../assets/icons8-heart-80.png" alt="Like Button" />
             </button>
-            <input type="text" name="artworkId" value={{artworkID}} style="display: none" />
+            <input type="text" name={{artID}} value={{artID}} style="display: none" />
           </form>
-        {{/photos}}
+        {{/artwork}}
       <a class="next" href="" onclick="nextart(event)">&#10095;</a>
     </div>
   </div>
@@ -80,7 +80,7 @@ $(function() {
 <script>
 function like(id){
   id = id.substring(5, id.length);
-  $.post("/api/like", { artworkId: id});
+  $.post("/api/like", {artID: id});
 }
 </script>
 </html>
