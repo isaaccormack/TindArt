@@ -15,7 +15,7 @@ export class RegisterHandler {
 
   constructor(userService: IUserService) {
     this.userService = userService;
-   }
+  }
 
   /**
    * Render Register Validation Errors Util
@@ -25,7 +25,7 @@ export class RegisterHandler {
     errors.forEach((error: ValidationErrorInterface) => {
       switch (error.property) {
         case "name":
-          req.flash("nameError", error.errorMessage);
+          req.flash("nameError", "Name is invalid");
           break;
         case "username":
           req.flash("usernameError", "Usename is invalid - only alphanumeric . and _ characters allowed");

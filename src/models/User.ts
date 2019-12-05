@@ -2,9 +2,7 @@ import { IsLength, IsEmail, IsAlpha, Matches, IsNumeric, IsIn } from "validator.
 
 /* User object to validate user input */
 export class User {
-  @IsAlpha({
-    message: "Name must be alphabetical"
-  })
+  @Matches(RegExp("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"))
   @IsLength(2, 32, {
     message: "Name must be between 2 and 32 characters"
   })
