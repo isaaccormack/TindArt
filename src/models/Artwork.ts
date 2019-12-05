@@ -1,17 +1,14 @@
-import { IsLength, IsAlpha, Matches, IsNumeric, IsIn, IsAlphanumeric, MinLength, MaxLength, MinNumber } from "validator.ts/decorator/Validation";
+import { IsLength, IsNumeric, MinLength, MinNumber } from "validator.ts/decorator/Validation";
 
 /* Artwork object to validate artwork input */
 export class Artwork {
-  @IsAlpha({
-    message: "Title must be alphabetical"
-  })
-  @IsLength(3, 32, {
-    message: "Title must be included, up to 32 characters"
+  @IsLength(2, 32, {
+    message: "Title must be between 2 and 32 characters"
   })
   private title: string = "";
 
   @IsLength(2, 250, {
-    message: "Description must be included, up to 250 characters"
+    message: "Description must be between 2 and 250 characters"
   })
   private description: string = "";
 
@@ -20,7 +17,7 @@ export class Artwork {
   private province: string = "";
 
   @IsNumeric({
-    message: "Price must be a number"
+    message: "Price must be numeric"
   })
   @MinNumber(0, {
     message: "Price must be a positive number"
@@ -28,7 +25,7 @@ export class Artwork {
   private price: string = "";
 
   @IsNumeric({
-    message: "Depth must be a number"
+    message: "Depth must be numeric"
   })
   @MinNumber(0, {
     message: "Depth must be a positive number"
@@ -39,15 +36,15 @@ export class Artwork {
   private depth: string = "";
 
   @IsNumeric({
-    message: "Price must be a number"
+    message: "Width must be numeric"
   })
   @MinNumber(0, {
-    message: "Price must be a positive number"
+    message: "Width must be a positive number"
   })
   private width: string = "";
 
   @IsNumeric({
-    message: "Height must be a number"
+    message: "Height must be numeric"
   })
   @MinNumber(0, {
     message: "Height must be a positive number"
