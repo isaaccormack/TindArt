@@ -14,14 +14,12 @@
                     alt="Search" /></button>
         </form>
     </div>
-    {{#username}} {{! If authenticated, these options will be visible }}
     <div class="header-right">
-        <a href="/user/{{res.0}}"><img src="../assets/icons8-user-80-big.png" /></a>
+        <a href="/user"><img src="../assets/icons8-user-80-big.png" /></a>
         {{! This will be changed to include the profile picture if they have one }}
         <a href="/likes"><img src="../assets/icons8-heart-80.png" /></a> {{! Likes page will be created }}
         <a href="/api/logout"><img src="../assets/icons8-lock-512.png" /></a> {{! This will be an icon in the future }}
     </div>
-    {{/username}}
 </div>
 
 <script type="text/javascript">
