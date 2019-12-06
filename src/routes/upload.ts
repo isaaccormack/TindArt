@@ -89,6 +89,6 @@ export class UploadRoute extends BaseRoute {
       return res.status(401).redirect("/");
     }
 
-    this.render(req, res, "upload-avatar", { "username": req.session!.user.username });
+    this.render(req, res, "upload-avatar");
   }
 }
