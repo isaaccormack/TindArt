@@ -34,7 +34,7 @@ export class RegisterHandler {
           req.flash("emailError", "Email is invalid"); // Not able to add err msg in IsEmail() in user model
           break;
         case "city":
-          req.flash("locationError", error.errorMessage);
+          req.flash("locationError", error.errorMessage ? error.errorMessage : "City conatins invalid characters");
           break;
         case "provinceCode":
           req.flash("locationError", error.errorMessage);
