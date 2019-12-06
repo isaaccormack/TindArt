@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
-import axios from "axios";
 import { IArtworkDataJSON, IArtworkResult, IArtworkService } from "../services/IArtworkService";
+import { IUserResult, IUserService } from "../services/IUserService";
 import { Artwork } from "../models/Artwork";
 import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
 import { ArtworkDTO } from "../DTOs/ArtworkDTO";
@@ -11,16 +11,23 @@ const artworkNotFoundString: string = "Could not find artwork";
 export class ArtworkHandler {
   private static PAGE_SIZE: number = 10;
   private artworkService: IArtworkService;
+  private userService: IUserService;
 
-  constructor(artworkService: IArtworkService) {
+  constructor(artworkService: IArtworkService, userService: IUserService) {
     this.artworkService = artworkService;
+    this.userService = userService;
   }
 
   /**
-   * Find the current users artwork
+   * Find a user's artwork from a request
    */
   public async findUserArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    return await this.artworkService.findArtworkByUserID(req.session!.user._id);
+    const user: IUserResult = await this.userService.findOneUserByAttr("username", req.params.username);
+    if (user.err) {
+      throw new Error("User not found");
+    }
+
+    return await this.artworkService.findArtworkByUserID(user.result!._id);
   }
 
   /**
