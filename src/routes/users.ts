@@ -22,6 +22,14 @@ export class UserRoute extends BaseRoute {
       new UserRoute().userPage(req, res, userHandler, artworkHandler, next);
     });
 
+    router.get("/user", (req: Request, res: Response, next: NextFunction) => {
+      if (!req.session!.user) {
+        return res.redirect("/");
+      } else {
+        return res.redirect("/user/" + req.session!.user.username);
+      }
+    });
+
     router.post("/api/user/updateBio", (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.redirect(401, "/");
