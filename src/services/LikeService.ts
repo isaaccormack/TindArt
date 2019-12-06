@@ -1,36 +1,54 @@
-import { ILikeService } from "./ILikeService";
-import { DBService } from "./DBService";
 import { ObjectId } from "mongodb";
 
-import { getDb } from "../database/dbclient";
-import { IPhotoDataJSON } from "../services/IPhotoService";
-import { IArtworkDataJSON } from "../services/IArtworkService";
+import { ILikeService } from "./ILikeService";
+import { DBService } from "./DBService";
 import { ILikeDataJSON } from "../services/ILikeService";
 
+/**
+ * TODO: comments
+ * TODO: unified error handling
+ */
 export class LikeService extends DBService implements ILikeService {
 
-  // TODO: return inserted like or err. See PhotoService for similar situation.
-  public async addArtworkLike(userId: string, artworkId: string): Promise<void> {
+  public async likeArtwork(userId: string, artworkId: string): Promise<void> {
+    if (!userId || !artworkId) {
+      // TODO: error gracefully. This case occurs when artworkId is null, which
+      // occurs if the request is invalid when it is sent, which occurs in chrome
+      // sometimes. Ignoring it (i.e. making it do nothing to the DB) seems like
+      // a reasonable choice for now.
+      return;
+    }
     try {
-      await this.db.collection("likes").insertOne({
+      await this.db.collection("likes").replaceOne({
         userId,
         artworkId,
+      }, {
+        userId,
+        artworkId,
+        isLike: true,
+      }, {
+        upsert: true
       });
     } catch (err) {
-      if (err.code && parseInt(err.code, 10) === 11000) {
-        return; // Do nothing: duplicate like entry
-      }
       err.message = "Database insert error on adding like";
       throw err;
     }
   }
 
-  // TODO: return inserted like or err. See PhotoService for similar situation.
-  public async removeArtworkLike(userId: string, artworkId: string): Promise<void> {
+  public async dislikeArtwork(userId: string, artworkId: string): Promise<void> {
+    if (!userId || !artworkId) {
+      return;
+    }
     try {
-      await this.db.collection("likes").deleteMany({
+      await this.db.collection("likes").replaceOne({
         userId,
         artworkId,
+      }, {
+        userId,
+        artworkId,
+        isLike: false,
+      }, {
+        upsert: true
       });
     } catch (err) {
       err.message = "Database delete error on removing like";
@@ -39,28 +57,17 @@ export class LikeService extends DBService implements ILikeService {
   }
 
   public async findAllLikes(userId: string): Promise<ILikeDataJSON[]> {
+    if (!userId) {
+      return [];
+    }
     try {
       return await this.db.collection("likes").find({
         userId,
-      }).toArray();
+        isLike: true,
+      }).toArray() as ILikeDataJSON[];
     } catch (err) {
       err.message = "Database find error on getting all likes";
       throw err;
     }
   }
-
-  public async findNextLikes(userId: string, numToSkip: number): Promise<ILikeDataJSON[]> {
-    try {
-      return await this.db.collection("likes").find({
-        userId,
-      }, {
-        limit: 10,
-        skip: numToSkip,
-      }).toArray();
-    } catch (err) {
-      err.message = "Database find error on gettting more likes";
-      throw err;
-    }
-  }
-
 }

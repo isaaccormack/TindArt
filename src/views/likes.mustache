@@ -16,15 +16,15 @@
   <div>
       <div class="liked-photos">
         <div class="photo-box">
-            {{#photos}}
+            {{#likes}}
             <div class="photo">
-                <button type="button" id={{artworkId}} class="liked-art" onclick="openpopup(event, this.id)">
-                    <img src={{url}} alt="Like image" />
+                <button type="button" id={{_id}} class="liked-art" onclick="openpopup(event, this.id)">
+                    <img src={{photos.0}} alt="Like image" />
                 </button>
             </div>
-            <div class="popup" id="pop{{artworkId}}">
+            <div class="popup" id="pop{{_id}}">
                 <div class="popup-content">
-                    <a href="" class="close" id="{{artworkId}}2" onclick="close(event, this.id)">&times;</a>
+                    <a href="" class="close" id="{{_id}}2" onclick="close(event, this.id)">&times;</a>
                     <div class="title">
                         <h2>{{title}}</h2>
                     </div>
@@ -40,10 +40,10 @@
                     </div>
                 </div>
             </div>
-            {{/photos}}
-            {{^photos}}
+            {{/likes}}
+            {{^likes}}
             You have not liked any photos, check out the home page to <a href="/">browse</a> artwork.
-            {{/photos}}
+            {{/likes}}
         </div>
     </div>
   </div>

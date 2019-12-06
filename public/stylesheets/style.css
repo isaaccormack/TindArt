@@ -425,7 +425,7 @@ h3#user-photos-title{
   background-color: #444;
 }
 
-/* Like button CSS */
+/* Like & Dislike button CSS */
 .like-button{
   display: none;
   margin-top: 10px;
@@ -444,7 +444,25 @@ h3#user-photos-title{
 }
 
 .like img{
-  width: 75px;
+  width: 80px;
+  position: relative;
+  top: 5px;
+}
+
+.dislike{
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid darkgray;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.dislike:hover{
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dislike img{
+  width: 80px;
   position: relative;
   top: 5px;
 }
