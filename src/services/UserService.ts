@@ -4,15 +4,6 @@ import { ObjectId } from "mongodb";
 import { IUserService, IUserResult, IUserDataJSON } from "./IUserService";
 
 export class UserService extends DBService implements IUserService {
-
-  constructor(options: any) {
-    super(options);
-    // Setup the tables in the database.
-    // Any indexes or uniques can be done here.
-    // This returns a promise, ignore it (for now)
-    this.db.collection("users").createIndex({"email": 1}, {"unique": true});
-  }
-
   /**
    * Insert new User into database
    * @param user the User object to add to the users database

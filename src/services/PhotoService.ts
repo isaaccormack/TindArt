@@ -2,13 +2,6 @@ import { DBService } from "./DBService";
 import { IPhotoService, IPhotoResult, IPhotoDataJSON } from "./IPhotoService";
 
 export class PhotoService extends DBService implements IPhotoService {
-
-  constructor(options: any) {
-    super(options);
-    // Setup the tables in the database.
-    // Any indexes or uniques can be done here.
-    this.db.collection("photos");
-  }
   /**
    * Insert new Photo into database
    * @param photo the Photo object to add to the photos database
@@ -23,7 +16,6 @@ export class PhotoService extends DBService implements IPhotoService {
       if (!result || result.ops.length !== 1) {
         return { err: { type: "DBError", message: "Database insert error" } };
       }
-      console.log("Upload: " + result.insertedId);
       return { result: result.ops[0] as IPhotoDataJSON };
     } catch (err) {
       return { err: { type: "DBError", message: "Database error" } };

@@ -15,14 +15,12 @@ describe("Photo object", () => {
     userId: ""
   };
   it("should create a photo object given valid data", () => {
-    const photo: Photo = new Photo();
-    photo.create(photoData);
+    const photo: Photo = new Photo(photoData);
 
     expect(photo.getUserId()).to.equal(photoData.userId);
   });
   it("should give validation error with missing userId", () => {
-    const photo: Photo = new Photo();
-    photo.create(invalidData);
+    const photo: Photo = new Photo(invalidData);
 
     try {
       const validator: Validator = new Validator();
@@ -32,8 +30,7 @@ describe("Photo object", () => {
     }
   });
   it("should give validation error with empty id", () => {
-    const photo: Photo = new Photo();
-    photo.create(invalidDataEmpty);
+    const photo: Photo = new Photo(invalidDataEmpty);
 
     const validator: Validator = new Validator();
     const errors: ValidationErrorInterface[] = validator.validate(photo);

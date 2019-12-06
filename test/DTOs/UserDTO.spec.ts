@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import "mocha";
-import { UserDTO, UserDataJSON } from "../../src/DTOs/UserDTO";
+import { UserDTO } from "../../src/DTOs/UserDTO";
 
-describe("PhotoDTO object", () => {
+describe("UserDTO object", () => {
   const userData = {
     bio: "my bio",
     name: "my name",
