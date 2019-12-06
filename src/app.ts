@@ -144,7 +144,7 @@ export class Server {
     const registerHandler: RegisterHandler = new RegisterHandler(userService);
     const likesHandler: LikesHandler = new LikesHandler(likeService, artworkService);
     const uploadHandler: UploadHandler = new UploadHandler(photoService);
-    const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService);
+    const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService, userService);
 
     IndexRoute.create(router, artworkHandler);
     RegisterRoute.create(router, registerHandler);
