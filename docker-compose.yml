@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+
+  node-webserver:
+    image: seng350team301/webserver
+    ports:
+      - 3000:3000
+    environment:
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_NAME: production
