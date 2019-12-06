@@ -19,10 +19,6 @@ export class ArtworkRoute extends BaseRoute {
       const data = await artworkHandler.getArtworkPage(req, res, next);
       res.json(data); // should check users level of authentication here
     });
-    router.get("/api/artwork/clear", async (req: Request, res: Response, next: NextFunction) => {
-      artworkHandler.clearArtwork(req, res, next);
-      res.json({}); // should check users level of authentication here
-    });
 
     router.post("/api/artwork", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {

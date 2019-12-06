@@ -20,7 +20,7 @@ export class UserService extends DBService implements IUserService {
         "email": user.getEmail(),
         "city": user.getCity(),
         "province": user.getProvince(),
-        "password": hash,
+        "password": hash
       });
       // User couldn't be created, but insertOne() did not throw
       if (result.ops.length !== 1) {

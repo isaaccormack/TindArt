@@ -25,7 +25,6 @@ export class LogoutRoute extends BaseRoute {
       if (req.session!.user) {
         res.clearCookie("user_sid");
       }
-
       res.redirect("/");
     });
   }

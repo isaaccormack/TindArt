@@ -1,21 +1,20 @@
 import { ILikeService } from "./ILikeService";
 import { DBService } from "./DBService";
-import { ObjectId } from "mongodb";
-
-import { getDb } from "../database/dbclient";
-import { IPhotoDataJSON } from "../services/IPhotoService";
-import { IArtworkDataJSON } from "../services/IArtworkService";
 import { ILikeDataJSON } from "../services/ILikeService";
 
 export class LikeService extends DBService implements ILikeService {
 
   // TODO: return inserted like or err. See PhotoService for similar situation.
-  public async addArtworkLike(userId: string, artworkId: string): Promise<void> {
+  public async addArtworkLike(userId: string, artworkId: string): Promise<any> {
     try {
-      await this.db.collection("likes").insertOne({
+      const result = await this.db.collection("likes").insertOne({
         userId,
         artworkId,
       });
+      if (result.ops.length !== 1) {
+        return { err: { type: "DBError", message: "Database insert error" } };
+      }
+      return { result: result.ops[0] as ILikeDataJSON }; // err is falsey; typecast db return value
     } catch (err) {
       if (err.code && parseInt(err.code, 10) === 11000) {
         return; // Do nothing: duplicate like entry

@@ -16,7 +16,6 @@ export class PhotoService extends DBService implements IPhotoService {
       if (!result || result.ops.length !== 1) {
         return { err: { type: "DBError", message: "Database insert error" } };
       }
-      console.log("Upload: " + result.insertedId);
       return { result: result.ops[0] as IPhotoDataJSON };
     } catch (err) {
       return { err: { type: "DBError", message: "Database error" } };
