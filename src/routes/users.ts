@@ -3,7 +3,6 @@ import { Router, Request, Response, NextFunction } from "express";
 import { BaseRoute } from "./route";
 import { UserHandler } from "../handlers/users";
 import { ArtworkHandler } from "../handlers/artwork";
-import { PhotoDTO } from "../DTOs/PhotoDTO";
 import { UserDTO } from "../DTOs/UserDTO";
 import { IUserDataJSON } from "../services/IUserService";
 import { IArtworkDataJSON } from "../services/IArtworkService";
@@ -18,13 +17,22 @@ export class UserRoute extends BaseRoute {
   public static create(router: Router, userHandler: UserHandler, artworkHandler: ArtworkHandler) {
     console.log("[UserRoute::create] Creating user route.");
 
+    /* Staticly defined route to access auth-user page, used by partials on UI */
+    router.get("/user", (req: Request, res: Response, next: NextFunction) => {
+      if (!req.session!.user) {
+        return res.status(401).redirect("/");
+      }
+
+      return res.redirect("/user/" + req.session!.user.username);
+    });
+
     router.get("/user/:username", (req: Request, res: Response, next: NextFunction) => {
       new UserRoute().userPage(req, res, userHandler, artworkHandler, next);
     });
 
     router.post("/api/user/updateBio", (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
-        return res.redirect(401, "/");
+        return res.status(401).redirect("/");
       }
 
       userHandler.updateBio(req, res, next);
@@ -32,7 +40,7 @@ export class UserRoute extends BaseRoute {
 
     router.post("/api/user/updatePhoneNumber", (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
-        return res.redirect(401, "/");
+        return res.status(401).redirect("/");
       }
 
       userHandler.updatePhoneNumber(req, res, next);
@@ -58,10 +66,9 @@ export class UserRoute extends BaseRoute {
    * @param res {Response} The express Response object.
    * @next {NextFunction} Execute the next method.
    */
-  // tslint:disable-next-line: max-line-length
   public async userPage(req: Request, res: Response, userHandler: UserHandler, artworkHandler: ArtworkHandler, next: NextFunction) {
     if (!req.session!.user) {
-      return res.redirect(401, "/");
+      return res.status(401).redirect("/");
     }
 
     // Try to get user page from user's request

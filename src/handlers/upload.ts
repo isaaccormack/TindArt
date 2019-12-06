@@ -24,26 +24,42 @@ export class UploadHandler {
 
   constructor(photoService: IPhotoService) {
     this.photoService = photoService;
-   }
+  }
 
   /**
    * Add New Photo
    */
   public uploadPhoto(req: Request, res: Response, next: NextFunction) {
     uploader(req, res, async (err: any) => {
-      if (err) {
-        console.error("Upload failed: " + err);
+      if (err) { // unify this error handling
+        console.error("Upload photo failed: " + err);
         req.flash("error", "Photo upload failed!");
         return next(err);
       }
 
-      if ("avatar" in req.files) {
-        await this.uploadToGCP(req.files.avatar[0], req.session!.user.username);
-      } else if ("gallery" in req.files) {
+      if ("gallery" in req.files) { // fix the need for this if condition
         const all = req.files.gallery.map((file) => this.uploadArtworkPhoto(file, req.session!.user._id));
         const combine = Promise.all(all);
         await combine;
       }
+      next();
+    });
+  }
+
+  /**
+   * Add New Avatar
+   */
+  public uploadAvatar(req: Request, res: Response, next: NextFunction) {
+    uploader(req, res, async (err: any) => {
+      if (err) {
+        console.error("Upload avatar failed: " + err);
+        req.flash("error", "Photo upload failed!");
+        return next(err);
+      }
+      if ("avatar" in req.files) {
+        await this.uploadToGCP(req.files.avatar[0], req.session!.user.username);
+      }
+
       next();
     });
   }

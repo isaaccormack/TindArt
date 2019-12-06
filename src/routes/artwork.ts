@@ -14,7 +14,7 @@ export class ArtworkRoute extends BaseRoute {
     });
     router.get("/api/artwork/next", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
-        return res.redirect(401, "/");
+        return res.status(401).redirect("/");
       }
       const data = await artworkHandler.getArtworkPage(req, res, next);
       res.json(data); // should check users level of authentication here
@@ -22,7 +22,7 @@ export class ArtworkRoute extends BaseRoute {
 
     router.post("/api/artwork", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
-        return res.redirect(401, "/");
+        return res.status(401).redirect("/");
       }
       next();
     }, (req: Request, res: Response, next: NextFunction) => {

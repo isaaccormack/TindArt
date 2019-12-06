@@ -92,7 +92,7 @@ export class ArtworkHandler {
         await this.artworkService.insertNewArtwork(artwork, photos, req.session!.user._id);
       if (err) {
         req.flash(err.type, err.message);
-        return res.redirect("/upload");
+        return res.redirect("/uploadPhoto");
       }
     } catch (err) {
       console.error(err);
@@ -101,7 +101,7 @@ export class ArtworkHandler {
     }
 
     req.flash("artworkSuccess", "Artwork successfully uploaded");
-    return res.redirect("/upload");
+    return res.redirect("/user");
   }
 
   /**
@@ -132,6 +132,6 @@ export class ArtworkHandler {
       }
     });
 
-    return res.redirect("/upload");
+    return res.redirect("/uploadPhoto");
   }
 }

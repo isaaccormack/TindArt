@@ -13,17 +13,24 @@
 {{> header}} {{! This is the header that will be on almost all of the pages }}
 
 <body>
-  <!-- Edit bio button / form dynamically created in below div -->
+  {{#messages.artworkSuccess}}
+  <div class="flash-msg" id="flash-msg">
+    <span onclick="closeFlashMsg()" class="flash-close">&times;</span>
+    <p>{{messages.artworkSuccess}}</p>
+  </div>
+  {{/messages.artworkSuccess}}
+
   <div class="profile">
     <span class="avatar">
       <div>
         {{#avatar}}
-        <img src={{avatar}} class="user-avatar" alt="User Avatar" />
+        <img src={{avatar}} onerror="imgError(this);" id="user-avatar" class="user-avatar" alt="User Avatar" />
         {{/avatar}}
-        {{^avatar}}
+        <!-- make the below work in js -->
+        <!-- {{^avatar}}
         <img src="../assets/icons8-user-80-big.png" class="user-avatar" alt="User Avatar" />
-        {{/avatar}}
-        <a href="/upload"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
+        {{/avatar}} -->
+        <a href="/uploadAvatar"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
       </div>
       <div class="lower">
         <p>{{name}}</p>
@@ -53,7 +60,7 @@
   </div>
   <h3 id="user-photos-title">
     Your Artwork <span class="spacer"></span>
-    <a href="/upload"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
+    <a href="/uploadPhoto"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
   </h3>
   <div class="user-owned-photos">
     <div class="photo-box">
@@ -154,6 +161,16 @@
     document.getElementById('update-phone-number-form').remove(); // Delete edit phone number form on DOM
     document.getElementById('phone-number-text').style.display = "block"; // hide the bio
     buildEditPhoneNumBtn();
+  }
+
+  function closeFlashMsg() {
+    document.getElementById('flash-msg').remove();
+  }
+
+  function imgError(image) {
+    image.onerror = "";
+    image.src = "../assets/icons8-user-80-big.png";
+    return true;
   }
 </script>
 
