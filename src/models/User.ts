@@ -51,6 +51,7 @@ export class User {
   public getName(): string { return this.name; }
   public getUsername(): string { return this.username; }
   public getEmail(): string { return this.email; }
+  public setCity(city: string) { this.city = city; }
   public getCity(): string { return this.city; }
   public getProvinceCode(): string { return this.provinceCode; }
   // Map province code to province

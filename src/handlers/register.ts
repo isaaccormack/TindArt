@@ -51,19 +51,23 @@ export class RegisterHandler {
   /**
    * Validate Location Util
    */
-  private async validateLocation(city: string, provinceCode: string): Promise<boolean> {
+  private async validateLocation(city: string, provinceCode: string): Promise<string> {
     const url: string =
       "http://geogratis.gc.ca/services/geoname/en/geonames.json" +
       "?q=" + city + "&province=" + provinceCode + "&concise=CITY";
+    var result: string = "";
     try {
       const res = await axios.get(url);
       const matchingCities = res.data.items;
       // If we don't find any matching cities, or the user input city name doesn't match the name returned
-      return matchingCities.length > 0 && matchingCities[0].name.toLowerCase() === city.toLowerCase();
+      if (matchingCities.length > 0 && (matchingCities[0].name.toLowerCase() === city.toLowerCase())) {
+        result = matchingCities[0].name;
+      }
     } catch (err) {
       err.message = "Canadian geographical database error";
       throw err;
     }
+    return result;
   }
 
   /**
@@ -97,11 +101,14 @@ export class RegisterHandler {
     }
 
     try {
-      const valid: boolean = await this.validateLocation(user.getCity(), user.getProvinceCode());
-      if (!valid) {
+      const city: string = await this.validateLocation(user.getCity(), user.getProvinceCode());
+      if (!city) {
         req.flash("locationError", "City could not be found");
         return res.redirect("/register");
       }
+
+      /* Set the users city as the matching city returned from the db query for consistent capitalization */
+      user.setCity(city);
 
       const hash: string = await this.getHashedPassword(req.body.password);
 
