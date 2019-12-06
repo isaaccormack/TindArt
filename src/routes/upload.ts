@@ -3,6 +3,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import { BaseRoute } from "./route";
 import { UploadHandler } from "../handlers/upload";
 import { IPhotoService } from "../services/IPhotoService";
+import { UserDTO } from "../DTOs/UserDTO";
 
 export class UploadRoute extends BaseRoute {
   public static create(router: Router, uploadHandler: UploadHandler, photoService: IPhotoService) {
@@ -12,15 +13,21 @@ export class UploadRoute extends BaseRoute {
       const data = await photoService.getAllPhotos();
       res.json(data); // should check users level of authentication here
     });
+
     router.get("/api/photos/clear", async (req: Request, res: Response, next: NextFunction) => {
       photoService.clearPhotos();
       res.json({}); // should check users level of authentication here
     });
 
-    router.get("/upload", (req: Request, res: Response, next: NextFunction) => {
-      new UploadRoute().upload(req, res, next);
+    router.get("/uploadPhoto", (req: Request, res: Response, next: NextFunction) => {
+      new UploadRoute().uploadPhoto(req, res, next);
     });
 
+    router.get("/uploadAvatar", (req: Request, res: Response, next: NextFunction) => {
+      new UploadRoute().uploadAvatar(req, res, next);
+    });
+
+    // need to split this up!
     router.post("/api/upload", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.status(401).redirect("/");
@@ -40,19 +47,36 @@ export class UploadRoute extends BaseRoute {
   }
 
   /**
-   * The upload page route.
+   * The upload photo page route.
    *
    * @class UploadRoute
-   * @method upload
+   * @method uploadPhoto
    * @param req {Request} The express Request object.
    * @param res {Response} The express Response object.
    * @next {NextFunction} Execute the next method.
    */
-  public upload(req: Request, res: Response, next: NextFunction) {
+  public uploadPhoto(req: Request, res: Response, next: NextFunction) {
     if (!req.session!.user) {
       return res.status(401).redirect("/");
     }
 
-    this.render(req, res, "upload");
+    this.render(req, res, "upload-photo");
+  }
+
+  /**
+   * The upload avatar page route.
+   *
+   * @class UploadRoute
+   * @method uploadAvatar
+   * @param req {Request} The express Request object.
+   * @param res {Response} The express Response object.
+   * @next {NextFunction} Execute the next method.
+   */
+  public uploadAvatar(req: Request, res: Response, next: NextFunction) {
+    if (!req.session!.user) {
+      return res.status(401).redirect("/");
+    }
+
+    this.render(req, res, "upload-avatar");
   }
 }
