@@ -6,6 +6,7 @@ describe("LikeDTO object", () => {
   const likeData = {
     userId: "my ownerId",
     artworkId: "my artworkId",
+    isLike: true,
     _id: "my _id",
   };
 
