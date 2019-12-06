@@ -5,6 +5,8 @@ services:
   mongo:
     image: mongo
     restart: always
+    volumes:
+      - seng350team301db:/data/db
 
   node-webserver:
     image: seng350team301/webserver
@@ -14,3 +16,7 @@ services:
       DB_HOST: mongo
       DB_PORT: 27017
       DB_NAME: production
+
+volumes:
+  seng350team301db:
+
