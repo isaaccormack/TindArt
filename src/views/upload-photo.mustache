@@ -22,18 +22,7 @@
         {{messages.artworkError}}
         {{messages.artworkSuccess}}
         <div class="form-page">
-            <form class="boilerform" id="form" action='/api/upload' method="post" enctype="multipart/form-data">
-                <fieldset class="c-form">
-                    <legend class="c-form__heading">Avatar Upload</legend>
-                    <div class="c-form__row">
-                        <input type='file' , accept="image/*" name='avatar' class="c-input-field" value=""
-                            autocorrect="off" />
-                        <input type='submit' , value='Upload avatar' />
-                        {{messages.avatar}}
-                    </div>
-                </fieldset>
-            </form>
-            <form class="boilerform2" id="form" action='/api/artwork' method="post" enctype="multipart/form-data">
+            <form class="boilerform" id="form" action='/api/artwork' method="post" enctype="multipart/form-data">
                 <fieldset class="c-form">
                     <legend class="c-form__heading">Artwork Upload</legend>
                     <div class="c-form__row">
@@ -78,13 +67,12 @@
                         </div>
                     </div>
                     <div class="c-form__row">
-                        <label for="gallery" class="c-label">File:</label>
                         <input type='file' , accept="image/*" name='gallery' class="c-input-field" value="" multiple
                             autocorrect="off" required />
                         {{messages.gallery}}
                     </div>
                     <div class="c-form__row">
-                        <button class="c-button" type="submit">Submit</button>
+                        <button class="c-button" type="submit">Upload</button>
                     </div>
                 </fieldset>
             </form>
