@@ -3,7 +3,6 @@ import { Router, Request, Response, NextFunction } from "express";
 import { BaseRoute } from "./route";
 import { UserHandler } from "../handlers/users";
 import { ArtworkHandler } from "../handlers/artwork";
-import { PhotoDTO } from "../DTOs/PhotoDTO";
 import { UserDTO } from "../DTOs/UserDTO";
 import { IUserDataJSON } from "../services/IUserService";
 import { IArtworkDataJSON } from "../services/IArtworkService";

@@ -27,22 +27,32 @@ export class UploadRoute extends BaseRoute {
       new UploadRoute().uploadAvatar(req, res, next);
     });
 
-    // need to split this up!
-    router.post("/api/upload", async (req: Request, res: Response, next: NextFunction) => {
+    /* I think this is just a generic upload photo endpoint, which =/= upload artwork as all it does is put a photo on the GCP*/
+    router.post("/api/uploadPhoto", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.status(401).redirect("/");
       }
       uploadHandler.uploadPhoto(req, res, next);
     }, (req: Request, res: Response, next: NextFunction) => {
-      if ("avatar" in req.files) {
-        console.log(req.files.avatar[0].originalname);
-        req.flash("avatar", "Successfully uploaded avatar");
-        // Submit request to db to set users profile picture
-      } else if ("gallery" in req.files) {
+      if ("gallery" in req.files) {
         req.flash("gallery", "Successfully uploaded to gallery");
       }
 
-      res.redirect("/upload");
+      res.redirect("/user");
+    });
+
+    router.post("/api/uploadAvatar", async (req: Request, res: Response, next: NextFunction) => {
+      if (!req.session!.user) {
+        return res.status(401).redirect("/");
+      }
+      uploadHandler.uploadAvatar(req, res, next);
+    }, (req: Request, res: Response, next: NextFunction) => {
+      if ("avatar" in req.files) {
+        console.log(req.files.avatar[0].originalname);
+        req.flash("avatar", "Successfully uploaded avatar");
+      }
+
+      res.redirect("/uploadAvatar");
     });
   }
 

@@ -13,7 +13,13 @@
 {{> header}} {{! This is the header that will be on almost all of the pages }}
 
 <body>
-  <!-- Edit bio button / form dynamically created in below div -->
+  {{#messages.artworkSuccess}}
+  <div class="flash-msg" id="flash-msg">
+    <span onclick="closeFlashMsg()" class="flash-close">&times;</span>
+    <p>{{messages.artworkSuccess}}</p>
+  </div>
+  {{/messages.artworkSuccess}}
+
   <div class="profile">
     <span class="avatar">
       <div>
@@ -154,6 +160,10 @@
     document.getElementById('update-phone-number-form').remove(); // Delete edit phone number form on DOM
     document.getElementById('phone-number-text').style.display = "block"; // hide the bio
     buildEditPhoneNumBtn();
+  }
+
+  function closeFlashMsg() {
+    document.getElementById('flash-msg').remove();
   }
 </script>
 
