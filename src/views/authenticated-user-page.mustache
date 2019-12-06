@@ -24,11 +24,12 @@
     <span class="avatar">
       <div>
         {{#avatar}}
-        <img src={{avatar}} class="user-avatar" alt="User Avatar" />
+        <img src={{avatar}} onerror="imgError(this);" id="user-avatar" class="user-avatar" alt="User Avatar" />
         {{/avatar}}
-        {{^avatar}}
+        <!-- make the below work in js -->
+        <!-- {{^avatar}}
         <img src="../assets/icons8-user-80-big.png" class="user-avatar" alt="User Avatar" />
-        {{/avatar}}
+        {{/avatar}} -->
         <a href="/uploadAvatar"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
       </div>
       <div class="lower">
@@ -164,6 +165,12 @@
 
   function closeFlashMsg() {
     document.getElementById('flash-msg').remove();
+  }
+
+  function imgError(image) {
+    image.onerror = "";
+    image.src = "../assets/icons8-user-80-big.png";
+    return true;
   }
 </script>
 

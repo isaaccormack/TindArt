@@ -4,6 +4,8 @@ import { BaseRoute } from "./route";
 import { UploadHandler } from "../handlers/upload";
 import { IPhotoService } from "../services/IPhotoService";
 import { UserDTO } from "../DTOs/UserDTO";
+import { IUserDataJSON } from "../services/IUserService";
+
 
 export class UploadRoute extends BaseRoute {
   public static create(router: Router, uploadHandler: UploadHandler, photoService: IPhotoService) {
@@ -87,6 +89,6 @@ export class UploadRoute extends BaseRoute {
       return res.status(401).redirect("/");
     }
 
-    this.render(req, res, "upload-avatar");
+    this.render(req, res, "upload-avatar", { "username": req.session!.user.username });
   }
 }
