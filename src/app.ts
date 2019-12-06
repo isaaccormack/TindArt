@@ -13,12 +13,19 @@ import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
 import { RegisterRoute } from "./routes/register";
+import { LikesRoute } from "./routes/likes";
+import { ArtworkRoute } from "./routes/artwork";
 import { UserRoute } from "./routes/users";
 import { UploadRoute } from "./routes/upload";
 import { LoginHandler } from "./handlers/login";
+import { LikesHandler } from "./handlers/likes";
+import { ArtworkHandler } from "./handlers/artwork";
 import { UserService } from "./services/UserService";
 import { IUserService } from "./services/IUserService";
-import { initDb, getDb } from "./database/dbclient";
+import { LikeService } from "./services/LikeService";
+import { ILikeService } from "./services/ILikeService";
+import { ArtworkService } from "./services/ArtworkService";
+import { IArtworkService } from "./services/IArtworkService";
 import { PhotoService } from "./services/PhotoService";
 import { IPhotoService } from "./services/IPhotoService";
 import { UploadHandler } from "./handlers/upload";
@@ -42,8 +49,8 @@ export class Server {
    * @static
    * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
    */
-  public static bootstrap(): Server {
-    return new Server();
+  public static bootstrap(db: any): Server {
+    return new Server(db);
   }
 
   /**
@@ -52,14 +59,14 @@ export class Server {
    * @class Server
    * @constructor
    */
-  constructor() {
+  constructor(db: any) {
     // create expressjs application
     this.app = express();
 
     // configure application
     this.config();
 
-    this.routes();
+    this.routes(db);
   }
 
   /**
@@ -124,23 +131,29 @@ export class Server {
    * @method routes
    * @return void
    */
-  private routes() {
+  private routes(db: any) {
     const router: express.Router = express.Router();
 
-    const userService: IUserService = new UserService({db: getDb()});
-    const photoService: IPhotoService = new PhotoService({db: getDb()});
+    const userService: IUserService = new UserService({db});
+    const photoService: IPhotoService = new PhotoService({db});
+    const artworkService: IArtworkService = new ArtworkService({db});
+    const likeService: ILikeService = new LikeService({db});
 
     const loginHandler: LoginHandler = new LoginHandler(userService);
     const userHandler: UserHandler = new UserHandler(userService);
     const registerHandler: RegisterHandler = new RegisterHandler(userService);
+    const likesHandler: LikesHandler = new LikesHandler(likeService, artworkService);
     const uploadHandler: UploadHandler = new UploadHandler(photoService);
+    const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService);
 
-    IndexRoute.create(router);
+    IndexRoute.create(router, artworkHandler);
     RegisterRoute.create(router, registerHandler);
     LoginRoute.create(router, loginHandler);
     LogoutRoute.create(router);
+    LikesRoute.create(router, likesHandler);
     UploadRoute.create(router, uploadHandler, photoService);
-    UserRoute.create(router, userHandler, photoService); // 2nd last due to URL parsing
+    ArtworkRoute.create(router, artworkHandler, uploadHandler);
+    UserRoute.create(router, userHandler, artworkHandler); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
     // use router middleware

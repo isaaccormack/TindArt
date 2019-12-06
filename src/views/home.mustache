@@ -4,10 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TindArt</title>
-  <link rel="icon" type="image" href="../assets/icons8-fire-30.png" />
+  <link rel="icon" type="image" href="../assets/icons8-fire-80.png" />
 </head>
 
 {{> header}} {{! This is the header that will be on almost all of the pages }}
@@ -15,12 +17,66 @@
 <body>
   <div class="container">
     <!-- Only users which are logged in are shown this home page, otherwise index -->
-    <p>Welcome {{name}}</p>
-    <h3><a href="/user/{{username}}">Your Profile</a></h3>
-    <h3><a href="/api/logout">Log Out?</a></h3>
-    <h3><a href="/upload">Upload Photo?</a></h3>
+    <div class="carousel-container">
+        {{#artwork}}
+          <div id={{artID}} class="slide">
+            <div id="mypanel">
+              <img src={{url}} alt="artwork {{artID}}" />
+            </div>
+          </div>
+          {{! This like button action doesn't do the post properly }}
+          <form class="like-button" action="/api/likes" method="post">
+            <button class="like" id="load" type="button" name="artworkId" value={{artID}}>
+              <img src="../assets/icons8-heart-80.png" alt="Like Button" />
+            </button>
+          </form>
+        {{/artwork}}
+      <a class="next" href="" onclick="nextart(event)">&#10095;</a>
+    </div>
   </div>
 </body>
 
+<script>
+var slideShown = 1;
+showSlide(1);
+
+function showSlide(num){
+  var i;
+  var slides = document.getElementsByClassName("slide");
+  var likeBut = document.getElementsByClassName("like-button");
+  if (num > slides.length) {
+    slideShown = 1;
+  }
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+      likeBut[i].style.display = "none";
+  }
+  slides[slideShown-1].style.display = "block";
+  likeBut[slideShown-1].style.display = "block";
+}
+
+function nextart(e){
+  e.preventDefault();
+  showSlide(slideShown += 1);
+  return false;
+}
+
+</script>
+
 {{> footer}}
+<script>
+// This has to be changed to only run through the current group of art before actually submitting this api post request
+$(function() { 
+  $("#btn").on('click', function() {
+    $.getJSON("/api/artwork/next", function(data) {
+      var template = "{{#.}}"
+      + "<li>{{title}}</li>" 
+      + "<li><img src={{photos.0}} height=\"400\"></a></li>" 
+      + "{{/.}}";
+      var html = Mustache.render(template, data);   
+      $("#mypanel").html(html);
+    });
+  });
+}); 
+</script>
 </html>

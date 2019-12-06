@@ -9,9 +9,6 @@ export class DBService extends Service {
     if (!options.db) {
       throw new Error("db not defined.");
     }
-    if (!(options.db instanceof Db)) {
-      throw new Error("db must be of type Db");
-    }
     this._db = options.db;
   }
 

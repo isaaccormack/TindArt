@@ -46,6 +46,7 @@ export class NotFoundRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public display(req: Request, res: Response, next: NextFunction) {
+    res.status(404);
     this.render(req, res, "404");
   }
 }

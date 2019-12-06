@@ -5,7 +5,10 @@
         "tslint-sonarts"
     ],
     "linterOptions": {
-        "format": "stylish"
+        "format": "stylish",
+        "exclude": [
+            "bin/www"
+          ]
     },
     "jsRules": {},
     "rules": {

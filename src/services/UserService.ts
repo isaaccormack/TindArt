@@ -20,7 +20,7 @@ export class UserService extends DBService implements IUserService {
         "email": user.getEmail(),
         "city": user.getCity(),
         "province": user.getProvince(),
-        "password": hash,
+        "password": hash
       });
       // User couldn't be created, but insertOne() did not throw
       if (result.ops.length !== 1) {
@@ -29,10 +29,11 @@ export class UserService extends DBService implements IUserService {
       return { result: result.ops[0] as IUserDataJSON }; // err is falsey; typecast db return value
     } catch (err) {
       if (err.code && parseInt(err.code, 10) === 11000) { // Something is not unique that needs to be
-        if (err.keyPattern.username) { // username is not unique
-          return { err: { type: "usernameError", message: "An account with this username already exists" } };
-        } else { // implicitly err.keyPattern.email i.e. email is not unique
-          return { err: { type: "emailError", message: "An account with this email already exists" } };
+        // search error message to determine whether email or username was not unique
+        if (err.errmsg.search("email") === -1) { // username is not unique
+          return { err: { type: "usernameError", message: "An account with that username already exists" } };
+        } else { // email is not unique
+          return { err: { type: "emailError", message: "An account with that email already exists" } };
         }
       } else {
         return { err: { type: "DBError", message: "Database error" } };
