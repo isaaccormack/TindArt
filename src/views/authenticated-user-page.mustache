@@ -32,19 +32,23 @@
     </span>
     <span class="bio">
       <p class="bio-headers">Biography <span id="bio"></span></p>
-      {{#bio}}
-      <p>{{bio}}</p>
-      {{/bio}}
-      {{^bio}}
-      <p>Click the edit pencil above to add a bio to your profile!</p>
-      {{/bio}}
+      <div id="bio-text">
+        {{#bio}}
+        <p>{{bio}}</p>
+        {{/bio}}
+        {{^bio}}
+        <p>Click the edit pencil above to add a bio to your profile!</p>
+        {{/bio}}
+      </div>
       <p class="bio-headers">Phone Number <span id="phone-number"></span></p>
-      {{#phoneNumber}}
-      <p>{{phoneNumber}}</p>
-      {{/phoneNumber}}
-      {{^phoneNumber}}
-      <p>Click the edit pencil above to add a phone number!</p>
-      {{/phoneNumber}}
+      <div id="phone-number-text">
+        {{#phoneNumber}}
+        <p>{{phoneNumber}}</p>
+        {{/phoneNumber}}
+        {{^phoneNumber}}
+        <p>Click the edit pencil above to add a phone number!</p>
+        {{/phoneNumber}}
+      </div>
     </span>
   </div>
   <h3 id="user-photos-title">
@@ -79,7 +83,7 @@
       '<form id="update-bio-form" action="/api/user/updateBio" method="post">' +
       '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
       '<div class="c-form__row">' +
-      '<input type="text" name="bio" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="255" required />' +
+      '<input type="text" name="bio" id="bio-input" class="c-input-field" value="{{bio}}" autocorrect="off" maxlength="255" />' +
       '</div>' +
       '<span class="c-form__row">' +
       '<button class="c-button" onclick="handleCancelEditBioBtnClick(event);" type="submit">Cancel</button>' +
@@ -94,6 +98,7 @@
     e.preventDefault();
 
     document.getElementById('edit-bio').remove(); // Delete edit bio button on DOM
+    document.getElementById('bio-text').style.display = "none"; // hide the bio
     buildEditBioForm();
   }
 
@@ -101,6 +106,7 @@
     e.preventDefault();
 
     document.getElementById('update-bio-form').remove(); // Delete edit bio form on DOM
+    document.getElementById('bio-text').style.display = "block"; // hide the bio
     buildEditBioBtn();
   }
 </script>
@@ -123,7 +129,7 @@
       '<form id="update-phone-number-form" action="/api/user/updatePhoneNumber" method="post">' +
       '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
       '<div class="c-form__row">' +
-      '<input type="tel" name="phoneNumber" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="10" required />' +
+      '<input type="tel" name="phoneNumber" id="bio-input" class="c-input-field" value="{{phoneNumber}}" autocorrect="off" maxlength="10" />' +
       '</div>' +
       '<span class="c-form__row">' +
       '<button class="c-button" onclick="handleCancelEditPhoneNumBtnClick(event);" type="submit">Cancel</button>' +
@@ -138,6 +144,7 @@
     e.preventDefault();
 
     document.getElementById('edit-phone-number').remove(); // Delete edit phone number button on DOM
+    document.getElementById('phone-number-text').style.display = "none"; // hide the bio
     buildEditPhoneNumForm();
   }
 
@@ -145,6 +152,7 @@
     e.preventDefault();
 
     document.getElementById('update-phone-number-form').remove(); // Delete edit phone number form on DOM
+    document.getElementById('phone-number-text').style.display = "block"; // hide the bio
     buildEditPhoneNumBtn();
   }
 </script>

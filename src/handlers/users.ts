@@ -10,7 +10,7 @@ export class UserHandler {
 
   constructor(userService: IUserService) {
     this.userService = userService;
-   }
+  }
 
   /**
    * Get User By Username
@@ -41,14 +41,10 @@ export class UserHandler {
     // Validate user input bio
     const bio: string = req.body.bio;
     const validator: Validator = new Validator();
-    const validBio: boolean = validator.isLength(bio, 1, 300);
+    const validBio: boolean = validator.isLength(bio, 0, 300);
 
     if (!validBio) {
-      if (bio.length === 0) {
-        req.flash("bioError", "Please enter a bio");
-      } else {
-        req.flash("bioError", "Bio is too long, max 300 characters");
-      }
+      req.flash("bioError", "Bio is too long, max 300 characters");
       return res.redirect("back"); // reload current page
     }
 
@@ -74,13 +70,17 @@ export class UserHandler {
   public async updatePhoneNumber(req: Request, res: Response, next: NextFunction) {
     // Validate user input phone number
     const phoneNumber: string = req.body.phoneNumber;
-    const validator: Validator = new Validator();
-    const validPhoneNumber: boolean = validator.isMobilePhone(phoneNumber, "en-US");
 
-    if (!validPhoneNumber) {
-      req.flash("phoneNumberError", "Please enter a valid phone number");
-      return res.redirect("back"); // reload current page
+    // If the user sent a phone number, validate it
+    if (phoneNumber) {
+      const validator: Validator = new Validator();
+      const validPhoneNumber: boolean = validator.isMobilePhone(phoneNumber, "en-US");
+      if (!validPhoneNumber) {
+        req.flash("phoneNumberError", "Please enter a valid phone number");
+        return res.redirect("back"); // reload current page
+      }
     }
+
     try {
       // tslint:disable-next-line: max-line-length
       const success: boolean = await this.userService.updateUserAttrByID(req.session!.user._id, "phoneNumber", phoneNumber);
