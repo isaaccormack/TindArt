@@ -1,57 +1,38 @@
-import { IsLength, IsAlpha, Matches, IsNumeric, IsIn, IsAlphanumeric, MinLength, MaxLength, MinNumber } from "validator.ts/decorator/Validation";
+import { IsLength, Matches, MinLength, IsFloat, IsIn } from "validator.ts/decorator/Validation";
 
 /* Artwork object to validate artwork input */
 export class Artwork {
-  @IsAlpha({
-    message: "Title must be alphabetical"
-  })
-  @IsLength(3, 32, {
-    message: "Title must be included, up to 32 characters"
+  @IsLength(2, 32, {
+    message: "Title must be between 2 and 32 characters"
   })
   private title: string = "";
 
   @IsLength(2, 250, {
-    message: "Description must be included, up to 250 characters"
+    message: "Description must be between 2 and 250 characters"
   })
   private description: string = "";
 
   // Pass in from the user and has already been validated
   private city: string = "";
   private province: string = "";
-
-  @IsNumeric({
-    message: "Price must be a number"
-  })
-  @MinNumber(0, {
-    message: "Price must be a positive number"
-  })
+  
+  /* RegExp validates that user input a floating point number with 1 or 2 decimal
+   * places, ensure that price is formatted before it is displayed back on UI */
+  @Matches(RegExp("^(?:[0-9]{0,10}(?:.[0-9]{1,2})?|.[0-9]{1,2})$"))
   private price: string = "";
 
-  @IsNumeric({
-    message: "Depth must be a number"
-  })
-  @MinNumber(0, {
-    message: "Depth must be a positive number"
-  })
+  @IsIn(["Inches", "Feet", "Millimeters", "Centimeters", "Meters"])
+  private units: string = "";
+
   @MinLength(1, {
     message: ""
   })
   private depth: string = "";
 
-  @IsNumeric({
-    message: "Price must be a number"
-  })
-  @MinNumber(0, {
-    message: "Price must be a positive number"
-  })
+  @IsFloat({ min: 0.0, max: 100000.0 })
   private width: string = "";
 
-  @IsNumeric({
-    message: "Height must be a number"
-  })
-  @MinNumber(0, {
-    message: "Height must be a positive number"
-  })
+  @IsFloat({ min: 0.0, max: 100000.0 })
   private height: string = "";
 
   constructor(artworkData: any) {
@@ -64,6 +45,7 @@ export class Artwork {
     this.city = artworkData.city;
     this.province = artworkData.province;
     this.price = artworkData.price;
+    this.units = artworkData.units;
     if (!artworkData.depth || artworkData.depth.length === 0) {
       artworkData.depth = "0";
     }
@@ -81,5 +63,6 @@ export class Artwork {
     return this.province;
   }
   public getPrice() { return this.price; }
+  public getUnits() { return this.units; }
   public getDimensions() { return [this.width, this.height, this.depth]; }
 }

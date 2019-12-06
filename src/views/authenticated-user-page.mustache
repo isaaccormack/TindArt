@@ -13,50 +13,60 @@
 {{> header}} {{! This is the header that will be on almost all of the pages }}
 
 <body>
-  <!-- Edit bio button / form dynamically created in below div -->
+  {{#messages.artworkSuccess}}
+  <div class="flash-msg" id="flash-msg">
+    <span onclick="closeFlashMsg()" class="flash-close">&times;</span>
+    <p>{{messages.artworkSuccess}}</p>
+  </div>
+  {{/messages.artworkSuccess}}
+
   <div class="profile">
     <span class="avatar">
-    <div>
-      {{#avatar}}
-        <img src={{avatar}} class="user-avatar" alt="User Avatar" />
-      {{/avatar}}
-      {{^avatar}}
+      <div>
+        {{#avatar}}
+        <img src={{avatar}} onerror="imgError(this);" id="user-avatar" class="user-avatar" alt="User Avatar" />
+        {{/avatar}}
+        <!-- make the below work in js -->
+        <!-- {{^avatar}}
         <img src="../assets/icons8-user-80-big.png" class="user-avatar" alt="User Avatar" />
-      {{/avatar}}
-      <a href="/upload"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
+        {{/avatar}} -->
+        <a href="/uploadAvatar"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
       </div>
       <div class="lower">
         <p>{{name}}</p>
-        <p>{{username}}</p>
         <p class="location">{{city}}, {{province}}</p>
       </div>
     </span>
     <span class="bio">
-      <p class="bio-headers">Biography <span id="bio"></span></p> 
-      {{#bio}}
+      <p class="bio-headers">Biography <span id="bio"></span></p>
+      <div id="bio-text">
+        {{#bio}}
         <p>{{bio}}</p>
-      {{/bio}}
-      {{^bio}}
+        {{/bio}}
+        {{^bio}}
         <p>Click the edit pencil above to add a bio to your profile!</p>
-      {{/bio}}
+        {{/bio}}
+      </div>
       <p class="bio-headers">Phone Number <span id="phone-number"></span></p>
-      {{#phoneNumber}}
+      <div id="phone-number-text">
+        {{#phoneNumber}}
         <p>{{phoneNumber}}</p>
-      {{/phoneNumber}}
-      {{^phoneNumber}}
+        {{/phoneNumber}}
+        {{^phoneNumber}}
         <p>Click the edit pencil above to add a phone number!</p>
-      {{/phoneNumber}}
+        {{/phoneNumber}}
+      </div>
     </span>
   </div>
   <h3 id="user-photos-title">
     Your Artwork <span class="spacer"></span>
-    <a href="/upload"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
+    <a href="/uploadPhoto"><img src="../assets/icons8-pencil-64.png" class="edit-pencil" alt="Edit" /></a>
   </h3>
   <div class="user-owned-photos">
     <div class="photo-box">
-        {{#photoURLs}}
-        <div class="photo"><img src={{.}} /></a></div>
-        {{/photoURLs}}
+      {{#photoURLs}}
+      <div class="photo"><img src={{.}} /></a></div>
+      {{/photoURLs}}
     </div>
   </div>
   <h4>{{messages.serverError}}</h4>
@@ -69,7 +79,7 @@
   function buildEditBioBtn() {
     document.getElementById('bio').innerHTML +=
       '<span id="edit-bio">' +
-      '<a href="" onclick="handleEditBioBtnClick(event);">'+
+      '<a href="" onclick="handleEditBioBtnClick(event);">' +
       '<img src="../assets/icons8-pencil-64.png" class="edit-pencil" /></a>' +
       '{{messages.bioError}}' +
       '</span>';
@@ -80,7 +90,7 @@
       '<form id="update-bio-form" action="/api/user/updateBio" method="post">' +
       '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
       '<div class="c-form__row">' +
-      '<input type="text" name="bio" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="255" required />' +
+      '<input type="text" name="bio" id="bio-input" class="c-input-field" value="{{bio}}" autocorrect="off" maxlength="255" />' +
       '</div>' +
       '<span class="c-form__row">' +
       '<button class="c-button" onclick="handleCancelEditBioBtnClick(event);" type="submit">Cancel</button>' +
@@ -95,6 +105,7 @@
     e.preventDefault();
 
     document.getElementById('edit-bio').remove(); // Delete edit bio button on DOM
+    document.getElementById('bio-text').style.display = "none"; // hide the bio
     buildEditBioForm();
   }
 
@@ -102,6 +113,7 @@
     e.preventDefault();
 
     document.getElementById('update-bio-form').remove(); // Delete edit bio form on DOM
+    document.getElementById('bio-text').style.display = "block"; // hide the bio
     buildEditBioBtn();
   }
 </script>
@@ -124,7 +136,7 @@
       '<form id="update-phone-number-form" action="/api/user/updatePhoneNumber" method="post">' +
       '<input type="submit" hidden="true" />' + // This form field enables form submission when 'enter' is pressed and focus is on textbox
       '<div class="c-form__row">' +
-      '<input type="tel" name="phoneNumber" id="bio-input" class="c-input-field" value="" autocorrect="off" maxlength="10" required />' +
+      '<input type="tel" name="phoneNumber" id="bio-input" class="c-input-field" value="{{phoneNumber}}" autocorrect="off" maxlength="10" />' +
       '</div>' +
       '<span class="c-form__row">' +
       '<button class="c-button" onclick="handleCancelEditPhoneNumBtnClick(event);" type="submit">Cancel</button>' +
@@ -139,6 +151,7 @@
     e.preventDefault();
 
     document.getElementById('edit-phone-number').remove(); // Delete edit phone number button on DOM
+    document.getElementById('phone-number-text').style.display = "none"; // hide the bio
     buildEditPhoneNumForm();
   }
 
@@ -146,7 +159,18 @@
     e.preventDefault();
 
     document.getElementById('update-phone-number-form').remove(); // Delete edit phone number form on DOM
+    document.getElementById('phone-number-text').style.display = "block"; // hide the bio
     buildEditPhoneNumBtn();
+  }
+
+  function closeFlashMsg() {
+    document.getElementById('flash-msg').remove();
+  }
+
+  function imgError(image) {
+    image.onerror = "";
+    image.src = "../assets/icons8-user-80-big.png";
+    return true;
   }
 </script>
 

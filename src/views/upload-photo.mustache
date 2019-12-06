@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Upload</title>
+    <link rel="icon" type="image" href="../assets/icons8-fire-80.png" />
+</head>
+
+{{> header}} {{! This is the header that will be on almost all of the pages }}
+
+<body>
+    <div class="registration-error">
+        <ul>{{#messages}}<li>{{error}}</li>{{/messages}}</ul>
+    </div>
+
+    <!-- Boilerplate Form -->
+    <div class="container">
+        {{messages.artworkError}}
+        {{messages.artworkSuccess}}
+        <div class="form-page">
+            <form class="boilerform" id="form" action='/api/artwork' method="post" enctype="multipart/form-data">
+                <fieldset class="c-form">
+                    <legend class="c-form__heading">Artwork Upload</legend>
+                    <div class="c-form__row">
+                        <label for="name" class="c-label"><b>Title</b></label> <br />
+                        <input type="text" name="title" id="title" class="c-input-field" value="" autocorrect="off"
+                            maxlength="32" required />
+                        {{messages.titleError}}
+                    </div>
+                    <div class="c-form__row">
+                        <label for="name" class="c-label"><b>Description</b></label> <br />
+                        <input type="text" name="description" id="description" class="c-input-field" value=""
+                            autocorrect="off" maxlength="32" required />
+                        {{messages.descriptionError}}
+                    </div>
+                    <div class="c-form__row">
+                        <label for="price" class="c-label"><b>Price (CAD)</b></label> <br />
+                        <input type="text" name="price" id="price" class="c-input-field" maxlength="10" required />
+                        {{messages.priceError}}
+                    </div>
+                    <div class="c-form__row">
+                        <label for="dimensions" class="c-label"><b>Dimensions</b></label>
+                        <select name="units">
+                            <option value="Inches">Inches</option>
+                            <option value="Feet">Feet</option>
+                            <option value="Millimeters">Millimeters</option>
+                            <option value="Centimeters">Centimeters</option>
+                            <option value="Meters">Meters</option>
+                        </select>
+                        <br />
+                        <div id="dimensions">
+                            <label for="width" class="c-label"><b>Width</b></label>
+                            <input type="text" name="width" id="width" class="c-input-field" value="" maxlength="5"
+                                required />
+                            {{messages.widthError}}
+                            <label for="height" class="c-label"><b>Height</b></label>
+                            <input type="text" name="height" id="height" class="c-input-field" value="" maxlength="5"
+                                required />
+                            {{messages.heightError}}
+                            <label for="depth" class="c-label"><b>Depth</b></label>
+                            <input type="text" name="depth" id="depth" class="c-input-field" value="" maxlength="5" />
+                            {{messages.depthError}}
+                        </div>
+                    </div>
+                    <div class="c-form__row">
+                        <input type='file' , accept="image/*" name='gallery' class="c-input-field" value="" multiple
+                            autocorrect="off" required />
+                        {{messages.gallery}}
+                    </div>
+                    <div class="c-form__row">
+                        <button class="c-button" type="submit">Upload</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</body>
+
+{{> footer}}
+
+</html>

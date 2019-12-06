@@ -18,6 +18,7 @@ export class ArtworkService extends DBService implements IArtworkService {
         "city": artwork.getCity(),
         "province": artwork.getProvince(),
         "price": artwork.getPrice(),
+        "units": artwork.getUnits(),
         "dimensions": artwork.getDimensions(),
         "photos": photoIds
       });
@@ -65,12 +66,13 @@ export class ArtworkService extends DBService implements IArtworkService {
       if (lastId.length === 0) {
         result = await this.db.collection("artworks")
           .find({
-              "city": { $regex: ".*" + city + ".*" },
-              "province": { $regex: ".*" + province + ".*" } })
+            "city": { $regex: ".*" + city + ".*" },
+            "province": { $regex: ".*" + province + ".*" }
+          })
           .limit(pageSize).toArray();
       } else {
         result = await this.db.collection("photos").find({
-          "_id": {"$gt": new ObjectId(lastId)},
+          "_id": { "$gt": new ObjectId(lastId) },
           "city": { $regex: ".*" + city + ".*" },
           "province": { $regex: ".*" + province + ".*" }
         }).limit(pageSize).toArray();

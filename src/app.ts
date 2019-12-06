@@ -26,7 +26,6 @@ import { LikeService } from "./services/LikeService";
 import { ILikeService } from "./services/ILikeService";
 import { ArtworkService } from "./services/ArtworkService";
 import { IArtworkService } from "./services/IArtworkService";
-import { initDb, getDb } from "./database/dbclient";
 import { PhotoService } from "./services/PhotoService";
 import { IPhotoService } from "./services/IPhotoService";
 import { UploadHandler } from "./handlers/upload";
@@ -50,8 +49,8 @@ export class Server {
    * @static
    * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
    */
-  public static bootstrap(): Server {
-    return new Server();
+  public static bootstrap(db: any): Server {
+    return new Server(db);
   }
 
   /**
@@ -60,14 +59,14 @@ export class Server {
    * @class Server
    * @constructor
    */
-  constructor() {
+  constructor(db: any) {
     // create expressjs application
     this.app = express();
 
     // configure application
     this.config();
 
-    this.routes();
+    this.routes(db);
   }
 
   /**
@@ -132,13 +131,13 @@ export class Server {
    * @method routes
    * @return void
    */
-  private routes() {
+  private routes(db: any) {
     const router: express.Router = express.Router();
 
-    const userService: IUserService = new UserService({db: getDb()});
-    const photoService: IPhotoService = new PhotoService({db: getDb()});
-    const artworkService: IArtworkService = new ArtworkService({db: getDb()});
-    const likeService: ILikeService = new LikeService({db: getDb()});
+    const userService: IUserService = new UserService({db});
+    const photoService: IPhotoService = new PhotoService({db});
+    const artworkService: IArtworkService = new ArtworkService({db});
+    const likeService: ILikeService = new LikeService({db});
 
     const loginHandler: LoginHandler = new LoginHandler(userService);
     const userHandler: UserHandler = new UserHandler(userService);

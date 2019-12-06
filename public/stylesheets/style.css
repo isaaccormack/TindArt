@@ -202,6 +202,9 @@ p.title{
 }
 
 #dimensions .c-input-field {
+  text-align: center; 
+  padding-left: 8px;
+  padding-right: 8px;
   width: 50px;
 }
 
@@ -234,6 +237,7 @@ form fieldset{
 /* Search Box CSS */
 form input#searchbar {
   padding: 6px;
+  padding-left: 14px;
   font-size: 14px;
   border-radius: 15px;
   border: none;
@@ -278,6 +282,31 @@ form.search button img{
   font-size: 24px;
   color: white;
   text-align: center;
+}
+
+.flash-msg {
+  background-color: rgba(119, 241, 89, 0.5);
+  color: rgb(38, 158, 27);
+  text-align: center;
+  margin: 10px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  border-radius: 5px;
+}
+
+.flash-close {
+  float: right;
+  margin-top: 3px;
+  margin-right: 10px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.flash-close:hover,
+.flasch-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .profile {

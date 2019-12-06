@@ -1,10 +1,11 @@
-import { IsLength, IsEmail, IsAlpha, Matches, IsNumeric, IsIn } from "validator.ts/decorator/Validation";
+import { IsLength, IsEmail, Matches, IsIn } from "validator.ts/decorator/Validation";
+
+/* A simple RegExp used to allow some special chars in name and city */
+const basicRegExp = "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
 
 /* User object to validate user input */
 export class User {
-  @IsAlpha({
-    message: "Name must be alphabetical"
-  })
+  @Matches(RegExp(basicRegExp))
   @IsLength(2, 32, {
     message: "Name must be between 2 and 32 characters"
   })
@@ -17,17 +18,12 @@ export class User {
   @IsEmail()
   private email: string = "";
 
-  @IsAlpha({
-    message: "City must be alphabetical"
-  })
+  @Matches(RegExp(basicRegExp))
   @IsLength(2, 32, {
     message: "City must be between 2 and 32 characters"
   })
   private city: string = "";
 
-  @IsNumeric({
-    message: "Province code must be numeric"
-  })
   /* Province codes are defined in the following http://geogratis.gc.ca/services/geoname/en/codes/province */
   @IsIn(["10", "11", "12", "13", "24", "35", "46", "47", "48", "59", "60", "61", "62", "72", "73"], {
     message: "Province code does not map to a province"
@@ -55,6 +51,7 @@ export class User {
   public getName(): string { return this.name; }
   public getUsername(): string { return this.username; }
   public getEmail(): string { return this.email; }
+  public setCity(city: string) { this.city = city; }
   public getCity(): string { return this.city; }
   public getProvinceCode(): string { return this.provinceCode; }
   // Map province code to province
