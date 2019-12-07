@@ -2,20 +2,20 @@ import { IsLength, Matches, MinLength, IsFloat, IsIn } from "validator.ts/decora
 
 /* Artwork object to validate artwork input */
 export class Artwork {
-  @IsLength(2, 32, {
-    message: "Title must be between 2 and 32 characters"
+  @IsLength(1, 32, {
+    message: "Title must be between 1 and 32 characters"
   })
   private title: string = "";
 
-  @IsLength(2, 250, {
-    message: "Description must be between 2 and 250 characters"
+  @IsLength(0, 250, {
+    message: "Description must be less than 250 characters"
   })
   private description: string = "";
 
   // Pass in from the user and has already been validated
   private city: string = "";
   private province: string = "";
-  
+
   /* RegExp validates that user input a floating point number with 1 or 2 decimal
    * places, ensure that price is formatted before it is displayed back on UI */
   @Matches(RegExp("^(?:[0-9]{0,10}(?:.[0-9]{1,2})?|.[0-9]{1,2})$"))
