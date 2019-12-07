@@ -16,7 +16,10 @@ let db: Db;
 describe("Integration Test", () => {
   before(async () => {
     const dbPromise = promisify(dbModule.initDb);
-    const result = await dbPromise("mongodb://localhost:27017", "test");
+    const connString = "mongodb://"
+      + (process.env.DB_HOST || "localhost") + ":"
+      + (process.env.DB_PORT || "27017");
+    const result = await dbPromise(connString, "test");
     client = result.client;
     db = result.db;
     app = appModule.Server.bootstrap(db).app;
