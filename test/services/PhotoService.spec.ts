@@ -80,17 +80,6 @@ describe("PhotoService object", () => {
       expect("No Error").to.equal(true);
     }
   });
-  it("should return all photos without error", async () => {
-    try {
-      const result: IPhotoDataJSON[] = await photoService!.getAllPhotos();
-      expect(result.length).to.equal(1);
-      expect(result[0].user).to.equal(photoData.userId);
-      expect(result[0]._id).to.equal(id);
-    } catch (error) {
-      console.log(error);
-      expect("No Error").to.equal(true);
-    }
-  });
   it("should find all photos for a userId", async () => {
     try {
       const result: IPhotoDataJSON[] = await photoService!.findUserPhotosByID(photoData.userId);
