@@ -1,6 +1,10 @@
 import { ILikeDataJSON } from "../services/ILikeService";
 
-/* LikeDTO object to transfer data between model and view */
+/**
+ * LikeDTO encapsulates the data of a user that has "liked" an artwork.
+ * In particular, it is the data representation sent to the templating engine
+ * (view) after converting it from the database (model) representation.
+ */
 export class LikeDTO {
   public userId: string = "";
 

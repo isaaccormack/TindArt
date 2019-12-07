@@ -1,7 +1,11 @@
 import { IUserDataJSON } from "../services/IUserService";
 import { GCP_URL } from "../services/GCPService";
 
-/* UserDTO object to transfer data between model and view */
+/**
+ * UserDTO encapsulates a single user's data.
+ * In particular, it is the data representation sent to the templating engine
+ * (view) after converting it from the database (model) representation.
+ */
 export class UserDTO {
   public bio: string = "";
 
@@ -23,12 +27,6 @@ export class UserDTO {
 
   public avatar: string = "";
 
-  /**
-   * Could add these later:
-   * Phone number
-   * Personal Website
-   * Social media links - facebook, twitter, etc.
-   */
   constructor(res: IUserDataJSON) {
     this.create(res);
   }
