@@ -50,7 +50,9 @@ export class IndexRoute extends BaseRoute {
   public async index(req: Request, res: Response, next: NextFunction, artworkHandler: ArtworkHandler) {
     if (req.session!.user) { // If user logged in
       const artworksJSON: IArtworkDataJSON[] = await artworkHandler.findArtworkForUser(req, res, next);
+      console.log(artworksJSON);
       const artworksDTOs: ArtworkDTO[] = artworksJSON.map((artwork) => new ArtworkDTO(artwork));
+      console.log(artworksDTOs);
       this.render(req, res, "home", {
         name: req.session!.user.name,
         username: req.session!.user.username,

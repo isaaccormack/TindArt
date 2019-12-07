@@ -1,14 +1,12 @@
+import { UserDTO } from "../DTOs/UserDTO";
 import { Artwork } from "../models/Artwork";
 
 export interface IArtworkService {
   insertNewArtwork(artwork: Artwork, photoIds: string[], userid: string): Promise<IArtworkResult>;
   removeArtworkById(artworkId: string): Promise<boolean>;
-  getAllArtwork(): Promise<IArtworkDataJSON[]>;
-  getArtworkPage(pageSize: number, lastId: string, city: string, province: string): Promise<[IArtworkDataJSON[], string]>;
   findArtworkByUserID(userId: string): Promise<IArtworkDataJSON[]>;
-  findArtworkByLocation(city: string, province: string): Promise<IArtworkDataJSON[]>;
   findArtworkByArtworkID(artworkIds: string[]): Promise<IArtworkDataJSON[]>;
-  clearArtwork(): void;
+  findArtworkByLocation(city: string, province: string, excludeIds: string[]): Promise<IArtworkDataJSON[]>;
 }
 
 export interface IArtworkResult { // Type returned by insertNewArtwork

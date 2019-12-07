@@ -38,27 +38,29 @@
 {{> footer}}
 
 <script>
-var slideShown = 1;
-showSlide(1);
+var curSlide = 0;
+showSlide();
 
-function showSlide(num){
+function showSlide(){
   var i;
   var slides = document.getElementsByClassName("slide");
   var likeBut = document.getElementsByClassName("like-button");
-  if (num > slides.length) {
-    slideShown = 1;
+  if (curSlide > slides.length) {
+    curSlide = 0;
+    // TODO: don't wrap around - if we've gone through them all, we should show a blank screen.
   }
   for (i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";
       likeBut[i].style.display = "none";
   }
-  slides[slideShown-1].style.display = "block";
-  likeBut[slideShown-1].style.display = "block";
+  slides[curSlide].style.display = "block";
+  likeBut[curSlide].style.display = "block";
 }
 
 function nextart(e){
   e.preventDefault();
-  showSlide(slideShown += 1);
+  curSlide++;
+  showSlide();
   return false;
 }
 
@@ -76,19 +78,6 @@ $(".dislike").click(function(e) {
   nextart(e);
 });
 
-// This has to be changed to only run through the current group of art before actually submitting this api post request
-$(function() { 
-  $("#btn").on("click", function() {
-    $.getJSON("/api/artwork/next", function(data) {
-      var template = "{{#.}}"
-      + "<li>{{title}}</li>" 
-      + "<li><img src={{photos.0}} height=\"400\"></a></li>" 
-      + "{{/.}}";
-      var html = Mustache.render(template, data);   
-      $(".carousel-container").html(html);
-    });
-  });
-}); 
 </script>
 
 </html>
