@@ -2,7 +2,6 @@ import { expect } from "chai";
 import "mocha";
 import { mock, when, instance, anything, deepEqual } from "ts-mockito";
 import { Db, ObjectID, Collection, Cursor } from "mongodb";
-import { Photo } from "../../src/models/Photo";
 import { IPhotoService, IPhotoDataJSON } from "../../src/services/IPhotoService";
 import { PhotoService } from "../../src/services/PhotoService";
 
