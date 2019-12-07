@@ -19,14 +19,14 @@
     <!-- Only users which are logged in are shown this home page, otherwise index -->
     <div class="carousel-container">
         {{#artwork}}
-          <div id={{artID}} class="slide">
-            <div id="mypanel">
-              <img src={{url}} alt="artwork {{artID}}" />
-            </div>
+          <div id={{_id}} class="slide">
+            <img src={{photos.0}} alt="artwork {{_id}}" />
           </div>
-          {{! This like button action doesn't do the post properly }}
-          <form class="like-button" action="/api/likes" method="post">
-            <button class="like" id="load" type="button" name="artworkId" value={{artID}}>
+          <form class="like-button">
+            <button class="dislike" data-artworkid="{{_id}}">
+              <img src="../assets/icons8-multiply-80.png" alt="Dislike Button" />
+            </button>
+            <button class="like" data-artworkid="{{_id}}">
               <img src="../assets/icons8-heart-80.png" alt="Like Button" />
             </button>
           </form>
@@ -61,22 +61,32 @@ function nextart(e){
   return false;
 }
 
-</script>
+$(".like").click(function(e) {
+  e.preventDefault();
+  artId = $(this).attr("data-artworkid");
+  $.post("/api/like", { artworkId: artId });
+});
 
-{{> footer}}
-<script>
+$(".dislike").click(function(e) {
+  e.preventDefault();
+  artId = $(this).attr("data-artworkid");
+  $.post("/api/dislike", { artworkId: artId });
+});
+
 // This has to be changed to only run through the current group of art before actually submitting this api post request
 $(function() { 
-  $("#btn").on('click', function() {
+  $("#btn").on("click", function() {
     $.getJSON("/api/artwork/next", function(data) {
       var template = "{{#.}}"
       + "<li>{{title}}</li>" 
       + "<li><img src={{photos.0}} height=\"400\"></a></li>" 
       + "{{/.}}";
       var html = Mustache.render(template, data);   
-      $("#mypanel").html(html);
+      $(".carousel-container").html(html);
     });
   });
 }); 
 </script>
+
+{{> footer}}
 </html>

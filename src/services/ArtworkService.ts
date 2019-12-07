@@ -141,10 +141,10 @@ export class ArtworkService extends DBService implements IArtworkService {
    * @return a Promise for an array of ArtworkDataJSON objects
    */
   public async findArtworkByArtworkID(artworkIds: string[]): Promise<IArtworkDataJSON[]> {
+    const artworkObjs: ObjectId[] = artworkIds.map((id) => new ObjectId(id));
     try {
-      // For some reason this query doesn't match the user ID exactly, so check if user Id contains user Id
       const result: any = await this.db.collection("artworks").find(
-        { "_id": { $regex: ".*" + artworkIds + ".*" } })
+        { "_id": { $in: artworkObjs } })
         .toArray();
       if (!result) {
         return [];

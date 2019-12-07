@@ -12,32 +12,38 @@
 
 {{> header}}
 <body>
-  <p>Your Likes</p>
+  <h1>Your Likes</h1>
   <div>
       <div class="liked-photos">
         <div class="photo-box">
-            {{#photos}}
+            {{#likes}}
             <div class="photo">
-                <button type="button" id={{artworkId}} class="liked-art" onclick="openpopup(this.id)">
-                    <img src={{url}} alt="Like image" />
+                <button type="button" id={{_id}} class="liked-art" onclick="openpopup(event, this.id)">
+                    <img src={{photos.0}} alt="Like image" />
                 </button>
             </div>
-            <div class="popup" id="pop{{artworkId}}">
+            <div class="popup" id="pop{{_id}}">
                 <div class="popup-content">
-                    <span class="close" id="{{artworkId}}2" onclick="close(this.id)">&times;</span>
+                    <a href="" class="close" id="{{_id}}2" onclick="close(event, this.id)">&times;</a>
                     <div class="title">
                         <h2>{{title}}</h2>
                     </div>
                     <div class="text">
-                        <p>{{description}}</p>
-                        <p>{{price}}$</p>
+                        <div class="popup-header">Description: </div>
+                        <p class="popup-body">{{description}}</p>
+                        <div class="popup-header">Price: </div>
+                        <p class="popup-body">{{price}} $</p>
+                        <div class="popup-header">Location: </div>
+                        <p class="popup-body">{{city}}, {{province}}</p>
+                        <div class="popup-header">Dimensions: </div>
+                        <p class="popup-body">{{dimensions}}</p>
                     </div>
                 </div>
             </div>
-            {{/photos}}
-            {{^photos}}
+            {{/likes}}
+            {{^likes}}
             You have not liked any photos, check out the home page to <a href="/">browse</a> artwork.
-            {{/photos}}
+            {{/likes}}
         </div>
     </div>
   </div>
@@ -46,20 +52,16 @@
 </body>
 
 <script type="text/javascript">
-var span = document.getElementsByClassName("close")[0];
 
-function openpopup(id){
+function openpopup(e, id){
+    e.preventDefault();
     id="pop"+id;
     var popup = document.getElementById(id);
     popup.style.display = "block";
 }
 
-span.onclick = function() { // this won't work
-    console.log(span)
- // popup.style.display = "none";
-}
-/* This didn't work
-function close(id) {
+function close(e, id) {
+    e.preventDefault();
     console.log(id)
     id = id.substring(0, id.length-1);
     id = "pop" +id;
