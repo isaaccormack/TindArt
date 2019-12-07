@@ -127,7 +127,7 @@ export class Server {
   }
 
   /**
-   * Create and return Router.
+   * Create and return Router with all the routes, handlers, and services initialized.
    *
    * @class Server
    * @method routes

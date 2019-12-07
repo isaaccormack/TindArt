@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 /**
- * Constructor
+ * The base class for all our route classes.
  *
  * @class BaseRoute
  */
@@ -18,8 +18,7 @@ export class BaseRoute {
    * @constructor
    */
   constructor() {
-    // initialize variables
-    this.title = "My New TypeScript Web app";
+    this.title = "TindArt";
     this.scripts = [];
   }
 
