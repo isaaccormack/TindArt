@@ -15,7 +15,7 @@ export class Artwork {
   // Pass in from the user and has already been validated
   private city: string = "";
   private province: string = "";
-  
+
   /* RegExp validates that user input a floating point number with 1 or 2 decimal
    * places, ensure that price is formatted before it is displayed back on UI */
   @Matches(RegExp("^(?:[0-9]{0,10}(?:.[0-9]{1,2})?|.[0-9]{1,2})$"))
