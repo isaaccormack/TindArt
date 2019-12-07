@@ -31,6 +31,9 @@
             </button>
           </form>
         {{/artwork}}
+        {{^artwork}}
+          No artwork nearby!
+        {{/artwork}}
     </div>
   </div>
 </body>
@@ -45,13 +48,9 @@ function showSlide(){
   var i;
   var slides = document.getElementsByClassName("slide");
   var likeBut = document.getElementsByClassName("like-button");
-  if (curSlide > slides.length) {
-    curSlide = 0;
-    // TODO: don't wrap around - if we've gone through them all, we should show a blank screen.
-  }
   for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-      likeBut[i].style.display = "none";
+    slides[i].style.display = "none";
+    likeBut[i].style.display = "none";
   }
   slides[curSlide].style.display = "block";
   likeBut[curSlide].style.display = "block";
