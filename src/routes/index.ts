@@ -11,18 +11,17 @@ import { BaseRoute } from "./route";
  * @class IndexRoute
  */
 export class IndexRoute extends BaseRoute {
+
   /**
-   * Create the routes.
+   * Create the routes and endpoints.
    *
    * @class IndexRoute
    * @method create
    * @static
    */
   public static create(router: Router, artworkHandler: ArtworkHandler) {
-    // log
     console.log("[IndexRoute::create] Creating index route.");
 
-    // add home page route
     router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       new IndexRoute().index(req, res, next, artworkHandler);
     });
@@ -39,13 +38,14 @@ export class IndexRoute extends BaseRoute {
   }
 
   /**
-   * The home page route.
+   * The home page. Renders the index page to unauthenticated users, or the browse
+   * page to authenticated users.
    *
    * @class IndexRoute
    * @method index
    * @param req {Request} The express Request object.
    * @param res {Response} The express Response object.
-   * @next {NextFunction} Execute the next method.
+   * @param next {NextFunction} Execute the next method.
    */
   public async index(req: Request, res: Response, next: NextFunction, artworkHandler: ArtworkHandler) {
     if (req.session!.user) { // If user logged in

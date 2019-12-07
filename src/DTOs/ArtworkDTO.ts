@@ -1,7 +1,11 @@
 import { IArtworkDataJSON } from "../services/IArtworkService";
 import { GCP_URL } from "../services/GCPService";
 
-/* ArtworkDTO object to transfer data between model and view */
+/**
+ * ArtworkDTO encapsulates the data of a single artwork.
+ * In particular, it is the data representation sent to the templating engine
+ * (view) after converting it from the database (model) representation.
+ */
 export class ArtworkDTO {
   public _id: string = "";
 

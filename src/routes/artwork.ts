@@ -4,7 +4,20 @@ import { BaseRoute } from "./route";
 import { ArtworkHandler } from "../handlers/artwork";
 import { UploadHandler } from "../handlers/upload";
 
+/**
+ * /api/artwork api endpoint
+ *
+ * @class UploadRoute
+ */
 export class ArtworkRoute extends BaseRoute {
+
+  /**
+   * Create the routes and endpoints.
+   *
+   * @class ArtworkRoute
+   * @method create
+   * @static
+   */
   public static create(router: Router, artworkHandler: ArtworkHandler, uploadHandler: UploadHandler) {
     console.log("[ArtworkRoute::create] Creating artwork route.");
 

@@ -1,9 +1,9 @@
+import { ObjectID } from "mongodb";
+
 export interface IPhotoService {
   insertNewPhoto(userId: string): Promise<IPhotoResult>;
   removePhotoById(photoId: string): Promise<boolean>;
-  getAllPhotos(): Promise<IPhotoDataJSON[]>;
   findUserPhotosByID(userId: string): Promise<IPhotoDataJSON[]>;
-  clearPhotos(): void;
 }
 
 export interface IPhotoResult { // Type returned by insertNewPhoto
@@ -17,6 +17,6 @@ export interface IPhotoResult { // Type returned by insertNewPhoto
 
 /* Type interface for the returned JSON for photo returned by DB query */
 export interface IPhotoDataJSON {
-  _id: string;
+  _id: ObjectID;
   user: string;
 }
