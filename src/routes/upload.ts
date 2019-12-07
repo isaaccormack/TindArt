@@ -10,16 +10,6 @@ export class UploadRoute extends BaseRoute {
   public static create(router: Router, uploadHandler: UploadHandler, photoService: IPhotoService) {
     console.log("[UploadRoute::create] Creating UploadRoutes route.");
 
-    router.get("/api/photos", async (req: Request, res: Response, next: NextFunction) => {
-      const data = await photoService.getAllPhotos();
-      res.json(data); // should check users level of authentication here
-    });
-
-    router.get("/api/photos/clear", async (req: Request, res: Response, next: NextFunction) => {
-      photoService.clearPhotos();
-      res.json({}); // should check users level of authentication here
-    });
-
     router.get("/uploadPhoto", (req: Request, res: Response, next: NextFunction) => {
       new UploadRoute().uploadPhoto(req, res, next);
     });
@@ -28,8 +18,7 @@ export class UploadRoute extends BaseRoute {
       new UploadRoute().uploadAvatar(req, res, next);
     });
 
-    /* I think this is just a generic upload photo endpoint,
-     which =/= upload artwork as all it does is put a photo on the GCP*/
+    /* This is just a generic upload photo endpoint, which =/= upload artwork as all it does is put a photo on the GCP*/
     router.post("/api/uploadPhoto", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.status(401).redirect("/");

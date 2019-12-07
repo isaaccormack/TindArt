@@ -33,50 +33,12 @@ export class ArtworkHandler {
    * Find artwork for the logged-in user.
    */
   public async findArtworkForUser(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-<<<<<<< HEAD
-    return await this.artworkService.findArtworkByLocation(req.session!.user.city, req.session!.user.province);
-  }
-
-  /**
-   * All artwork
-   */
-  public async getAllArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    return await this.artworkService.getAllArtwork();
-  }
-
-  /**
-   * Get a page of artwork based on the last request
-   */
-  public async getArtworkPage(req: Request, res: Response, next: NextFunction) {
-    let lastId = "";
-    if (req.session!.lastId) {
-      lastId = req.session!.lastId;
-    }
-
-    let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE,
-      lastId, req.session!.user.city, req.session!.user.province);
-    if (result[0].length === 0 && lastId.length !== 0) {
-      // Hit the end of the artwork pagination, go back to the beginning
-      result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE,
-        "", req.session!.user.city, req.session!.user.province);
-    }
-    req.session!.lastId = result[1];
-    return result[0].map((r) => new ArtworkDTO(r));
-  }
-
-  /**
-   * All artwork
-   */
-  public clearArtwork(req: Request, res: Response, next: NextFunction) {
-    this.artworkService.clearArtwork();
-=======
     const likes: ILikeDataJSON[] = await this.likeService.findAllLikesOrDislikes(req.session!.user._id);
     const artworks: IArtworkDataJSON[] = await this.artworkService.findArtworkByUserID(req.session!.user._id);
     const excludeLikes: string[] = likes.map((like) => like.artworkId);
     const excludeArtworks: string[] = artworks.map((artwork) => artwork._id);
     const excludeIds: string[] = excludeLikes.concat(excludeArtworks);
     return await this.artworkService.findArtworkByLocation(req.session!.user.city, req.session!.user.province, excludeIds);
->>>>>>> 9f34626f56cf37c557704f6085b5b2ec8ff19928
   }
 
   public async addNewArtwork(req: Request, res: Response, next: NextFunction) {
