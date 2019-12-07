@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Storage } from "@google-cloud/storage";
 import multer from "multer";
-import { PhotoDTO } from "../DTOs/PhotoDTO";
 import { IPhotoResult, IPhotoService } from "../services/IPhotoService";
 import { GCP_PROJECT_ID, CLOUD_CREDENTIAL_FILE, BUCKET_NAME } from "../services/GCPService";
 
@@ -65,14 +64,13 @@ export class UploadHandler {
   }
 
   private async uploadArtworkPhoto(exFile: Express.Multer.File, userId: string): Promise<IPhotoResult> {
-    const result = await this.photoService.insertNewPhoto(userId);
+    const result: IPhotoResult = await this.photoService.insertNewPhoto(userId);
     if (result.err) {
       exFile.filename = "-1";
       return result;
     }
-    const photoDTO: PhotoDTO = new PhotoDTO(result.result!);
-    await this.uploadToGCP(exFile, photoDTO._id);
-    exFile.filename = photoDTO._id;
+    await this.uploadToGCP(exFile, result.result!._id.toString());
+    exFile.filename = result.result!._id.toString();
     return result;
   }
 
