@@ -55,7 +55,7 @@ export class RegisterHandler {
     const url: string =
       "http://geogratis.gc.ca/services/geoname/en/geonames.json" +
       "?q=" + city + "&province=" + provinceCode + "&concise=CITY";
-    var result: string = "";
+    let result: string = "";
     try {
       const res = await axios.get(url);
       const matchingCities = res.data.items;

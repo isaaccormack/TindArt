@@ -76,7 +76,8 @@ export class UserRoute extends BaseRoute {
    * @param res {Response} The express Response object.
    * @param next {NextFunction} Execute the next method.
    */
-  public async userPage(req: Request, res: Response, userHandler: UserHandler, artworkHandler: ArtworkHandler, next: NextFunction) {
+  public async userPage(req: Request, res: Response, userHandler: UserHandler,
+                        artworkHandler: ArtworkHandler, next: NextFunction) {
     if (!req.session!.user) {
       return res.status(401).redirect("/");
     }
