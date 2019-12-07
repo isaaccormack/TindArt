@@ -1,6 +1,6 @@
 import { IsLength, Matches, MinLength, IsFloat, IsIn } from "validator.ts/decorator/Validation";
 
-/* Artwork object to validate artwork input */
+/* Artwork object to validate artwork input during artwork upload */
 export class Artwork {
   @IsLength(1, 32, {
     message: "Title must be between 1 and 32 characters"
@@ -12,7 +12,7 @@ export class Artwork {
   })
   private description: string = "";
 
-  // Pass in from the user and has already been validated
+  // city & province are passed in from the user and have already been validated
   private city: string = "";
   private province: string = "";
 
@@ -57,11 +57,7 @@ export class Artwork {
   public getTitle(): string { return this.title; }
   public getDescription(): string { return this.description; }
   public getCity(): string { return this.city; }
-  public getProvinceCode(): string { return this.province; }
-  // Map province code to province
-  public getProvince(): string {
-    return this.province;
-  }
+  public getProvince(): string { return this.province; }
   public getPrice() { return this.price; }
   public getUnits() { return this.units; }
   public getDimensions() { return [this.width, this.height, this.depth]; }
