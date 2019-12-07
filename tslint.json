@@ -5,11 +5,16 @@
         "tslint-sonarts"
     ],
     "linterOptions": {
-        "format": "stylish"
+        "format": "stylish",
+        "exclude": [
+            "bin/www"
+          ]
     },
     "jsRules": {},
     "rules": {
         "no-console": false,
+        "interface-name": false,
+        "variable-name": { "options": [ "allow-leading-underscore" ] },
         "object-literal-sort-keys": false,
         "object-literal-key-quotes": [true, "consistent"],
         "ordered-imports": [false, {"named-imports-order": "any"}],

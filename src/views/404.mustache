@@ -7,13 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>404</title>
+  <link rel="icon" type="image" href="../assets/icons8-fire-30.png" />
 </head>
+
+{{> header}} {{! This is the header that will be on almost all of the pages }}
 
 <body>
   <div class="404-page">
-    <h1>We know you're looking for something, but it's not this!</h1>
-    <h6><a href="/">Home</a></h6>
+    <h1>What you're looking for could not be found.</h1>
+    <div class="error-img">
+      <img src="../assets/artthief.png" alt="Error" />
+    </div>
   </div>
 </body>
 
+{{> footer}}
 </html>

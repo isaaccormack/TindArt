@@ -1,63 +1,106 @@
-import { Request, Response, NextFunction } from 'express';
-import { Db } from 'mongodb';
+import { Request, Response, NextFunction } from "express";
+import { Storage } from "@google-cloud/storage";
+import multer from "multer";
+import { PhotoDTO } from "../DTOs/PhotoDTO";
+import { IPhotoResult, IPhotoService } from "../services/IPhotoService";
+import { GCP_PROJECT_ID, CLOUD_CREDENTIAL_FILE, BUCKET_NAME } from "../services/GCPService";
 
-const DbClient = require('../DbClient');
-const multer = require('multer');
+const uploader = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // no larger than 5mb
+  }
+}).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 8 }]);
 
-const storage = multer.diskStorage({
-  destination: function (req: any, file: any, cb: any) {
-    cb(null, 'uploads')
-  },
-  filename: function (req: any, file: any, cb: any) {
-    getNextPhotoID(req).then((filename: string) => {
-      cb(null, filename + '.' + file.originalname.split('.').pop());
+// Creates reference to storage and bucket
+const storage = new Storage({
+  projectId: GCP_PROJECT_ID,
+  keyFilename: CLOUD_CREDENTIAL_FILE
+});
+const bucket = storage.bucket(BUCKET_NAME);
+
+export class UploadHandler {
+  private photoService: IPhotoService;
+
+  constructor(photoService: IPhotoService) {
+    this.photoService = photoService;
+  }
+
+  /**
+   * Add New Photo
+   */
+  public uploadPhoto(req: Request, res: Response, next: NextFunction) {
+    uploader(req, res, async (err: any) => {
+      if (err) { // unify this error handling
+        console.error("Upload photo failed: " + err);
+        req.flash("error", "Photo upload failed!");
+        return next(err);
+      }
+
+      if ("gallery" in req.files) { // fix the need for this if condition
+        const all = req.files.gallery.map((file) => this.uploadArtworkPhoto(file, req.session!.user._id));
+        const combine = Promise.all(all);
+        await combine;
+      }
+      next();
     });
   }
-});
 
-const uploader = multer({ storage: storage }).fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }]);
-
-/**
-* Get All Photos
-*/
-export function getAllPhotos(req: Request, res: Response, next: NextFunction) {
-  DbClient.connect()
-    .then((db: any) => {
-      return db!.collection("photos").find().toArray();
-    })
-    .then((photos: any) => {
-      console.log(photos);
-      res.send(photos);
-    })
-    .catch((err: any) => {
-      console.error("Database conn failed: " + err);
-    })
-}
-
-/**
-* Add New Photo
-*/
-export function uploadPhoto(req: Request, res: Response, next: NextFunction) {
-  uploader(req, res, (err: any) => {
-    if (err) {
-      console.error("Upload failed: " + err);
-      req.flash('error', 'Photo upload failed!');
-    }
-    next();
-  });
-}
-
-function getNextPhotoID(req: Request) {
-  return DbClient.connect()
-    .then((db: Db) => {
-      return db!.collection("photos").insertOne({
-        "user": req.session!.user._id
-      });
-    })
-    .then((result: any) => { // handle database response
-      if (result) {
-        console.log('Upload: ' + result.insertedId);
-        return result.insertedId.toString();
+  /**
+   * Add New Avatar
+   */
+  public uploadAvatar(req: Request, res: Response, next: NextFunction) {
+    uploader(req, res, async (err: any) => {
+      if (err) {
+        console.error("Upload avatar failed: " + err);
+        req.flash("error", "Photo upload failed!");
+        return next(err);
       }
+      if ("avatar" in req.files) {
+        await this.uploadToGCP(req.files.avatar[0], req.session!.user.username);
+      }
+
+      next();
     });
+  }
+
+  private async uploadArtworkPhoto(exFile: Express.Multer.File, userId: string): Promise<IPhotoResult> {
+    const result = await this.photoService.insertNewPhoto(userId);
+    if (result.err) {
+      exFile.filename = "-1";
+      return result;
+    }
+    const photoDTO: PhotoDTO = new PhotoDTO(result.result!);
+    await this.uploadToGCP(exFile, photoDTO._id);
+    exFile.filename = photoDTO._id;
+    return result;
+  }
+
+  private async uploadToGCP(exFile: Express.Multer.File, photoId: string) {
+    return new Promise<void>(async (res) => {
+      const file = bucket.file(photoId);
+      const stream = file.createWriteStream({
+        metadata: {
+          contentType: exFile.mimetype,
+          cacheControl: "public, max-age=31536000"
+        },
+        resumable: false
+      });
+
+      stream.on("error", async (errr) => {
+        try {
+          await this.photoService.removePhotoById(photoId);
+        } catch (err) {
+          console.log("Error Deleting: " + photoId);
+        }
+        res();
+      });
+
+      stream.on("finish", () => {
+        console.log(`${photoId} uploaded to ${BUCKET_NAME}.`);
+        res();
+      });
+      stream.end(exFile.buffer);
+    });
+  }
 }

@@ -4,7 +4,7 @@ import express from "express";
 import { Request, Response, NextFunction } from "express";
 import flash = require("express-flash");
 import logger from "morgan";
-import mustache from 'mustache-express';
+import mustache from "mustache-express";
 import path from "path";
 import session = require("express-session");
 
@@ -13,8 +13,24 @@ import { LogoutRoute } from "./routes/logout";
 import { LoginRoute } from "./routes/login";
 import { NotFoundRoute } from "./routes/notFound";
 import { RegisterRoute } from "./routes/register";
+import { LikesRoute } from "./routes/likes";
+import { ArtworkRoute } from "./routes/artwork";
 import { UserRoute } from "./routes/users";
-import { UploadRouter } from "./routes/upload";
+import { UploadRoute } from "./routes/upload";
+import { LoginHandler } from "./handlers/login";
+import { LikesHandler } from "./handlers/likes";
+import { ArtworkHandler } from "./handlers/artwork";
+import { UserService } from "./services/UserService";
+import { IUserService } from "./services/IUserService";
+import { LikeService } from "./services/LikeService";
+import { ILikeService } from "./services/ILikeService";
+import { ArtworkService } from "./services/ArtworkService";
+import { IArtworkService } from "./services/IArtworkService";
+import { PhotoService } from "./services/PhotoService";
+import { IPhotoService } from "./services/IPhotoService";
+import { UploadHandler } from "./handlers/upload";
+import { UserHandler } from "./handlers/users";
+import { RegisterHandler } from "./handlers/register";
 
 /**
  * The server.
@@ -33,8 +49,8 @@ export class Server {
    * @static
    * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
    */
-  public static bootstrap(): Server {
-    return new Server();
+  public static bootstrap(db: any): Server {
+    return new Server(db);
   }
 
   /**
@@ -43,15 +59,14 @@ export class Server {
    * @class Server
    * @constructor
    */
-  constructor() {
+  constructor(db: any) {
     // create expressjs application
     this.app = express();
 
     // configure application
     this.config();
 
-    // add routes
-    this.routes();
+    this.routes(db);
   }
 
   /**
@@ -60,14 +75,14 @@ export class Server {
    * @class Server
    * @method config
    */
-  public config() {
+  private config() {
     // add static paths
     this.app.use(express.static(path.join(__dirname, "../public")));
 
     // configure mustache
-    this.app.engine('mustache', mustache());
-    this.app.set('view engine', 'mustache');
-    this.app.set('views', __dirname + '/../src/views');
+    this.app.engine("mustache", mustache());
+    this.app.set("view engine", "mustache");
+    this.app.set("views", __dirname + "/../src/views");
 
     // mount logger
     this.app.use(logger("dev"));
@@ -116,19 +131,32 @@ export class Server {
    * @method routes
    * @return void
    */
-  private routes() {
-    let router: express.Router;
-    router = express.Router();
+  private routes(db: any) {
+    const router: express.Router = express.Router();
 
-    IndexRoute.create(router);
-    RegisterRoute.create(router);
-    LoginRoute.create(router);
+    const userService: IUserService = new UserService({db});
+    const photoService: IPhotoService = new PhotoService({db});
+    const artworkService: IArtworkService = new ArtworkService({db});
+    const likeService: ILikeService = new LikeService({db});
+
+    const loginHandler: LoginHandler = new LoginHandler(userService);
+    const userHandler: UserHandler = new UserHandler(userService);
+    const registerHandler: RegisterHandler = new RegisterHandler(userService);
+    const likesHandler: LikesHandler = new LikesHandler(likeService, artworkService);
+    const uploadHandler: UploadHandler = new UploadHandler(photoService);
+    const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService, userService);
+
+    IndexRoute.create(router, artworkHandler);
+    RegisterRoute.create(router, registerHandler);
+    LoginRoute.create(router, loginHandler);
     LogoutRoute.create(router);
-    UploadRouter.create(router);
-    UserRoute.create(router); // 2nd last due to URL parsing
+    LikesRoute.create(router, likesHandler);
+    UploadRoute.create(router, uploadHandler, photoService);
+    ArtworkRoute.create(router, artworkHandler, uploadHandler);
+    UserRoute.create(router, userHandler, artworkHandler); // 2nd last due to URL parsing
     NotFoundRoute.create(router); // 404 Route must be last
 
-    //use router middleware
+    // use router middleware
     this.app.use(router);
   }
 

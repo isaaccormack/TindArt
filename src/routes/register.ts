@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { BaseRoute } from "./route";
-import { createUser } from "../handlers/register";
+import { RegisterHandler } from "../handlers/register";
 
 /**
  * / route
@@ -9,7 +9,7 @@ import { createUser } from "../handlers/register";
  * @class RegisterRoute
  */
 export class RegisterRoute extends BaseRoute {
-  public static create(router: Router) {
+  public static create(router: Router, registerHandler: RegisterHandler) {
     console.log("[RegisterRoute::create] Creating register route.");
 
     router.get("/register", (req: Request, res: Response, next: NextFunction) => {
@@ -17,9 +17,11 @@ export class RegisterRoute extends BaseRoute {
     });
 
     router.post("/api/register", (req: Request, res: Response, next: NextFunction) => {
-      if (req.session!.user) return res.redirect("/");
+      if (req.session!.user) {
+        return res.redirect("/");
+      }
 
-      createUser(req, res, next);
+      registerHandler.createUser(req, res, next);
     });
   }
 
@@ -43,7 +45,9 @@ export class RegisterRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public register(req: Request, res: Response, next: NextFunction) {
-    if (req.session!.user) return res.redirect("/");
+    if (req.session!.user) {
+      return res.redirect("/");
+    }
 
     this.render(req, res, "register");
   }

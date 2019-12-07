@@ -6,34 +6,40 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Register</title>
+  <title>Log In</title>
+  <link rel="icon" type="image" href="../assets/icons8-fire-80.png" />
 </head>
 
+{{! This page is different -- no header }}
+
 <body>
-  <!-- Boilerplate Form -->
-  <form class="boilerform" id="form" action='/api/login' method="post">
-      <fieldset class="c-form">
-          <legend class="c-form__heading">Login form</legend>
-          <div class="c-form__row">
-              <label for="email" class="c-label">Email</label>
-              <input type="email" name="email" id="email" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
-              {{messages.emailError}}
-          </div>
-          <div class="c-form__row">
-              <label for="password" class="c-label">Password</label>
-              <input type="password" name="password" id="password" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
-              {{messages.passwordError}}
+    <div class="container">
+        <div class="form-page">
+            <a href="/"><img class="pad-top" src="../assets/icons8-fire-80.png" /></a>
+            <br />
+            <p class="title">Log in to TindArt</p>
+            <form class="boilerform" id="form" action='/api/login' method="post">    
+                {{messages.loginError}}
+                {{messages.emailError}}
+                {{messages.passwordError}}
+                <fieldset class="c-form">
+                    <div class="c-form__row">
+                        <label for="email" class="c-label"><b>Email</b></label> <br />
+                        <input type="email" name="email" id="email" placeholder="Enter Email" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
+                    </div>
+                    <div class="c-form__row">
+                        <label for="password" class="c-label"><b>Password</b></label> <br />
+                        <input type="password" name="password" id="password" placeholder="Enter Password" autocapitalize="none" autocorrect="off" class="c-input-field" maxlength="32" required />
 
-          </div>
-          <div class="c-form__row">
-              <button class="c-button" type="submit">Submit</button>    
-              {{messages.loginError}}
-          </div>
-      </fieldset>
-  </form>
-
-  <p>Don't have an account? <a href="/register">Register</a></p>
-  <a href="/">Go Home?</a>
+                    </div>
+                    <div class="c-form__row">
+                        <button class="c-button" type="submit">Submit</button>
+                    </div>
+                </fieldset>
+            </form>
+            <p>New to TindArt? <a href="/register">Sign Up</a></p>
+        </div>
+    </div>
 </body>
 
 </html>

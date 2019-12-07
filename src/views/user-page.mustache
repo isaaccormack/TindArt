@@ -7,12 +7,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TindArt</title>
+  <link rel="icon" type="image" href="../assets/icons8-fire-80.png" />
 </head>
 
+{{> header}} {{! This is the header that will be on almost all of the pages }}
+
 <body>
-  <p>This is {{name}}'s profile</p>
-  <p>{{city}}, {{province}}</p>
-  <h6>{{bio}}</h6>
+  <div class="profile">
+    <span class="avatar">
+      <div>
+        {{#avatar}}
+        <img src={{avatar}} onerror="imgError(this);" class="user-avatar" alt="User Avatar" />
+        {{/avatar}}
+        {{^avatar}}
+        <img src="../assets/icons8-user-80-big.png" class="user-avatar" alt="User Avatar" />
+        {{/avatar}}
+      </div>
+      <div class="lower">
+        <p>{{name}}</p>
+        <p class="location">{{city}}, {{province}}</p>
+      </div>
+    </span>
+    <span class="bio">
+      <p class="bio-headers">Biography </p>
+      {{#bio}}
+      <p>{{bio}}</p>
+      {{/bio}}
+      {{^bio}}
+      <p>This user has not specified a bio.</p>
+      {{/bio}}
+      <p class="bio-headers">Phone Number </p>
+      {{#phoneNumber}}
+      <p>{{phoneNumber}}</p>
+      {{/phoneNumber}}
+      {{^phoneNumber}}
+      <p>This user has not specified a phone number.</p>
+      {{/phoneNumber}}
+    </span>
+  </div>
+  <h3 id="user-photos-title">
+    {{name}}'s Artwork
+  </h3>
+  <div class="user-owned-photos">
+    <div class="photo-box">
+      {{#photoURLs}}
+      <div class="photo"><img src={{.}} /></a></div>
+      {{/photoURLs}}
+      {{^photoURLs}}
+      This user has not uploaded any artwork yet.
+      {{/photoURLs}}
+    </div>
+  </div>
 </body>
+
+<script>
+  function imgError(image) {
+    image.onerror = "";
+    image.src = "../assets/icons8-user-80-big.png";
+    return true;
+  }
+</script>
 
 </html>
