@@ -30,7 +30,7 @@ export class LikeService extends DBService implements ILikeService {
         upsert: true
       });
     } catch (err) {
-      err.message = "Database insert error on adding like";
+      err.message = "Database replace error on adding like";
       throw err;
     }
   }
@@ -51,7 +51,7 @@ export class LikeService extends DBService implements ILikeService {
         upsert: true
       });
     } catch (err) {
-      err.message = "Database delete error on removing like";
+      err.message = "Database replace error on adding dislike";
       throw err;
     }
   }
@@ -67,6 +67,20 @@ export class LikeService extends DBService implements ILikeService {
       }).toArray() as ILikeDataJSON[];
     } catch (err) {
       err.message = "Database find error on getting all likes";
+      throw err;
+    }
+  }
+
+  public async findAllLikesOrDislikes(userId: string): Promise<ILikeDataJSON[]> {
+    if (!userId) {
+      return [];
+    }
+    try {
+      return await this.db.collection("likes").find({
+        userId
+      }).toArray() as ILikeDataJSON[];
+    } catch (err) {
+      err.message = "Database find error on getting all likes or dislikes";
       throw err;
     }
   }
