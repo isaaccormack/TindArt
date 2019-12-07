@@ -1,6 +1,6 @@
 # Majabris!
 
-[![Build Status](https://travis-ci.com/seng350/seng350f19-project-team-3-1.svg?token=MKYirfVTx6By2GhqMnsq&branch=develop)](https://travis-ci.com/seng350/seng350f19-project-team-3-1)
+[![Build Status](https://travis-ci.com/seng350/seng350f19-project-team-3-1.svg?token=MKYirfVTx6By2GhqMnsq&branch=master)](https://travis-ci.com/seng350/seng350f19-project-team-3-1)
 [![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-1/branch/master/graph/badge.svg?token=nysinaCFt7)](https://codecov.io/gh/seng350/seng350f19-project-team-3-1)
 ## Getting Started
 1. Clone the repo
@@ -16,6 +16,17 @@ docker-compose up
 ```sh
 docker-compose down
 ```
+
+### Testing & Linting
+From within the repo, run
+```
+npm run lint
+```
+to run the linter (which gives a small number of errors that we've opted to ignore), and
+```
+npm run test
+```
+to run the unit and integration tests. Our integration tests require a mongodb instance to be running on `localhost:27017`.
 
 ## Developing
 For ease of development, using services which continuously reflect source code changes is recommended to be used. This can be accomplished by running two proccess continously during development:
