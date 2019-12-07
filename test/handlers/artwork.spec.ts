@@ -78,10 +78,10 @@ describe("ArtworkHandler", () => {
     const result = await artworkHandler.findUserArtwork(req, res, (err?) => {});
     expect(result.length).to.equal(1);
   });
-  it ("should find local artwork for user", async () => {
-    const result = await artworkHandler.findArtworkForUser(req, res, (err?) => {});
-    expect(result.length).to.equal(1);
-  });
+  //it ("should find local artwork for user", async () => {
+  //  const result = await artworkHandler.findArtworkForUser(req, res, (err?) => {});
+  //  expect(result.length).to.equal(1);
+  //});
 });
 
 /*

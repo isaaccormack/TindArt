@@ -37,9 +37,10 @@
     "all": true,
     "cache": false,
     "skip-full": false,
-    "functions": 50,
-    "statements": 50,
-    "lines": 50,
+    "branches": 25,
+    "functions": 60,
+    "statements": 60,
+    "lines": 60,
     "check-coverage": true
   },
   "dependencies": {
