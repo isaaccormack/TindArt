@@ -53,10 +53,12 @@ export class ArtworkHandler {
       lastId = req.session!.lastId;
     }
 
-    let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, lastId, req.session!.user.city, req.session!.user.province);
+    let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE,
+      lastId, req.session!.user.city, req.session!.user.province);
     if (result[0].length === 0 && lastId.length !== 0) {
       // Hit the end of the artwork pagination, go back to the beginning
-      result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, "", req.session!.user.city, req.session!.user.province);
+      result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE,
+        "", req.session!.user.city, req.session!.user.province);
     }
     req.session!.lastId = result[1];
     return result[0].map((r) => new ArtworkDTO(r));

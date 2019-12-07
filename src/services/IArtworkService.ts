@@ -4,7 +4,8 @@ export interface IArtworkService {
   insertNewArtwork(artwork: Artwork, photoIds: string[], userid: string): Promise<IArtworkResult>;
   removeArtworkById(artworkId: string): Promise<boolean>;
   getAllArtwork(): Promise<IArtworkDataJSON[]>;
-  getArtworkPage(pageSize: number, lastId: string, city: string, province: string): Promise<[IArtworkDataJSON[], string]>;
+  getArtworkPage(pageSize: number, lastId: string, city: string, province: string):
+    Promise<[IArtworkDataJSON[], string]>;
   findArtworkByUserID(userId: string): Promise<IArtworkDataJSON[]>;
   findArtworkByLocation(city: string, province: string): Promise<IArtworkDataJSON[]>;
   findArtworkByArtworkID(artworkIds: string[]): Promise<IArtworkDataJSON[]>;
