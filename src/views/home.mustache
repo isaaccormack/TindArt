@@ -31,10 +31,11 @@
             </button>
           </form>
         {{/artwork}}
-      <a class="next" href="" onclick="nextart(event)">&#10095;</a>
     </div>
   </div>
 </body>
+
+{{> footer}}
 
 <script>
 var slideShown = 1;
@@ -65,12 +66,14 @@ $(".like").click(function(e) {
   e.preventDefault();
   artId = $(this).attr("data-artworkid");
   $.post("/api/like", { artworkId: artId });
+  nextart(e);
 });
 
 $(".dislike").click(function(e) {
   e.preventDefault();
   artId = $(this).attr("data-artworkid");
   $.post("/api/dislike", { artworkId: artId });
+  nextart(e);
 });
 
 // This has to be changed to only run through the current group of art before actually submitting this api post request
@@ -88,5 +91,4 @@ $(function() {
 }); 
 </script>
 
-{{> footer}}
 </html>
