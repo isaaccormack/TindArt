@@ -71,6 +71,24 @@ To contribute:
 5. Open a Pull Request
 
 
+# Milestone 4
+
+## User Stories Addressed
+In this milestone user stories 3 through 6 were addressed.
+
+User Story 3: Seller Updates Profile -> Support was added for a user to update their bio, phone number, add an avatar, and add photos to their account. The avatar and bio allows the seller to be recognizable to a potential buyer. This functionality works by adding a bio, phone number, avatar URL and list of photo URLs to the user object maintained in the database. 
+
+User Story 4: Buyer Browsing Site -> Support for a user of the site to browse are which is for sale in the same location as them was added. This functionality works by quering the database for all photos which have the same location as the user and displaying them on the home page in a paginated fashion such that the user can navigate through them using and X or heart icon.
+
+User Story 5: Buyer Likes Art -> Support for liking of photos was added by saving a users liked photos to their database object such that when a photo is like a request is sent to the server to add the photo id to this list.
+
+User Story 6: Buyer Views Liked Art -> Support for viewing liked images was supported by adding an endpoint to recieve a list of users like photos. This endpoint queries the database for the user object and returns the list of all liked photos.
+
+## Explination of Automating Testing of 3 QAS from M1
+Testability -> This QAS was automated by integrating testing into the continuous integration pipeline such that the unit tests were executed whenever commits were made to tracked branches. Along with this, code coverage is run to log the extent to which code coverage was changed by the recent commit.
+
+## Explination of Testing and CI Pipeline
+
 # Milestone 3.5
 
 ## Functionality
