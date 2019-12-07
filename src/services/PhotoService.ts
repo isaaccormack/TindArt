@@ -31,19 +31,6 @@ export class PhotoService extends DBService implements IPhotoService {
   }
 
   /**
-   * @return a Promise for a PhotoDataJSON array containing all photo data
-   */
-  public async getAllPhotos(): Promise<IPhotoDataJSON[]> {
-    try {
-      return await this.db.collection("photos").find().toArray();
-    } catch (err) {
-      err.message = "Database photo error";
-      console.error("Failed to get all photos: " + err);
-      throw err;
-    }
-  }
-
-  /**
    * Get all users photos from their ID
    * @param userId the Photo object to add to the photos database
    * @return a Promise for an array of PhotoDataJSON objects
@@ -63,12 +50,5 @@ export class PhotoService extends DBService implements IPhotoService {
       err.message = "Database find error";
       throw err;
     }
-  }
-
-  /**
-   * Clears photo collection
-   */
-  public async clearPhotos() {
-    return await this.db.collection("photos").drop();
   }
 }

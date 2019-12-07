@@ -3,9 +3,7 @@ import { ObjectID } from "mongodb";
 export interface IPhotoService {
   insertNewPhoto(userId: string): Promise<IPhotoResult>;
   removePhotoById(photoId: string): Promise<boolean>;
-  getAllPhotos(): Promise<IPhotoDataJSON[]>;
   findUserPhotosByID(userId: string): Promise<IPhotoDataJSON[]>;
-  clearPhotos(): void;
 }
 
 export interface IPhotoResult { // Type returned by insertNewPhoto
