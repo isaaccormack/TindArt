@@ -63,9 +63,10 @@ export class Server {
     // create expressjs application
     this.app = express();
 
-    // configure application
+    // configure application middleware
     this.config();
 
+    // initialize routes
     this.routes(db);
   }
 
@@ -109,6 +110,7 @@ export class Server {
       }
     }));
 
+    // mount flash middleware
     this.app.use(flash());
 
     /* This middleware will check if user's cookie is still saved in browser and
