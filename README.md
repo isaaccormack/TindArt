@@ -3,40 +3,19 @@
 [![Build Status](https://travis-ci.com/seng350/seng350f19-project-team-3-1.svg?token=MKYirfVTx6By2GhqMnsq&branch=develop)](https://travis-ci.com/seng350/seng350f19-project-team-3-1)
 [![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-1/branch/master/graph/badge.svg?token=nysinaCFt7)](https://codecov.io/gh/seng350/seng350f19-project-team-3-1)
 ## Getting Started
-1. Install and run MongoDB on your local computer. Mongo should be listening on port 27017.
-2. Open a session with mongo
-```
-mongo
-```
-3. Create a new database "myapp" for this app
-```
-use myapp
-```
-4. Add a unique index on the email field in the users collection (such that every email in the collection is unique)
-```
-db.users.createIndex( { "email": 1 }, { unique: true } )
-```
-5. Clone the repo
+1. Clone the repo
 ```sh
 git clone https://github.com/seng350/seng350f19-project-team-3-1.git
 ```
-6. Install NPM packages
+2. Run docker-compose (install it if necessary)
 ```sh
-npm install
+docker-compose up
 ```
-7. Compile the Typescript
+3. Navigate to the site on http://localhost:3000/
+4. Take down the site
 ```sh
-npm run build-ts
+docker-compose down
 ```
-or Compile using Watch Mode:
-```sh
-npm run watch-ts
-```
-8. Start the application
-```sh
-npm start
-```
-9. Navigate to the site on http://localhost:3000/
 
 ## Developing
 For ease of development, using services which continuously reflect source code changes is recommended to be used. This can be accomplished by running two proccess continously during development:
@@ -84,10 +63,14 @@ User Story 5: Buyer Likes Art -> Support for liking of photos was added by savin
 
 User Story 6: Buyer Views Liked Art -> Support for viewing liked images was supported by adding an endpoint to recieve a list of users like photos. This endpoint queries the database for the user object and returns the list of all liked photos.
 
-## Explination of Automating Testing of 3 QAS from M1
+## Explanation of Automating CI/Testing of QAS from M1
 Testability -> This QAS was automated by integrating testing into the continuous integration pipeline such that the unit tests were executed whenever commits were made to tracked branches. Along with this, code coverage is run to log the extent to which code coverage was changed by the recent commit.
 
-## Explination of Testing and CI Pipeline
+Backend portability -> This QAS was automated by building docker images and deploying to dockerhub in the CI pipeline.
+
+## Explanation of Testing and CI Pipeline
+We unit test with mocha, chai, and ts-mockito. We run integration tests that use a mongodb instance to test the app more fully. We use nyc to measure code coverage. Testing is automated by travis-ci, which also deploys to dockerhub on a successful build.
+
 
 # Milestone 3.5
 
