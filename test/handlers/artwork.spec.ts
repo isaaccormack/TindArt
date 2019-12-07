@@ -4,14 +4,17 @@ import "mocha";
 import { mock, when, instance } from "ts-mockito";
 import { ArtworkService } from "../../src/services/ArtworkService";
 import { UserService } from "../../src/services/UserService";
+import { LikeService } from "../../src/services/LikeService";
 import { ArtworkHandler } from "../../src/handlers/artwork";
 import { IArtworkService, IArtworkResult, IArtworkDataJSON } from "../../src/services/IArtworkService";
 import { Request, Response } from "express";
 import { IUserService, IUserResult } from "../../src/services/IUserService";
+import { ILikeService } from "../../src/services/ILikeService";
 
 describe("ArtworkHandler", () => {
   const mockedArtworkService: IArtworkService = mock<IArtworkService>(ArtworkService);
   const mockedUserService: IUserService = mock<IUserService>(UserService);
+  const mockedLikeService: ILikeService = mock<ILikeService>(LikeService);
   const mockedReq: Request = mock<Request>();
   const mockedRes: Response = mock<Response>();
   const mockedSession: Express.Session = mock<Express.Session>();
@@ -59,14 +62,14 @@ describe("ArtworkHandler", () => {
   when(mockedReq.session).thenReturn(instance(mockedSession));
 
   when(mockedUserService.findOneUserByAttr("username", "bob")).thenResolve(dbUserResult);
-  when(mockedArtworkService.findArtworkByLocation("Victoria", "British Columbia")).thenResolve([dbArtwork]);
+  when(mockedArtworkService.findArtworkByLocation("Victoria", "British Columbia", [])).thenResolve([dbArtwork]);
 
   when(mockedArtworkService.findArtworkByUserID(userId)).thenResolve([dbArtwork]);
-  when(mockedArtworkService.getAllArtwork()).thenResolve([dbArtwork]);
 
   const req = instance(mockedReq);
   const res = instance(mockedRes);
-  const artworkHandler: ArtworkHandler = new ArtworkHandler(instance(mockedArtworkService), instance(mockedUserService));
+  const artworkHandler: ArtworkHandler =
+    new ArtworkHandler(instance(mockedArtworkService), instance(mockedUserService), instance(mockedLikeService));
 
   it ("should add new artwork", async () => {
     await artworkHandler.addNewArtwork(req, res, (err?) => {});
@@ -77,10 +80,6 @@ describe("ArtworkHandler", () => {
   });
   it ("should find local artwork for user", async () => {
     const result = await artworkHandler.findArtworkForUser(req, res, (err?) => {});
-    expect(result.length).to.equal(1);
-  });
-  it ("should get all artwork", async () => {
-    const result = await artworkHandler.getAllArtwork(req, res, (err?) => {});
     expect(result.length).to.equal(1);
   });
 });
