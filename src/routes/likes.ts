@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 
 import { BaseRoute } from "./route";
 import { ArtworkDTO } from "./../DTOs/ArtworkDTO";
@@ -6,10 +6,19 @@ import { LikesHandler } from "../handlers/likes";
 
 /**
  * /likes route
+ * /api/like and /api/dislike api endpoints
  *
  * @class LikesRoute
  */
 export class LikesRoute extends BaseRoute {
+
+  /**
+   * Create the routes and endpoints.
+   *
+   * @class LikesRoute
+   * @method create
+   * @static
+   */
   public static create(router: Router, likesHandler: LikesHandler) {
     console.log("[LikesRoute::create] Creating likes route.");
 

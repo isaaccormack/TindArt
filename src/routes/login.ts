@@ -4,21 +4,21 @@ import { BaseRoute } from "./route";
 import { LoginHandler } from "../handlers/login";
 
 /**
- * / route
+ * /login route
+ * /api/login api endpoint
  *
  * @class LoginRoute
  */
 export class LoginRoute extends BaseRoute {
 
   /**
-   * Create the routes.
+   * Create the routes and endpoints.
    *
    * @class LoginRoute
    * @method create
    * @static
    */
   public static create(router: Router, loginHandler: LoginHandler) {
-    // log
     console.log("[LoginRoute::create] Creating login route.");
 
     router.get("/login", (req: Request, res: Response, next: NextFunction) => {
@@ -51,7 +51,7 @@ export class LoginRoute extends BaseRoute {
    * @method login
    * @param req {Request} The express Request object.
    * @param res {Response} The express Response object.
-   * @next {NextFunction} Execute the next method.
+   * @param next {NextFunction} Execute the next method.
    */
   public login(req: Request, res: Response, next: NextFunction) {
     if (req.session!.user) {

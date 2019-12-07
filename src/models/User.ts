@@ -3,7 +3,7 @@ import { IsLength, IsEmail, Matches, IsIn } from "validator.ts/decorator/Validat
 /* A simple RegExp used to allow some special chars in name and city */
 const basicRegExp = "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
 
-/* User object to validate user input */
+/* User object to validate user input during account creation */
 export class User {
   @Matches(RegExp(basicRegExp))
   @IsLength(2, 32, {
@@ -11,7 +11,8 @@ export class User {
   })
   private name: string = "";
 
-  /* Generic username regexp from https://stackoverflow.com/a/12019115 */
+  /* Generic username regexp from
+   * https://stackoverflow.com/a/12019115 */
   @Matches(RegExp("^(?=.{2,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"))
   private username: string = "";
 
@@ -24,7 +25,8 @@ export class User {
   })
   private city: string = "";
 
-  /* Province codes are defined in the following http://geogratis.gc.ca/services/geoname/en/codes/province */
+  /* Province codes are defined in the following
+   * http://geogratis.gc.ca/services/geoname/en/codes/province */
   @IsIn(["10", "11", "12", "13", "24", "35", "46", "47", "48", "59", "60", "61", "62", "72", "73"], {
     message: "Province code does not map to a province"
   })

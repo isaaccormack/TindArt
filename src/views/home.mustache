@@ -31,33 +31,35 @@
             </button>
           </form>
         {{/artwork}}
-      <a class="next" href="" onclick="nextart(event)">&#10095;</a>
+        {{^artwork}}
+          No artwork nearby!
+        {{/artwork}}
     </div>
   </div>
 </body>
 
-<script>
-var slideShown = 1;
-showSlide(1);
+{{> footer}}
 
-function showSlide(num){
+<script>
+var curSlide = 0;
+showSlide();
+
+function showSlide(){
   var i;
   var slides = document.getElementsByClassName("slide");
   var likeBut = document.getElementsByClassName("like-button");
-  if (num > slides.length) {
-    slideShown = 1;
-  }
   for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-      likeBut[i].style.display = "none";
+    slides[i].style.display = "none";
+    likeBut[i].style.display = "none";
   }
-  slides[slideShown-1].style.display = "block";
-  likeBut[slideShown-1].style.display = "block";
+  slides[curSlide].style.display = "block";
+  likeBut[curSlide].style.display = "block";
 }
 
 function nextart(e){
   e.preventDefault();
-  showSlide(slideShown += 1);
+  curSlide++;
+  showSlide();
   return false;
 }
 
@@ -65,28 +67,16 @@ $(".like").click(function(e) {
   e.preventDefault();
   artId = $(this).attr("data-artworkid");
   $.post("/api/like", { artworkId: artId });
+  nextart(e);
 });
 
 $(".dislike").click(function(e) {
   e.preventDefault();
   artId = $(this).attr("data-artworkid");
   $.post("/api/dislike", { artworkId: artId });
+  nextart(e);
 });
 
-// This has to be changed to only run through the current group of art before actually submitting this api post request
-$(function() { 
-  $("#btn").on("click", function() {
-    $.getJSON("/api/artwork/next", function(data) {
-      var template = "{{#.}}"
-      + "<li>{{title}}</li>" 
-      + "<li><img src={{photos.0}} height=\"400\"></a></li>" 
-      + "{{/.}}";
-      var html = Mustache.render(template, data);   
-      $(".carousel-container").html(html);
-    });
-  });
-}); 
 </script>
 
-{{> footer}}
 </html>

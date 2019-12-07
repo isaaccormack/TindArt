@@ -1,11 +1,14 @@
-import { Service } from "./Service";
 import { Db } from "mongodb";
 
-export class DBService extends Service {
+/**
+ * DBService is a base class for our services that require database access.
+ * By using this, we simplify and unify access to the database across
+ * all of our services.
+ */
+export class DBService {
   private _db: Db;
 
   constructor(options: any) {
-    super(options);
     if (!options.db) {
       throw new Error("db not defined.");
     }

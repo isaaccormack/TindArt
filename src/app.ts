@@ -63,9 +63,10 @@ export class Server {
     // create expressjs application
     this.app = express();
 
-    // configure application
+    // configure application middleware
     this.config();
 
+    // initialize routes
     this.routes(db);
   }
 
@@ -109,6 +110,7 @@ export class Server {
       }
     }));
 
+    // mount flash middleware
     this.app.use(flash());
 
     /* This middleware will check if user's cookie is still saved in browser and
@@ -125,7 +127,7 @@ export class Server {
   }
 
   /**
-   * Create and return Router.
+   * Create and return Router with all the routes, handlers, and services initialized.
    *
    * @class Server
    * @method routes
@@ -144,7 +146,7 @@ export class Server {
     const registerHandler: RegisterHandler = new RegisterHandler(userService);
     const likesHandler: LikesHandler = new LikesHandler(likeService, artworkService);
     const uploadHandler: UploadHandler = new UploadHandler(photoService);
-    const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService, userService);
+    const artworkHandler: ArtworkHandler = new ArtworkHandler(artworkService, userService, likeService);
 
     IndexRoute.create(router, artworkHandler);
     RegisterRoute.create(router, registerHandler);

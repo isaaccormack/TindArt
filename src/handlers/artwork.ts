@@ -1,72 +1,44 @@
+import { ILikeDataJSON, ILikeService } from "./../services/ILikeService";
 import { Request, Response, NextFunction } from "express";
 import { Validator } from "validator.ts/Validator";
 import { IArtworkDataJSON, IArtworkResult, IArtworkService } from "../services/IArtworkService";
 import { IUserResult, IUserService } from "../services/IUserService";
 import { Artwork } from "../models/Artwork";
 import { ValidationErrorInterface } from "validator.ts/ValidationErrorInterface";
-import { ArtworkDTO } from "../DTOs/ArtworkDTO";
-
-const artworkNotFoundString: string = "Could not find artwork";
 
 export class ArtworkHandler {
-  private static PAGE_SIZE: number = 10;
   private artworkService: IArtworkService;
   private userService: IUserService;
+  private likeService: ILikeService;
 
-  constructor(artworkService: IArtworkService, userService: IUserService) {
+  constructor(artworkService: IArtworkService, userService: IUserService, likeService: ILikeService) {
     this.artworkService = artworkService;
     this.userService = userService;
+    this.likeService = likeService;
   }
 
   /**
-   * Find a user's artwork from a request
+   * Find a user's artwork. User is specified in the parameters of the request.
    */
   public async findUserArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    const user: IUserResult = await this.userService.findOneUserByAttr("username", req.params.username);
-    if (user.err) {
+    const userRes: IUserResult = await this.userService.findOneUserByAttr("username", req.params.username);
+    if (userRes.err) {
       throw new Error("User not found");
     }
 
-    return await this.artworkService.findArtworkByUserID(user.result!._id);
+    return await this.artworkService.findArtworkByUserID(userRes.result!._id);
   }
 
   /**
-   * Find artwork for the current users location
+   * Find artwork for the logged-in user.
    */
   public async findArtworkForUser(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    return await this.artworkService.findArtworkByLocation(req.session!.user.city, req.session!.user.province);
-  }
-
-  /**
-   * All artwork
-   */
-  public async getAllArtwork(req: Request, res: Response, next: NextFunction): Promise<IArtworkDataJSON[]> {
-    return await this.artworkService.getAllArtwork();
-  }
-
-  /**
-   * Get a page of artwork based on the last request
-   */
-  public async getArtworkPage(req: Request, res: Response, next: NextFunction) {
-    let lastId = "";
-    if (req.session!.lastId) {
-      lastId = req.session!.lastId;
-    }
-
-    let result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, lastId, req.session!.user.city, req.session!.user.province);
-    if (result[0].length === 0 && lastId.length !== 0) {
-      // Hit the end of the artwork pagination, go back to the beginning
-      result = await this.artworkService.getArtworkPage(ArtworkHandler.PAGE_SIZE, "", req.session!.user.city, req.session!.user.province);
-    }
-    req.session!.lastId = result[1];
-    return result[0].map((r) => new ArtworkDTO(r));
-  }
-
-  /**
-   * All artwork
-   */
-  public clearArtwork(req: Request, res: Response, next: NextFunction) {
-    this.artworkService.clearArtwork();
+    const likes: ILikeDataJSON[] = await this.likeService.findAllLikesOrDislikes(req.session!.user._id);
+    const artworks: IArtworkDataJSON[] = await this.artworkService.findArtworkByUserID(req.session!.user._id);
+    const excludeLikes: string[] = likes.map((like) => like.artworkId);
+    const excludeArtworks: string[] = artworks.map((artwork) => artwork._id);
+    const excludeIds: string[] = excludeLikes.concat(excludeArtworks);
+    return await this.artworkService.findArtworkByLocation(req.session!.user.city, req.session!.user.province, excludeIds);
   }
 
   public async addNewArtwork(req: Request, res: Response, next: NextFunction) {

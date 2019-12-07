@@ -4,7 +4,9 @@ import assert from "assert";
 let db: Db;
 
 /**
- * Initialize database connection.
+ * Initialize database connection and verify the database has the correct
+ * unique indexes.
+ *
  * Calls the passed callback only once the database is connected - so
  * this should be (and is, in bin/www) called with server.listen() as the
  * callback. This way, the (singular) database connection is available
@@ -15,6 +17,7 @@ export function initDb(connString: string, dbName: string, callback: (err: Error
     return callback(new Error("Cannot initialize database twice"), undefined);
   }
 
+  // Mongo callback - adds unique indexes to collections as necessary.
   function onConnected(err: MongoError, client: MongoClient) {
     if (err) {
       return callback(err, undefined);
@@ -30,7 +33,7 @@ export function initDb(connString: string, dbName: string, callback: (err: Error
 }
 
 /**
- * Access the (singular) database connection.
+ * Synchronously returns the (singular) database connection.
  * Requires initDb() to have been called first.
  */
 export function getDb(): Db {

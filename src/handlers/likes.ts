@@ -4,7 +4,6 @@ import { Validator } from "validator.ts/Validator";
 import { ILikeDataJSON, ILikeService } from "./../services/ILikeService";
 import { IArtworkDataJSON, IArtworkService } from "./../services/IArtworkService";
 import { ArtworkDTO } from "./../DTOs/ArtworkDTO";
-import { PhotoDTO } from "../DTOs/PhotoDTO";
 import { LikeDTO } from "../DTOs/LikeDTO";
 
 /**

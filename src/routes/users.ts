@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 
 import { BaseRoute } from "./route";
 import { UserHandler } from "../handlers/users";
@@ -9,15 +9,24 @@ import { IArtworkDataJSON } from "../services/IArtworkService";
 import { ArtworkDTO } from "../DTOs/ArtworkDTO";
 
 /**
- * / route
+ * /user and /user/:username routes
+ * /api/user/updateBio and /api/user/updatePhoneNumber api endpoints
  *
  * @class UserRoute
  */
 export class UserRoute extends BaseRoute {
+
+  /**
+   * Create the routes and endpoints.
+   *
+   * @class UserRoute
+   * @method create
+   * @static
+   */
   public static create(router: Router, userHandler: UserHandler, artworkHandler: ArtworkHandler) {
     console.log("[UserRoute::create] Creating user route.");
 
-    /* Staticly defined route to access auth-user page, used by partials on UI */
+    // Staticly defined route to access auth-user page, used by partials on UI
     router.get("/user", (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.status(401).redirect("/");
@@ -26,6 +35,7 @@ export class UserRoute extends BaseRoute {
       return res.redirect("/user/" + req.session!.user.username);
     });
 
+    // Dynamically defined route to get a specific user's page; used by search function
     router.get("/user/:username", (req: Request, res: Response, next: NextFunction) => {
       new UserRoute().userPage(req, res, userHandler, artworkHandler, next);
     });
@@ -58,15 +68,16 @@ export class UserRoute extends BaseRoute {
   }
 
   /**
-   * The user page route.
+   * The user's account page.
    *
    * @class UserRoute
    * @method userPage
    * @param req {Request} The express Request object.
    * @param res {Response} The express Response object.
-   * @next {NextFunction} Execute the next method.
+   * @param next {NextFunction} Execute the next method.
    */
-  public async userPage(req: Request, res: Response, userHandler: UserHandler, artworkHandler: ArtworkHandler, next: NextFunction) {
+  public async userPage(req: Request, res: Response, userHandler: UserHandler,
+                        artworkHandler: ArtworkHandler, next: NextFunction) {
     if (!req.session!.user) {
       return res.status(401).redirect("/");
     }

@@ -2,7 +2,6 @@ import { expect } from "chai";
 import "mocha";
 import { mock, when, instance, anything, deepEqual } from "ts-mockito";
 import { Db, ObjectID, Collection, Cursor } from "mongodb";
-import { Photo } from "../../src/models/Photo";
 import { IPhotoService, IPhotoDataJSON } from "../../src/services/IPhotoService";
 import { PhotoService } from "../../src/services/PhotoService";
 
@@ -76,17 +75,6 @@ describe("PhotoService object", () => {
       // tslint:disable-next-line: no-useless-cast
       expect(result!.user).to.equal(photoData.userId);
       expect(result!._id).to.equal(id);
-    } catch (error) {
-      console.log(error);
-      expect("No Error").to.equal(true);
-    }
-  });
-  it("should return all photos without error", async () => {
-    try {
-      const result: IPhotoDataJSON[] = await photoService!.getAllPhotos();
-      expect(result.length).to.equal(1);
-      expect(result[0].user).to.equal(photoData.userId);
-      expect(result[0]._id).to.equal(id);
     } catch (error) {
       console.log(error);
       expect("No Error").to.equal(true);
