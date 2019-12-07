@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - 12
 
+services:
+  - mongodb
+
 # Step 1: Install dependencies.
 #   'npm ci' is essentially a stricter 'npm install', designed for CI use.
 install:
@@ -10,6 +13,7 @@ install:
 # Step 2: Run commands that require dependencies to be installed.
 before_script:
   - npm run build-ts 
+  - sleep 10 
 
 # Step 3: Run linter, tests, and code coverage.
 script:
