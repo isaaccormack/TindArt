@@ -1,0 +1,58 @@
+# Majabris/TindArt Retrospective
+
+_By Braydon Berthelet, Isaac Cormack, Marina Dunn, and Jamie St Martin_
+
+_Dec. 11, 2019_
+
+## Summary
+
+Throughout this semester on this project, we learned many things and grew as a group. We struggled with certain aspects of the project, but did others with ease. Overall, we felt that the project went well as a course project, and we came away with practically-applicable knowledge for our futures.
+
+## Things That Went Well
+
+We found that a lot of the non-code aspects of the project went well. We very quickly decided on what our app would be, and for the duration of the project we worked pretty well as a cohesive team, with no major conflicts between team members. Communication via slack was effective. We had some fairly distinct (though informal) roles for team members - Marina was on frontend, Braydon on testing, Jamie on CI, and Isaac on features.
+
+There were also a couple of technical aspects that went well and felt fairly easy. Our development and local (i.e. not unit/automated) testing process was to use “tsc -w” and “nodemon”, which automatically recompiled our changed typescript files and automatically restarted the server when the files were changed. This essentially made it super easy to make changes to the source code and see how they worked (or if they did at all). We also found it really straightforward to set up MongoDB for our backend, and to set up Google Cloud Bucket (GCB) integration for image storage.
+
+Finally, we thought that the architectural design process (i.e. Milestone 2) went very smoothly. Although it turned out that not everything that we designed was implemented in the end (such as the image server, which was changed to be GCB), and that what we created in that architectural document was not feature-complete because we had missed some aspects (such as how our frontend and backend would integrate), the process made us think about and make decisions on most of our features and overarching design. This generated a lot of discussion, which was clarifying and productive, and it helped a lot in speeding up our implementation.
+
+## Things That Could Have Gone Better
+
+Many aspects of our project went well, but many also could have gone better. Our testing, processes, and a few technical aspects were real shortcomings that made development difficult and resulted in a less feature-complete app than we had hoped for.
+
+One aspect that could have gone better was testing. Testability was not given a high priority as a requirement, and as a result minimal testability was built into the application from the start, and few tests were written as the app developed. This resulted in an informally tested application until late in development, at which point a major refactor was completed to implement dependency injection and ultimately test the app more thoroughly. This allowed mocking of dependencies for classes throughout the application, which was previously difficult, fragile, and not really done. If we were to build the app again, we would certainly build it with testing more at the forefront of our minds, both in writing the code and in writing more tests.
+
+Another aspect of the app’s development that had room for improvement was our process for adding changes. A standardized process specifying the manner in which pull requests should be reviewed and in what scenarios they should be approved or rejected could have been established. The lack of this resulted in bugs which were detected multiple merges after they were introduced, which noticeably decreased the stability of the application. If this app were to be released into production, this change-review process would be the first to be looked at seriously and made rigorous, because defect management is critical when building a larger app, as source code quality can vary heavily depending on developer time constraints and effort. Although submitting well-tested code should, in theory, compensate for some of this, it is obvious after developing this app that peer reviewing code is of equal importance.
+
+Our git workflow also showed us that the team could have taken more care with issue tracking. Many zombie issues from earlier milestones existed in the repository at late stages in development. This resulted in a lack of traceability between implemented functionality and issues which could have resulted in double-work, had team communication not been so strong. For example, the implementation details of many of the database services were not as completed, even though they were.
+
+On a similar, somewhat more nit-picky note, we found that github issues were not being resolved automatically when pull requests were merged. This was because we had planned to use the “git flow” branching strategy, wherein there is a “develop” and “master” branch, and we were only ever merging into “develop”, which was not the default branch. Ideally, we would’ve set “develop” as the default branch so that issues would automatically close, and keep our issue tracking cohesive, but that required admin rights on the repository, which only Neil had (and we didn’t realize that the issues not closing was due to merging into a non-default branch, until very late in the project). 
+
+We had a few technical problems, as well. For starters, we made a few attempts before endpoints in the application were properly asynchronous. This stemmed from a lack of understanding of the basic premise and implementation details of asynchronous programming in Javascript/Typescript and how to use Promises, .then(), and .catch(); async, await, try, and catch; and callbacks. Had these misconceptions been cleared up and we had had a thorough understanding of asynchronous programming methods earlier in the development cycle, the extent to which defective code was littered though the application could have been mitigated. The result of this was a delayed development timeline due to needing (sometimes repeated) refactoring of major functionality.
+
+Additionally, the initial design did not have a database abstraction layer (i.e. route classes were calling MongoDB function directly), which led to issues in development later on. This required some significant refactors partway through the project, which took a considerable amount of time compared to it being set up better from the beginning. Ultimately, this was an issue with our code not initially matching our architecture, which stemmed from our architecture being insufficient.
+
+Finally, we never really made any formal decisions to link the frontend and backend together. The frontend wasn’t part of our architectural document at all, even though it was a major design consideration in our implementation. The frontend and backend were pieced together when features were merged together, but some refactoring of code on both ends was frequently needed. This could have been avoided by knowing and clearly defining data structures that each frontend page required to be function correctly, so that the backend could have been implemented to produce that data from the get-go.
+
+## Lessons Learned
+
+One thing we learned from this project was that the setup of the development environment is crucial to streamlining development efficiency. Care was taken to create a dynamic development environment using typescript compilation in watch mode with `tsc -w` and nodemon to immediately see changes made to the app. Also, most members of the team used VS Code for development, which has extensive support for git that made switching between our many concurrent branches manageable.
+
+Another takeaway from this project was that defining the scope of the application from the start of the project was immensely helpful for scheduling when to implement functionality. Having the scope well-defined allowed the team to front-load the required work for the application into the first two milestones to save room at the end for any miscellaneous tasks or delays in development. This also allowed us to combat scope-creep, a common cause of late work, as each team member had a basis they could use to decide if a new piece of functionality fit into the scope the team had initially aimed to implement. In the end, we had almost all the functionality that we had planned to implement, and very little that we hadn’t planned, so we thought that our scope was really well-defined from the beginning.
+
+Additionally, defining the architecture early in the development cycle was helpful to kick-start development, and doing so in our projects is something we’re all likely to do in the future. However, more time could have been spent on fleshing out the details of the architecture before implementation - we really only had a high-level description of how we were going to build the app before we started writing code. Overall, we were able to carve out a design, but time could have been saved and some issues, such as the late implementation of testing and the lack of integration between frontend and backend, would not have come up if we had put more effort in at the start.
+
+We all learned quite powerfully that we should make testing a high-priority task from the very beginning. If we had done so, we would have had a solid testing framework, which would’ve helped later testing and streamlined the process of test writing and feature development. Additionally, it would have helped detect bugs sooner and shown us areas for improvement with respect to testability and modifiability.
+
+Finally, we certainly learned that GitHub Issues is an effective tool for the tracking and organization of implementation, if it is used comprehensively. Issues were used through all stages of development and were very helpful in keeping the work of members on the team focused and mutually exclusive. Issues also allowed everyone to see the progress being made toward the next milestone so they could allocate their time accordingly. Finally, issues aided in keeping the work distribution even among team members by assigning issues to team members and working on them as such. This replaced traditional methods of TODO spreadsheets, etc. However, as mentioned in the previous section, we did find that _not_ using issues caused problems as a result of other members expecting them to be used.
+
+## Some Recommendations
+
+We had some recommendations for future offerings of the course and the project:
+
+- We appreciated the simplicity of MongoDB, keeping it is a good idea so that students do not have to be concerned with a difficult-to-get-started-and-maintain SQL database. Being unable to utilize a framework such as mongoose made it more difficult, but of course that was part of the learning and was useful as a result.
+- Node & Express were solid; understanding asynchronous programming was challenging, but again, a worthwhile learning experience. Express was required to have a working server and we’re glad it was allowed and that the basics were covered in the labs.
+- We thought it would be nice to allow us to use a more powerful CSS framework, such as bootstrap, as writing the CSS was a very time-consuming process and tangential to the learning objectives for this course.
+- It would’ve been good to have somewhat more consistency between the labs and what we’d be doing for the project; some of the labs were using technologies that we weren’t allowed to use.
+- Having more focus in grading on testing early in the project would have improved our own importance on it in the project. 
+- Having a lab or a resource as reference for the testing and dependency injection would have been valuable to our understanding of these topics.
