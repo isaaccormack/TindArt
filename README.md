@@ -3,50 +3,29 @@
 [![Build Status](https://travis-ci.com/seng350/seng350f19-project-team-3-1.svg?token=MKYirfVTx6By2GhqMnsq&branch=develop)](https://travis-ci.com/seng350/seng350f19-project-team-3-1)
 [![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-1/branch/develop/graph/badge.svg?token=nysinaCFt7)](https://codecov.io/gh/seng350/seng350f19-project-team-3-1)
 
-My cool desc
-
 ## Getting Started 
-1. Install and run MongoDB on your local computer. Mongo should be listening on port 27017.
-2. Open a session with mongo
-```
-mongo
-```
-3. Create and use a new database "myapp"
-```
-use myapp
-```
-4. Create a collection "users" in the "myapp" database
-```
-db.createCollection("users")
-```
-5. Make both the "email" and "username" fields in the "users" collection unique
-```
-db.users.createIndex( { "email": 1 }, { unique: true } )
-db.users.createIndex( { "username": 1 }, { "unique": true } )
-```
-6. Clone the repo
+This app requires node v12.0 or higher.
+
+1. Install and run MongoDB on your local machine. Mongo should be listening on port 27017.
+2. Clone the repo
 ```sh
 git clone https://github.com/isaaccormack/TindArt.git
 ```
-7. Install NPM packages
+3. Install NPM packages
 ```sh
 npm install
 ```
-8. Compile the TypeScript
+4. Compile the TypeScript
 ```sh
 npm run build-ts
 ```
-or Compile using watch mode
-```sh
-npm run watch-ts
-```
-9. Start the application
+5. Start the application
 ```sh
 npm start
 ```
-9. Navigate to the site on http://localhost:3000/
+6. Navigate to the site on http://localhost:3000/
 
-## Getting Started (with Docker)
+## Running With Docker
 1. Clone the repo
 ```sh
 git clone https://github.com/isaaccormack/TindArt.git
@@ -62,14 +41,14 @@ docker-compose down
 ```
 
 ## Developing
-For ease of development, running the below is recommended.
+For ease of development, running these two processes concurrently is recommended.
 
-The TypeScript transpiler on watch mode to transpile TypeScript source code into JavaScript on every save
+The TypeScript transpiler on watch mode, which transpiles TypeScript to JavaScript on every save
 ```
 npm run watch-ts
 ```
 
-In a new terminal window, a 'nodemon' (via npm script) to refresh the server when new JavaScript is generated
+and nodemon to refresh the server when new JavaScript is generated
 
 ```
 npm run dev

@@ -24,8 +24,6 @@ export class UserRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router, userHandler: UserHandler, artworkHandler: ArtworkHandler) {
-    console.log("[UserRoute::create] Creating user route.");
-
     // Staticly defined route to access auth-user page, used by partials on UI
     router.get("/user", (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {

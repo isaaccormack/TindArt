@@ -19,8 +19,6 @@ export class ArtworkRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router, artworkHandler: ArtworkHandler, uploadHandler: UploadHandler) {
-    console.log("[ArtworkRoute::create] Creating artwork route.");
-
     router.post("/api/artwork", async (req: Request, res: Response, next: NextFunction) => {
       if (!req.session!.user) {
         return res.status(401).redirect("/");

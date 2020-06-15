@@ -19,8 +19,6 @@ export class LoginRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router, loginHandler: LoginHandler) {
-    console.log("[LoginRoute::create] Creating login route.");
-
     router.get("/login", (req: Request, res: Response, next: NextFunction) => {
       new LoginRoute().login(req, res, next);
     });

@@ -20,8 +20,6 @@ export class LikesRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router, likesHandler: LikesHandler) {
-    console.log("[LikesRoute::create] Creating likes route.");
-
     router.get("/likes", (req: Request, res: Response, next: NextFunction) => {
       new LikesRoute().likesPage(req, res, next, likesHandler);
     });

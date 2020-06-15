@@ -17,8 +17,6 @@ export class NotFoundRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
-    console.log("[NotFoundRoute::create] Creating not found route.");
-
     // Catch all requests for endpoints which are not found
     router.get("/*", (req: Request, res: Response, next: NextFunction) => {
       new NotFoundRoute().display(req, res, next);
