@@ -20,8 +20,6 @@ export class IndexRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router, artworkHandler: ArtworkHandler) {
-    console.log("[IndexRoute::create] Creating index route.");
-
     router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       new IndexRoute().index(req, res, next, artworkHandler);
     });

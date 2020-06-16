@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
 import { ArtworkDTO } from "../../src/DTOs/ArtworkDTO";
-import { GCP_URL } from "../../src/services/GCPService";
+import { S3_URL } from "../../src/services/S3Service";
 
 describe("ArtworkDTO object", () => {
   const artworkData = {
@@ -30,7 +30,7 @@ describe("ArtworkDTO object", () => {
     expect(artwork.city).to.equal(artworkData.city);
     expect(artwork.province).to.equal(artworkData.province);
     expect(artwork.photos.length).to.equal(2);
-    expect(artwork.photos[0]).to.equal(GCP_URL(artworkData.photos[0]));
-    expect(artwork.photos[1]).to.equal(GCP_URL(artworkData.photos[1]));
+    expect(artwork.photos[0]).to.equal(S3_URL(artworkData.photos[0]));
+    expect(artwork.photos[1]).to.equal(S3_URL(artworkData.photos[1]));
   });
 });

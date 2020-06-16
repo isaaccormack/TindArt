@@ -1,8 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { Storage } from "@google-cloud/storage";
 import multer from "multer";
 import { IPhotoResult, IPhotoService } from "../services/IPhotoService";
-import { GCP_PROJECT_ID, CLOUD_CREDENTIAL_FILE, BUCKET_NAME } from "../services/GCPService";
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
 
 const uploader = multer({
   storage: multer.memoryStorage(),
@@ -10,13 +14,6 @@ const uploader = multer({
     fileSize: 5 * 1024 * 1024 // no larger than 5mb
   }
 }).fields([{ name: "avatar", maxCount: 1 }, { name: "gallery", maxCount: 8 }]);
-
-// Creates reference to storage and bucket
-const storage = new Storage({
-  projectId: GCP_PROJECT_ID,
-  keyFilename: CLOUD_CREDENTIAL_FILE
-});
-const bucket = storage.bucket(BUCKET_NAME);
 
 export class UploadHandler {
   private photoService: IPhotoService;
@@ -76,29 +73,26 @@ export class UploadHandler {
 
   private async uploadToGCP(exFile: Express.Multer.File, photoId: string) {
     return new Promise<void>(async (res) => {
-      const file = bucket.file(photoId);
-      const stream = file.createWriteStream({
-        metadata: {
-          contentType: exFile.mimetype,
-          cacheControl: "public, max-age=31536000"
-        },
-        resumable: false
-      });
-
-      stream.on("error", async (errr) => {
+      var params = {
+        ACL: 'public-read',
+        Bucket: process.env.BUCKET_NAME,
+        Body: exFile.buffer,
+        Key: photoId
+      };
+  
+      try {
+        await s3.upload(params).promise();
+      } catch(err) {
+        console.log('Error occured while trying to upload to S3 bucket', err);
         try {
           await this.photoService.removePhotoById(photoId);
         } catch (err) {
-          console.log("Error Deleting: " + photoId);
+          console.log("Error removing photo " + photoId + " from database");
         }
         res();
-      });
-
-      stream.on("finish", () => {
-        console.log(`${photoId} uploaded to ${BUCKET_NAME}.`);
-        res();
-      });
-      stream.end(exFile.buffer);
+      }
+      console.log(`${photoId} uploaded to bucket!`);
+      res();
     });
   }
 }

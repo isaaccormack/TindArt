@@ -20,8 +20,6 @@ export class UploadRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router, uploadHandler: UploadHandler, photoService: IPhotoService) {
-    console.log("[UploadRoute::create] Creating upload route.");
-
     router.get("/uploadPhoto", (req: Request, res: Response, next: NextFunction) => {
       new UploadRoute().uploadPhoto(req, res, next);
     });

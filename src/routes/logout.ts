@@ -17,8 +17,6 @@ export class LogoutRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
-    console.log("[LogoutRoute::create] Creating logout route.");
-
     router.get("/api/logout", (req: Request, res: Response, next: NextFunction) => {
       if (req.session!.user) {
         res.clearCookie("user_sid");

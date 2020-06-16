@@ -19,8 +19,6 @@ export class RegisterRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router, registerHandler: RegisterHandler) {
-    console.log("[RegisterRoute::create] Creating register route.");
-
     router.get("/register", (req: Request, res: Response, next: NextFunction) => {
       new RegisterRoute().register(req, res, next);
     });
