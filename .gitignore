@@ -5,3 +5,4 @@ app/uploads/
 /.nyc_output
 *.DS_Store*
 npm-debug.log
+.env

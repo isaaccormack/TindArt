@@ -7,6 +7,8 @@ import logger from "morgan";
 import mustache from "mustache-express";
 import path from "path";
 import session = require("express-session");
+var MemoryStore = require('memorystore')(session)
+
 
 import { IndexRoute } from "./routes/index";
 import { LogoutRoute } from "./routes/logout";
@@ -86,7 +88,9 @@ export class Server {
     this.app.set("views", __dirname + "/../src/views");
 
     // mount logger
-    this.app.use(logger("dev"));
+    if (process.env.NODE_ENV != 'production') {
+      this.app.use(logger("dev"));
+    }
 
     // mount json form parser
     this.app.use(bodyParser.json());
@@ -97,17 +101,20 @@ export class Server {
     }));
 
     // mount cookie parser middleware
-    this.app.use(cookieParser("SECRET_GOES_HERE"));
+    this.app.use(cookieParser(process.env.COOKIE_SECRET || "SECRET_GOES_HERE"));
 
     // initialize express-session to allow us track the logged-in user across sessions.
     this.app.use(session({
       name: "user_sid",
-      secret: "SECRET_GOES_HERE",
+      secret: process.env.SESSION_SECRET || "SECRET_GOES_HERE",
       resave: false,
       saveUninitialized: false,
       cookie: {
         maxAge: 360000 // 1 hour
-      }
+      },
+      store: new MemoryStore({
+        checkPeriod: 86400000 // prune expired entries every 24h
+      })
     }));
 
     // mount flash middleware

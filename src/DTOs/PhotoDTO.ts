@@ -1,5 +1,5 @@
 import { IPhotoDataJSON } from "../services/IPhotoService";
-import { GCP_URL } from "../services/GCPService";
+import { S3_URL } from "../services/S3Service";
 
 /**
  * PhotoDTO encapsulates a single photo's data.
@@ -20,6 +20,6 @@ export class PhotoDTO {
   public create(res: IPhotoDataJSON) {
     this.userId = res.user;
     this._id = res._id.toString();
-    this.url = GCP_URL(this._id);
+    this.url = S3_URL(this._id);
   }
 }

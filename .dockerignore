@@ -10,3 +10,4 @@ dist
 test
 coverage
 .nyc_output
+.env
