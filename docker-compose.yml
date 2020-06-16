@@ -1,4 +1,4 @@
-version: "3.7"
+version: "2.2"
 
 services:
 
@@ -9,13 +9,19 @@ services:
       - seng350team301db:/data/db
 
   node-webserver:
-    image: seng350team301/webserver
+    image: seng350team301/server
     ports:
       - 3000:3000
     environment:
       DB_HOST: mongo
       DB_PORT: 27017
       DB_NAME: production
+      NODE_ENV: ${NODE_ENV}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
+      BUCKET_NAME: ${BUCKET_NAME}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
 
 volumes:
   seng350team301db:

@@ -1,5 +1,5 @@
 import { IArtworkDataJSON } from "../services/IArtworkService";
-import { GCP_URL } from "../services/GCPService";
+import { S3_URL } from "../services/S3Service";
 
 /**
  * ArtworkDTO encapsulates the data of a single artwork.
@@ -42,6 +42,6 @@ export class ArtworkDTO {
     this.city = res.city;
     this.province = res.province;
     // Remap photo ids from the database to the GCP urls
-    this.photos = res.photos.map((p) => GCP_URL(p));
+    this.photos = res.photos.map((p) => S3_URL(p));
   }
 }

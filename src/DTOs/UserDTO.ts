@@ -1,5 +1,5 @@
 import { IUserDataJSON } from "../services/IUserService";
-import { GCP_URL } from "../services/GCPService";
+import { S3_URL } from "../services/S3Service";
 
 /**
  * UserDTO encapsulates a single user's data.
@@ -40,6 +40,6 @@ export class UserDTO {
     this.province = res.province;
     this._id = res._id;
     this.phoneNumber = res.phoneNumber;
-    this.avatar = GCP_URL(this.username) + "?" + Math.round(new Date().getTime() / 1000);
+    this.avatar = S3_URL(this.username);
   }
 }
