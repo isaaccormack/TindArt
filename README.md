@@ -1,7 +1,17 @@
-# TindArt!
+<p align="center">
+    <img src="https://github.com/isaaccormack/TindArt/blob/develop/public/assets/tindart-logo.png" height="130">
+</p>
 
-[![Build Status](https://travis-ci.com/seng350/seng350f19-project-team-3-1.svg?token=MKYirfVTx6By2GhqMnsq&branch=develop)](https://travis-ci.com/seng350/seng350f19-project-team-3-1)
-[![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-1/branch/develop/graph/badge.svg?token=nysinaCFt7)](https://codecov.io/gh/seng350/seng350f19-project-team-3-1)
+<p align="center">
+    <img src="https://img.shields.io/github/package-json/v/seng350/seng350f19-project-team-3-1?style=flat-square" />
+    <img src="https://img.shields.io/david/seng350/seng350f19-project-team-3-1?style=flat-square" />
+    <img src="https://img.shields.io/github/contributors/seng350/seng350f19-project-team-3-1?style=flat-square" />
+    <img src="https://img.shields.io/github/issues-raw/seng350/seng350f19-project-team-3-1?style=flat-square" />
+    <img src="https://codecov.io/gh/seng350/seng350f19-project-team-3-1/branch/master/graph/badge.svg?token=nysinaCFt7" />
+</p>
+
+<h1 align="center">Tinder, but for Art</h1>
+TindArt is a simple web app connecting artists and art enthusiasts in close proxmity using a tinder-esque matching style. 
 
 ## Getting Started 
 This app requires node v12.0 or higher.
