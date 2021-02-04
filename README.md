@@ -10,7 +10,7 @@
     <img src="https://codecov.io/gh/seng350/seng350f19-project-team-3-1/branch/master/graph/badge.svg?token=nysinaCFt7" />
 </p>
 
-<h1 align="center">Tinder, but for Art</h1>
+<h1 align="center">Tinder, but for art</h1>
 TindArt is a simple web app connecting artists and art enthusiasts in close proxmity using a tinder-esque matching style. 
 
 ## Getting Started 
